@@ -55,32 +55,7 @@ class _TextFieldPassowrdState extends State<TextFieldPassowrd> {
         TextFormField(
           controller: widget.controller,
           onChanged: (value) {
-            RegExp regexNumber = RegExp(r'\d');
-            RegExp regexLetter = RegExp(r'[a-zA-Z]'); // Biểu thức chính quy
-
-            if (value.length >= 8) {
-              isEnoughCharacter = true;
-            } else {
-              isEnoughCharacter = false;
-            }
-
-            if (value.isEmpty) {
-              isEmpty = true;
-            } else {
-              isEmpty = false;
-            }
-
-            if (regexNumber.hasMatch(value)) {
-              isContainNumber = true;
-            } else {
-              isContainNumber = false;
-            }
-            if (regexLetter.hasMatch(value)) {
-              isContainLetter = true;
-            } else {
-              isContainLetter = false;
-            }
-
+            validateValue(value);
             context.read<ChangeNewPasswordCubit>().changeState(
                 isContainLetter: isContainLetter,
                 err: (isEmpty) ? "Vui lòng không để trống" : "",
@@ -139,6 +114,34 @@ class _TextFieldPassowrdState extends State<TextFieldPassowrd> {
         ),
       ],
     );
+  }
+
+  void validateValue(String value) {
+    RegExp regexNumber = RegExp(r'\d');
+    RegExp regexLetter = RegExp(r'[a-zA-Z]'); // Biểu thức chính quy
+
+    if (value.length >= 8) {
+      isEnoughCharacter = true;
+    } else {
+      isEnoughCharacter = false;
+    }
+
+    if (value.isEmpty) {
+      isEmpty = true;
+    } else {
+      isEmpty = false;
+    }
+
+    if (regexNumber.hasMatch(value)) {
+      isContainNumber = true;
+    } else {
+      isContainNumber = false;
+    }
+    if (regexLetter.hasMatch(value)) {
+      isContainLetter = true;
+    } else {
+      isContainLetter = false;
+    }
   }
 }
 

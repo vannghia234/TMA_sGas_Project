@@ -25,7 +25,6 @@ class ChangeNewPasswordPage extends StatefulWidget {
 class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
   final _passwordController = TextEditingController();
   final _rePasswordController = TextEditingController();
-  final _globalKey = GlobalKey<FormState>();
   List<String> errorlists = [
     "Tối thiểu 8 ký tự",
     "Chứa ít nhất 1 ký tự chữ",
@@ -62,37 +61,24 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
               SizedBox(
                 height: getHeightScreen(context) * 0.05,
               ),
-              Form(
-                  key: _globalKey,
-                  child: Column(
-                    children: [
-                      TextFieldPassowrd(
-                          error: context
-                              .watch<ChangeNewPasswordCubit>()
-                              .state
-                              .error,
-                          controller: _passwordController,
-                          title: "Mật khẩu",
-                          hintText: "Nhập mật khẩu",
-                          isObsuretext: true),
-                      SizedBox(
-                        height: getHeightScreen(context) * 0.02,
-                      ),
-                      TextFieldRePassword(
-                          error: context
-                              .watch<ChangeNewRePasswordCubit>()
-                              .state
-                              .error,
-                          controller: _rePasswordController,
-                          title: "Xác nhận mật khẩu",
-                          hintText: "Nhập lại mật khẩu",
-                          isObsuretext: true),
-                      SizedBox(
-                        height: getHeightScreen(context) * 0.03,
-                      ),
-                      //Error
-                    ],
-                  )),
+              TextFieldPassowrd(
+                  error: context.watch<ChangeNewPasswordCubit>().state.error,
+                  controller: _passwordController,
+                  title: "Mật khẩu",
+                  hintText: "Nhập mật khẩu",
+                  isObsuretext: true),
+              SizedBox(
+                height: getHeightScreen(context) * 0.02,
+              ),
+              TextFieldRePassword(
+                  error: context.watch<ChangeNewRePasswordCubit>().state.error,
+                  controller: _rePasswordController,
+                  title: "Xác nhận mật khẩu",
+                  hintText: "Nhập lại mật khẩu",
+                  isObsuretext: true),
+              SizedBox(
+                height: getHeightScreen(context) * 0.03,
+              ),
               Flexible(
                 child:
                     BlocBuilder<ChangeNewPasswordCubit, ChangeNewPasswordState>(

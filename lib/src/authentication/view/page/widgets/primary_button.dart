@@ -24,7 +24,7 @@ class PrimaryButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: TextButton(
-        onPressed: onpress,
+        onPressed: isDisable ? () {} : onpress,
         child: Text(
           text,
           style: CustomTextStyle.button2(
