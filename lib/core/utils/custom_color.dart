@@ -8,4 +8,5 @@ class CustomColor {
   static const primaryColor = Color.fromARGB(255, 24, 160, 160);
   static const semanticAlertColor = Color.fromARGB(255, 255, 27, 10);
   static const backgroundNeutralColor = Color.fromARGB(255, 243, 247, 247);
+  static const buttonDisableColor = Color(0xffEAEBEB);
 }

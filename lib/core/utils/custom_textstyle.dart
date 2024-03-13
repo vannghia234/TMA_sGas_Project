@@ -57,4 +57,12 @@ class CustomTextStyle {
       color: (textColor != null) ? textColor : Colors.black,
     );
   }
+
+  static TextStyle button2({Color? textColor}) {
+    return GoogleFonts.inter(
+      fontSize: 16,
+      fontWeight: FontWeight.w600,
+      color: (textColor != null) ? textColor : Colors.black,
+    );
+  }
 }

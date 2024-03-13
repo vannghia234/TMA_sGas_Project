@@ -1,26 +1,25 @@
 name: sgas
 description: "Gas Station Management App"
 
-publish_to: 'none'
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
+  sdk: ">=3.3.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
   cupertino_icons: ^1.0.6
-
   flutter_bloc: ^8.1.4
   equatable: ^2.0.5
   get_it: ^7.6.7
-
   google_fonts: ^6.2.1
   flutter_svg: ^2.0.10+1
-
+  device_preview: ^1.1.0
+  lottie: ^3.1.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -28,12 +27,12 @@ dev_dependencies:
   flutter_lints: ^3.0.0
 
 flutter:
-
   uses-material-design: true
 
   assets:
     - assets/images/
     - assets/icons/
+    - assets/animations/
 
   # For example:
   # fonts:
