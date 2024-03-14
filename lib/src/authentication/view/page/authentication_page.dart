@@ -6,7 +6,10 @@ import 'package:sgas/core/constants/image_path.dart';
 import 'package:sgas/core/utils/custom_color.dart';
 import 'package:sgas/core/utils/custom_textstyle.dart';
 import 'package:sgas/routes/route_path.dart';
+import 'package:sgas/src/authentication/domain/entities/authentication_entity.dart';
+import 'package:sgas/src/authentication/domain/usecases/authenticaion_usecase.dart';
 import 'package:sgas/src/authentication/view/bloc/login_cubit.dart';
+import 'package:sgas/src/authentication/view/utils/key_storage.dart';
 import 'package:sgas/src/authentication/view/widgets/label_textfield.dart';
 import 'package:sgas/src/authentication/view/widgets/primary_button.dart';
 
@@ -20,8 +23,9 @@ class AuthenticationPage extends StatefulWidget {
 class _AuthenticationPageState extends State<AuthenticationPage> {
   final _username = TextEditingController();
   final _password = TextEditingController();
-
+  AuthenticationUseCase authUseCase = AuthenticationUseCase();
   bool isHidden = true;
+
   @override
   void dispose() {
     _username.dispose();
@@ -55,8 +59,40 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                       const _ForgetPasswordText(),
                       PrimaryButton(
                           text: "Đăng nhập",
-                          onpress: () {
-                            _handleLogin(context);
+                          onpress: () async {
+                            if (_username.text.isEmpty) {
+                              context.read<LoginCubit>().changeState(
+                                  InValidUserName(
+                                      message: "Bạn chưa nhập tên đăng nhập"));
+                              return;
+                            } else if (_password.text.isEmpty) {
+                              context.read<LoginCubit>().changeState(
+                                  InValidPassWord(
+                                      message: "Bạn chưa nhập tên mật khẩu"));
+                              return;
+                            } else {
+                              context
+                                  .read<LoginCubit>()
+                                  .changeState(Successful());
+                              AuthenticationEntity entity =
+                                  AuthenticationEntity(
+                                      username: _username.text,
+                                      password: _password.text);
+                              showAnimationLoading(context);
+                              var res = await authUseCase.loginUseCase(entity);
+
+                              Navigator.pop(context);
+
+                              if (res?.code == 200) {
+                                KeyStorage storage = KeyStorage();
+                                storage.save(
+                                    accessToken:
+                                        res!.data!.token!.accessToken! ?? "",
+                                    refreshToken:
+                                        res.data!.token!.accessToken! ?? "");
+                                Navigator.pushNamed(context, RoutePath.home);
+                              }
+                            }
                           },
                           isDisable: false)
                     ],
@@ -68,20 +104,6 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
         },
       ),
     );
-  }
-
-  void _handleLogin(BuildContext context) {
-    if (_username.text.isEmpty) {
-      context
-          .read<LoginCubit>()
-          .changeState(InValidUserName(message: "Bạn chưa nhập tên đăng nhập"));
-    } else if (_password.text.isEmpty) {
-      context
-          .read<LoginCubit>()
-          .changeState(InValidPassWord(message: "Bạn chưa nhập tên mật khẩu"));
-    } else {
-      context.read<LoginCubit>().changeState(Successful());
-    }
   }
 
   TextFormField _formPassword(LoginState state, BuildContext context) {

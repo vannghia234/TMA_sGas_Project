@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgas/core/constants/constants.dart';
@@ -10,6 +8,7 @@ import 'package:sgas/core/utils/custom_textstyle.dart';
 import 'package:sgas/routes/route_path.dart';
 import 'package:sgas/src/authentication/view/bloc/change_password_cubit.dart';
 import 'package:sgas/src/authentication/view/bloc/change_password_state.dart';
+import 'package:sgas/src/authentication/view/bloc/change_re_password_cubit.dart';
 import 'package:sgas/src/authentication/view/widgets/primary_button.dart';
 import 'package:sgas/src/authentication/view/widgets/text_field_password.dart';
 import 'package:sgas/src/authentication/view/widgets/text_field_repassword.dart';
@@ -83,62 +82,9 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
                     itemCount: errorlists.length,
                     itemBuilder: (context, index) => Padding(
                       padding: const EdgeInsets.only(bottom: 5),
-                      child: (state is InValidPassword )
-                          ? Row(
-                              children: [
-                                if (index == 0 && state.isEnoughCharacter)
-                                  SvgPicture.asset(
-                                    ImagePath.fill_check_circle,
-                                    height: 24,
-                                    width: 24,
-                                  )
-                                else if (index == 1 && state.isContainLetter)
-                                  SvgPicture.asset(
-                                    ImagePath.fill_check_circle,
-                                    height: 24,
-                                    width: 24,
-                                  )
-                                else if (index == 2 && state.isContainNumber)
-                                  SvgPicture.asset(
-                                    ImagePath.fill_check_circle,
-                                    height: 24,
-                                    width: 24,
-                                  )
-                                else
-                                  SvgPicture.asset(
-                                    ImagePath.check_circle,
-                                    height: 24,
-                                    width: 24,
-                                  ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  errorlists[index],
-                                  style: CustomTextStyle.body2(
-                                      textColor:
-                                          CustomColor.textSecondaryColor),
-                                )
-                              ],
-                            )
-                          : Row(
-                              children: [
-                                SvgPicture.asset(
-                                  ImagePath.check_circle,
-                                  height: 24,
-                                  width: 24,
-                                ),
-                                const SizedBox(
-                                  width: 5,
-                                ),
-                                Text(
-                                  errorlists[index],
-                                  style: CustomTextStyle.body2(
-                                      textColor:
-                                          CustomColor.textSecondaryColor),
-                                )
-                              ],
-                            ),
+                      child: (state is InValidPassword)
+                          ? _ErrorMess(index, state)
+                          : _ErrorMessDefault(index),
                     ),
                   ),
                 ),
@@ -159,22 +105,87 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
                     );
                     if (_passwordController.text !=
                         _rePasswordController.text) {
-                      context.read<ChangePasswordCubit>().changeState(
+                      context.read<ChangeRepasswordCubit>().changeState(
                           InValidRePassword(message: "Mật khẩu không khớp"));
                     } else {
                       context
-                          .read<ChangePasswordCubit>()
+                          .read<ChangeRepasswordCubit>()
                           .changeState(SuccessValidPassword());
                       Navigator.pushNamed(context, RoutePath.login);
                     }
                   },
-                  isDisable: (state is SuccessValidPassword) ? false : true,
+                  isDisable: (state is InValidPassword)
+                      ? (state.isContainLetter &&
+                              state.isContainNumber &&
+                              state.isEnoughCharacter)
+                          ? false
+                          : true
+                      : true,
                 ),
               )
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Row _ErrorMessDefault(int index) {
+    return Row(
+      children: [
+        SvgPicture.asset(
+          ImagePath.check_circle,
+          height: 24,
+          width: 24,
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Text(
+          errorlists[index],
+          style:
+              CustomTextStyle.body2(textColor: CustomColor.textSecondaryColor),
+        )
+      ],
+    );
+  }
+
+  Row _ErrorMess(int index, InValidPassword state) {
+    return Row(
+      children: [
+        if (index == 0 && state.isEnoughCharacter)
+          SvgPicture.asset(
+            ImagePath.fill_check_circle,
+            height: 24,
+            width: 24,
+          )
+        else if (index == 1 && state.isContainLetter)
+          SvgPicture.asset(
+            ImagePath.fill_check_circle,
+            height: 24,
+            width: 24,
+          )
+        else if (index == 2 && state.isContainNumber)
+          SvgPicture.asset(
+            ImagePath.fill_check_circle,
+            height: 24,
+            width: 24,
+          )
+        else
+          SvgPicture.asset(
+            ImagePath.check_circle,
+            height: 24,
+            width: 24,
+          ),
+        const SizedBox(
+          width: 5,
+        ),
+        Text(
+          errorlists[index],
+          style:
+              CustomTextStyle.body2(textColor: CustomColor.textSecondaryColor),
+        )
+      ],
     );
   }
 }

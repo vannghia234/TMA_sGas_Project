@@ -27,6 +27,7 @@ class AuthenticationRepository extends IAuthenticationRepository {
   @override
   Future<LoginModel> login({required Map<String, String> body}) async {
     String result = await dataSource.login(body);
+    print("REPOITORY $result");
     LoginModel model = LoginModel.fromJson(jsonDecode(result));
     return model;
   }
