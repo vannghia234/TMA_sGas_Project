@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sgas/core/utils/custom_color.dart';
 import 'package:sgas/core/utils/custom_textstyle.dart';
+import 'package:sgas/routes/route_path.dart';
 
 class RecieveOTPPage extends StatefulWidget {
   const RecieveOTPPage({super.key});
@@ -23,7 +24,8 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
           icon: const Icon(Icons.arrow_back_ios),
         ),
         title: const Text('Nhận mã OTP'),
-        titleTextStyle: CustomTextStyle.lable2(textColor: CustomColor.textPrimaryColor),
+        titleTextStyle:
+            CustomTextStyle.lable2(textColor: CustomColor.textPrimaryColor),
       ),
       body: Column(
         children: [
@@ -34,11 +36,13 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
             child: Text.rich(
               TextSpan(
                 text: 'Mã OTP đã được gửi về số điện thoại ',
-                style: CustomTextStyle.body2(textColor: CustomColor.textSecondaryColor),
+                style: CustomTextStyle.body2(
+                    textColor: CustomColor.textSecondaryColor),
                 children: <InlineSpan>[
                   TextSpan(
                     text: '012*****89',
-                    style: CustomTextStyle.body2(textColor: CustomColor.textPrimaryColor),
+                    style: CustomTextStyle.body2(
+                        textColor: CustomColor.textPrimaryColor),
                   ),
                 ],
               ),
@@ -67,7 +71,9 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
                             decoration: BoxDecoration(
                               // color: Colors.amberAccent,
                               borderRadius: BorderRadius.circular(6),
-                              border: Border.all(color: CustomColor.borderNeutralColor, width: 1),
+                              border: Border.all(
+                                  color: CustomColor.borderNeutralColor,
+                                  width: 1),
                             ),
                             child: const TextField(),
                           ),
@@ -92,7 +98,7 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
                   ),
                   child: TextButton(
                     onPressed: () {
-                      //
+                      Navigator.pushNamed(context, RoutePath.changeNewPassword);
                     },
                     child: Text(
                       'Xác nhận',

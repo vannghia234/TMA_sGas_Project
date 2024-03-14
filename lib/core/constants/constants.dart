@@ -5,6 +5,8 @@ import 'package:sgas/core/constants/image_path.dart';
 double getHeightScreen(context) => MediaQuery.of(context).size.height;
 double getWidthScreen(context) => MediaQuery.of(context).size.width;
 
+const header = {"Content-Type": "application/json"};
+
 void showAnimationLoading(context) {
   showDialog(
     context: context,

@@ -1,23 +1,17 @@
-import 'package:sgas/src/authentication/data/datasources/authentication_local_datasource.dart';
+import 'package:sgas/src/authentication/data/models/login_model.dart';
+import 'package:sgas/src/authentication/data/repositories/authentication_repository.dart';
 import 'package:sgas/src/authentication/domain/entities/authentication_entity.dart';
 
 class AuthenticationUseCase {
-  AuthenticationLocalDataSource authenticationLocalDataSource = AuthenticationLocalDataSource();
+  final AuthenticationRepository _repo = AuthenticationRepository();
 
-  List<AuthenticationEntity> getListAccount() {
-    List<AuthenticationEntity> list = [];
-
-    for (var element in authenticationLocalDataSource.listAccount) {
-      try {
-        list.add(AuthenticationEntity(
-          email: element.email,
-          password: element.password,
-        ));
-      } catch (e) {
-        continue;
-      }
+  Future<LoginModel?> loginUseCase(AuthenticationEntity entity) async {
+    var res = await _repo.login(
+        body: {"username": entity.username, "password": entity.password});
+    if (res.code == 200) {
+      print("request login");
+      return res;
     }
-
-    return list;
+    return null;
   }
 }
