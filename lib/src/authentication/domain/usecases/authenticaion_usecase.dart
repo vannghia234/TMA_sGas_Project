@@ -5,13 +5,9 @@ import 'package:sgas/src/authentication/domain/entities/authentication_entity.da
 class AuthenticationUseCase {
   final AuthenticationRepository _repo = AuthenticationRepository();
 
-  Future<LoginModel?> loginUseCase(AuthenticationEntity entity) async {
+  Future<LoginModel> loginUseCase(AuthenticationEntity entity) async {
     var res = await _repo.login(
         body: {"username": entity.username, "password": entity.password});
-    if (res.code == 200) {
-      print("request login");
-      return res;
-    }
-    return null;
+    return res;
   }
 }
