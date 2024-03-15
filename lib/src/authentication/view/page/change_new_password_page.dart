@@ -39,11 +39,17 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    Map<String, String> data =
+        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
+    logger.e(data.runtimeType);
+
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
+            Navigator.pop(context);
+
             //
           },
         ),
@@ -98,20 +104,26 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
                 builder: (context, state) => PrimaryButton(
                   text: "Xác nhận",
                   onpress: () async {
-                    showAnimationLoading(context);
-                    await Future.delayed(
-                      const Duration(milliseconds: 1300),
-                      () => Navigator.pop(context),
-                    );
                     if (_passwordController.text !=
                         _rePasswordController.text) {
                       context.read<ChangeRepasswordCubit>().changeState(
                           InValidRePassword(message: "Mật khẩu không khớp"));
                     } else {
+                      showAnimationLoading(context);
                       context
                           .read<ChangeRepasswordCubit>()
                           .changeState(SuccessValidPassword());
-                      Navigator.pushNamed(context, RoutePath.login);
+                      var res = await context
+                          .read<ChangeRepasswordCubit>()
+                          .updatePass(
+                              token: data["data"]!,
+                              newPassword: _rePasswordController.text,
+                              username: data["username"]!);
+                      Navigator.pop(context);
+                      if (res.code == 200) {
+                        logger.e("Đổi mật khẩu thành công ${res.data}");
+                        Navigator.pushNamed(context, RoutePath.login);
+                      }
                     }
                   },
                   isDisable: (state is InValidPassword)

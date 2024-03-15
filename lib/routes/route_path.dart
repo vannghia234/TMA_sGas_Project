@@ -4,4 +4,13 @@ class RoutePath {
   static const recieveOTP = '/recieveOTP';
   static const home = '/home';
   static const changeNewPassword = "/changeNewPassword";
+
+  //special screen
+  static const error404 = "/404";
+
+  static const disconect = "/disconnect";
+
+  static const unsupportVersion = "/unsupportVersion";
+
+  static const errorVersion = "/errorVersion";
 }
