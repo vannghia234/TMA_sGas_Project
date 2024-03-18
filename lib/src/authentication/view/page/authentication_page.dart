@@ -36,40 +36,36 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BlocBuilder<LoginCubit, LoginState>(
-        builder: (context, state) {
-          return SingleChildScrollView(
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
-              child: BlocBuilder<LoginCubit, LoginState>(
-                builder: (context, state) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: getHeightScreen(context) * 0.16),
-                      Image.asset(ImagePath.logoTMA),
-                      const _TitleLogin(),
-                      const LabelTextField(
-                        title: 'Tên đăng nhập',
-                      ),
-                      _formUserName(state, context),
-                      SizedBox(height: getHeightScreen(context) * 0.02),
-                      const LabelTextField(title: "Mật khẩu"),
-                      _formPassword(state, context),
-                      const _ForgetPasswordText(),
-                      PrimaryButton(
-                          text: "Đăng nhập",
-                          onpress: () async {
-                            handleButtonLogin();
-                          },
-                          isDisable: false)
-                    ],
-                  );
-                },
-              ),
-            ),
-          );
-        },
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(20, 0, 20, 0),
+          child: BlocBuilder<LoginCubit, LoginState>(
+            builder: (context, state) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: getHeightScreen(context) * 0.16),
+                  Image.asset(ImagePath.logoTMA),
+                  const _TitleLogin(),
+                  const LabelTextField(
+                    title: 'Tên đăng nhập',
+                  ),
+                  _formUserName(state, context),
+                  SizedBox(height: getHeightScreen(context) * 0.02),
+                  const LabelTextField(title: "Mật khẩu"),
+                  _formPassword(state, context),
+                  const _ForgetPasswordText(),
+                  PrimaryButton(
+                      text: "Đăng nhập",
+                      onpress: () async {
+                        handleButtonLogin();
+                      },
+                      isDisable: false)
+                ],
+              );
+            },
+          ),
+        ),
       ),
     );
   }
@@ -91,9 +87,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
           username: _username.text, password: _password.text);
       showAnimationLoading(context);
       var res = await authUseCase.loginUseCase(entity);
-
       Navigator.pop(context);
-
       if (res.code == 200) {
         KeyStorage storage = KeyStorage();
         storage.save(

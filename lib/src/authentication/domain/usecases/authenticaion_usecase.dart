@@ -1,5 +1,6 @@
 import 'package:sgas/src/authentication/data/models/change_password_model.dart';
 import 'package:sgas/src/authentication/data/models/fotget_moel.dart';
+import 'package:sgas/src/authentication/data/models/get_access_token_model.dart';
 import 'package:sgas/src/authentication/data/models/login_model.dart';
 import 'package:sgas/src/authentication/data/models/otp_model.dart';
 import 'package:sgas/src/authentication/data/repositories/authentication_repository.dart';
@@ -36,6 +37,12 @@ class AuthenticationUseCase {
       "username": entity.username,
       "newPassword": entity.newPassword
     });
+    return res;
+  }
+
+  Future<GetAccessTokenModel> getAccesstokenFromRefreshToken(
+      {required String refreshToken}) async {
+    var res = await _repo.getRefreshToken(refreshToken: refreshToken);
     return res;
   }
 }

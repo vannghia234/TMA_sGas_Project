@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:sgas/src/authentication/data/datasources/authentication_datasource.dart';
 import 'package:sgas/src/authentication/data/models/change_password_model.dart';
 import 'package:sgas/src/authentication/data/models/fotget_moel.dart';
+import 'package:sgas/src/authentication/data/models/get_access_token_model.dart';
 import 'package:sgas/src/authentication/data/models/login_model.dart';
 import 'package:sgas/src/authentication/data/models/otp_model.dart';
 import 'package:sgas/src/authentication/domain/repositories/interface_authentication_repository.dart';
@@ -25,9 +26,12 @@ class AuthenticationRepository extends IAuthenticationRepository {
   }
 
   @override
-  Future<void> getRefreshToken() {
-    // TODO: implement getRefreshToken
-    throw UnimplementedError();
+  Future<GetAccessTokenModel> getRefreshToken({required String refreshToken}) async {
+    String result = await dataSource.getAccessTokenFromRefreshToken(
+        refreshToken: refreshToken);
+    GetAccessTokenModel model =
+        GetAccessTokenModel.fromJson(jsonDecode(jsonDecode(result)));
+    return model;
   }
 
   @override
