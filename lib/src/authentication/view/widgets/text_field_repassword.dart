@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:sgas/core/constants/icon_path.dart';
 import 'package:sgas/core/utils/custom_color.dart';
 import 'package:sgas/core/utils/custom_textstyle.dart';
@@ -61,7 +62,7 @@ class _TextFieldRePasswordState extends State<TextFieldRePassword> {
                       isHidden = !isHidden;
                     });
                   },
-                  icon: Image.asset(
+                  icon: SvgPicture.asset(
                     (isHidden)
                         ? IconPath.show_password
                         : IconPath.hide_password,

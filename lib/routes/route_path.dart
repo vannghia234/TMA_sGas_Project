@@ -2,7 +2,7 @@ class RoutePath {
   static const wrapper = "/wrapper";
   static const login = '/login';
   static const forgotPassword = '/forgotPassword';
-  static const recieveOtp = '/recieveOTP';
+  static const recieveOtp = '/recieveOtp';
   static const home = '/home';
   static const changeNewPassword = "/changeNewPassword";
 

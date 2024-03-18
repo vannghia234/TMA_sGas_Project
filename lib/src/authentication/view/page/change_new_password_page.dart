@@ -44,6 +44,7 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
 
     return Scaffold(
       appBar: AppBar(
+        titleSpacing: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {

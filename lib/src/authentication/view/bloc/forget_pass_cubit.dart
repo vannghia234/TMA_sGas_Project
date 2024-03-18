@@ -40,6 +40,9 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
       } else if (res.code == 404) {
         // ignore: use_build_context_synchronously
         changeState(InvalidForgetUsername(message: "Tài khoản không tồn tại"));
+      } else if (res.code == 400) {
+        // ignore: use_build_context_synchronously
+        changeState(InvalidForgetPhoneNumber(message: "${res.data}"));
       } else if (res.code == 40015) {
         changeState(
             InvalidForgetPhoneNumber(message: "Số điện thoại không tồn tại"));

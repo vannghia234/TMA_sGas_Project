@@ -6,10 +6,9 @@ class IncorrectOtp extends OtpState {}
 
 class TimeOutOtp extends OtpState {}
 
-class SentOtp extends OtpState {}
-
 class WaittingOtp extends OtpState {}
 
-class SuccessfulOtp extends OtpState {
-  SuccessfulOtp();
+class OverRequestOtp extends OtpState {
+  final String mess;
+  OverRequestOtp({required this.mess});
 }

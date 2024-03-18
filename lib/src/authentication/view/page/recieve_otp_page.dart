@@ -51,13 +51,14 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
         .read<OtpCubit>()
         .sendOtp(userName: data["userName"]!, otpCode: otp);
     if (res.code == 200) {
-      context.read<OtpCubit>().changeState(SuccessfulOtp());
+      // context.read<OtpCubit>().changeState(InitialOtp());
       Map<String, String> arg = {
         "data": res.data!,
         "username": data["userName"]!
       };
 
-      Navigator.pushNamed(context, RoutePath.changeNewPassword, arguments: arg);
+      Navigator.popAndPushNamed(context, RoutePath.changeNewPassword,
+          arguments: arg);
     }
     // Gửi mã OTP ở đây
   }
@@ -82,152 +83,145 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
       body: SizedBox.expand(
         child: Column(
           children: [
-            Container(
-              height: 72,
-              color: CustomColor.backgroundNeutralColor,
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 20),
-              child: Text.rich(
-                TextSpan(
-                  text: 'Mã OTP đã được gửi về số điện thoại ',
-                  style: CustomTextStyle.body2(
-                      textColor: CustomColor.textSecondaryColor),
-                  children: <InlineSpan>[
-                    TextSpan(
-                      text: hideSDT(data["phone"]!),
-                      style: CustomTextStyle.body2(
-                          textColor: CustomColor.textPrimaryColor),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+            _OtpMemoTitle(data: data),
             const SizedBox(height: 24),
-            Padding(
-              padding: EdgeInsets.symmetric(
-                  horizontal: getWidthScreen(context) * 0.05),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    height: 56,
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      scrollDirection: Axis.horizontal,
-                      itemCount: 6,
-                      itemBuilder: (context, index) {
-                        return Row(
-                          children: [
-                            SizedBox(
-                              height: 56,
-                              width: 48,
-                              child: TextField(
-                                controller: controllers[index],
-                                focusNode: focusNodes[index],
-                                keyboardType: TextInputType.number,
-                                textAlign: TextAlign.center,
-                                maxLength: 1,
-                                onChanged: (value) {
-                                  if (value.isNotEmpty) {
-                                    setState(() {
-                                      otp += value;
-                                    });
-                                    if (index < controllers.length - 1) {
-                                      FocusScope.of(context)
-                                          .requestFocus(focusNodes[index + 1]);
-                                    } else {
-                                      _sendOTP(context);
-                                    }
-                                  } else {
-                                    otp = removeCharAtIndex(otp, index);
-                                    logger.e("OTP sau xóa $otp");
+            _otpFormField(context),
+          ],
+        ),
+      ),
+    );
+  }
 
-                                    controllers[index]
-                                        .clear(); // Xóa giá trị trong ô TextField nếu giá trị rỗng
+  Padding _otpFormField(BuildContext context) {
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: getWidthScreen(context) * 0.05),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            height: 56,
+            child: ListView.builder(
+              shrinkWrap: true,
+              scrollDirection: Axis.horizontal,
+              itemCount: 6,
+              itemBuilder: (context, index) {
+                return Row(
+                  children: [
+                    SizedBox(
+                      height: 56,
+                      width: 48,
+                      child: TextField(
+                        controller: controllers[index],
+                        focusNode: focusNodes[index],
+                        keyboardType: TextInputType.number,
+                        textAlign: TextAlign.center,
+                        maxLength: 1,
+                        onChanged: (value) {
+                          if (value.isNotEmpty) {
+                            setState(() {
+                              otp += value;
+                            });
+                            if (index < controllers.length - 1) {
+                              FocusScope.of(context)
+                                  .requestFocus(focusNodes[index + 1]);
+                            } else {
+                              _sendOTP(context);
+                            }
+                          } else {
+                            otp = removeCharAtIndex(otp, index);
+                            logger.e("OTP sau xóa $otp");
 
-                                    if (index > 0) {
-                                      // Di chuyển đến ô trước đó nếu giá trị rỗng và không phải là ô đầu tiên
-                                      FocusScope.of(context)
-                                          .requestFocus(focusNodes[index - 1]);
-                                    }
-                                  }
-                                },
-                                decoration: const InputDecoration(
-                                  counterText: '',
-                                  border: OutlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: CustomColor.borderNeutralColor,
-                                          width: 1),
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: 12.4)
-                          ],
-                        );
-                      },
+                            controllers[index]
+                                .clear(); // Xóa giá trị trong ô TextField nếu giá trị rỗng
+
+                            if (index > 0) {
+                              // Di chuyển đến ô trước đó nếu giá trị rỗng và không phải là ô đầu tiên
+                              FocusScope.of(context)
+                                  .requestFocus(focusNodes[index - 1]);
+                            }
+                          }
+                        },
+                        decoration: const InputDecoration(
+                          counterText: '',
+                          border: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: CustomColor.borderNeutralColor,
+                                  width: 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8))),
+                        ),
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  BlocBuilder<OtpCubit, OtpState>(
-                    builder: (context, state) {
-                      return (state is TimeOutOtp)
+                    const SizedBox(width: 12.4)
+                  ],
+                );
+              },
+            ),
+          ),
+          const SizedBox(height: 16),
+          BlocBuilder<OtpCubit, OtpState>(
+            builder: (context, state) {
+              return (state is TimeOutOtp)
+                  ? Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Mã OTP của bạn đã hết hạn",
+                        style: CustomTextStyle.body2(),
+                      ),
+                    )
+                  : (state is IncorrectOtp)
+                      ? Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Mã OTP không chính xác",
+                            style: CustomTextStyle.body2()
+                                .copyWith(color: Colors.red),
+                          ),
+                        )
+                      : (state is OverRequestOtp)
                           ? Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                "Mã OTP của bạn đã hết hạn",
-                                style: CustomTextStyle.body2(),
+                                state.mess,
+                                style: CustomTextStyle.body2()
+                                    .copyWith(color: Colors.red),
                               ),
                             )
-                          : (state is IncorrectOtp)
-                              ? Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    "Mã OTP không chính xác",
-                                    style: CustomTextStyle.body2()
-                                        .copyWith(color: Colors.red),
-                                  ),
-                                )
-                              : (state is SuccessfulOtp)
-                                  ? const SizedBox.shrink()
-                                  : _timerCountDown(context);
-                    },
-                  ),
-                  // Text(
-                  //   'Mã OTP sẽ hết hạn sau 1:20 phút',
-                  //   style: CustomTextStyle.body2(),
-                  // ),
-                  const SizedBox(height: 24),
-                  BlocBuilder<OtpCubit, OtpState>(
-                    builder: (context, state) {
-                      return (state is SentOtp)
-                          ? PrimaryButton(
-                              text: "Xác nhận",
-                              onpress: () {
-                                context.read<OtpCubit>().changeState(SentOtp());
-                              },
-                              isDisable: false)
-                          : PrimaryButton(
-                              text: "Gửi lại mã OTP",
-                              onpress: () {
-                                Map<String, String> data =
-                                    ModalRoute.of(context)!.settings.arguments
-                                        as Map<String, String>;
+                          : (state is WaittingOtp)
+                              ? _timerCountDown(context)
+                              : (state is InitialOtp)
+                                  ? _timerCountDown(context)
+                                  : const SizedBox();
+            },
+          ),
+          // Text(
+          //   'Mã OTP sẽ hết hạn sau 1:20 phút',
+          //   style: CustomTextStyle.body2(),
+          // ),
+          const SizedBox(height: 24),
+          BlocBuilder<OtpCubit, OtpState>(
+            builder: (context, state) {
+              return (state is WaittingOtp)
+                  ? PrimaryButton(
+                      text: "Xác nhận",
+                      onpress: () {
+                        // context.read<OtpCubit>().changeState(SentOtp());
+                      },
+                      isDisable: false)
+                  : PrimaryButton(
+                      text: "Gửi lại mã OTP",
+                      onpress: () {
+                        Map<String, String> data = ModalRoute.of(context)!
+                            .settings
+                            .arguments as Map<String, String>;
 
-                                context.read<OtpCubit>().reSendOtp(
-                                    userName: data["userName"]!,
-                                    phone: data["phone"]!);
-
-                                context.read<OtpCubit>().changeState(SentOtp());
-                              },
-                              isDisable: false);
-                    },
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
+                        context.read<OtpCubit>().reSendOtp(
+                            userName: data["userName"]!, phone: data["phone"]!);
+                      },
+                      isDisable: false);
+            },
+          ),
+        ],
       ),
     );
   }
@@ -253,6 +247,39 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
           context.read<OtpCubit>().changeState(TimeOutOtp());
           print('Timer is done!');
         },
+      ),
+    );
+  }
+}
+
+class _OtpMemoTitle extends StatelessWidget {
+  const _OtpMemoTitle({
+    super.key,
+    required this.data,
+  });
+
+  final Map<String, String> data;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      color: CustomColor.backgroundNeutralColor,
+      padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 15),
+      child: RichText(
+        textAlign: TextAlign.center,
+        text: TextSpan(
+          text: 'Mã OTP đã được gửi về số điện thoại ',
+          style:
+              CustomTextStyle.body2(textColor: CustomColor.textSecondaryColor),
+          children: <InlineSpan>[
+            TextSpan(
+              text: hideSDT(data["phone"]!),
+              style: CustomTextStyle.body2(
+                  textColor: CustomColor.textPrimaryColor),
+            ),
+          ],
+        ),
       ),
     );
   }

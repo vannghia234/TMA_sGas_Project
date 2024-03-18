@@ -18,9 +18,9 @@ class OtpCubit extends Cubit<OtpState> {
         ForgetPasswordEntity(username: userName, phone: phone);
     var res = await usecase.forgetPassword(entity);
     if (res.code == 200) {
-      changeState(SentOtp());
-    } else if (res.code == 400) {
       changeState(WaittingOtp());
+    } else if (res.code == 400) {
+      changeState(OverRequestOtp(mess: res.data!));
     }
   }
 
