@@ -47,7 +47,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   SizedBox(height: getHeightScreen(context) * 0.16),
-                  Image.asset(ImagePath.logoTMA),
+                  SvgPicture.asset(ImagePath.logoTMA),
                   const _TitleLogin(),
                   const LabelTextField(
                     title: 'Tên đăng nhập',
