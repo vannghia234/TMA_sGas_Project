@@ -35,6 +35,7 @@ class KeyStorage extends Cubit<LoginAuthenticationState> {
     } catch (e) {
       throw Exception(e);
     }
+
     logger.d("Read accessToken ${state.accessToken}");
     if (JwtDecoder.isExpired(state.accessToken)) {
       logger.d(

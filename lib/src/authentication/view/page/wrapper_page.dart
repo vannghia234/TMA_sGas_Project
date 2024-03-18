@@ -15,9 +15,7 @@ class Wrapper extends StatelessWidget {
             ? const HomePage()
             : (state is FailAuthentication)
                 ? const AuthenticationPage()
-                : const Center(
-                    child: Text("Error Wrapper"),
-                  );
+                : const AuthenticationPage();
       },
     );
   }
