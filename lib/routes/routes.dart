@@ -6,6 +6,7 @@ import 'package:sgas/src/authentication/view/page/forgot_password_page.dart';
 import 'package:sgas/src/authentication/view/page/home_page.dart';
 import 'package:sgas/src/authentication/view/page/recieve_otp_page.dart';
 import 'package:sgas/src/authentication/view/page/wrapper_page.dart';
+import 'package:sgas/src/setting/presentation/pages/setting_page.dart';
 
 Map<String, WidgetBuilder> routes = {
   RoutePath.wrapper: (context) => const Wrapper(),
