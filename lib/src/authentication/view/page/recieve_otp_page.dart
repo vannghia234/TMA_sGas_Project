@@ -46,7 +46,6 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
     Map<String, String> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, String>;
     logger.e("Test ${data["phone"]!}");
-    showAnimationLoading(context);
 
     var res = await context
         .read<OtpCubit>()
@@ -57,7 +56,6 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
         "data": res.data!,
         "username": data["userName"]!
       };
-      Navigator.pop(context);
 
       Navigator.pushNamed(context, RoutePath.changeNewPassword, arguments: arg);
     }

@@ -32,21 +32,15 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
       changeState(ValidForget());
       ForgetPasswordEntity entity =
           ForgetPasswordEntity(username: username, phone: phoneNumber);
-      showAnimationLoading(context);
 
       var res = await au.forgetPassword(entity);
       if (res.code == 200) {
-        Navigator.pop(context);
         Navigator.pushNamed(context, RoutePath.recieveOTP,
             arguments: {"userName": username, "phone": phoneNumber});
       } else if (res.code == 404) {
-        Navigator.pop(context);
-
         // ignore: use_build_context_synchronously
         changeState(InvalidForgetUsername(message: "Tài khoản không tồn tại"));
       } else if (res.code == 40015) {
-        Navigator.pop(context);
-
         changeState(
             InvalidForgetPhoneNumber(message: "Số điện thoại không tồn tại"));
       }

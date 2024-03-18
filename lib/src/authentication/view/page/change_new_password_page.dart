@@ -108,7 +108,6 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
                       context.read<ChangeRepasswordCubit>().changeState(
                           InValidRePassword(message: "Mật khẩu không khớp"));
                     } else {
-                      showAnimationLoading(context);
                       context
                           .read<ChangeRepasswordCubit>()
                           .changeState(SuccessValidPassword());
@@ -118,7 +117,6 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
                               token: data["data"]!,
                               newPassword: _rePasswordController.text,
                               username: data["username"]!);
-                      Navigator.pop(context);
                       if (res.code == 200) {
                         logger.e("Đổi mật khẩu thành công ${res.data}");
                         Navigator.pushNamed(context, RoutePath.login);

@@ -6,7 +6,6 @@ import 'package:sgas/src/authentication/view/page/forgot_password_page.dart';
 import 'package:sgas/src/authentication/view/page/home_page.dart';
 import 'package:sgas/src/authentication/view/page/recieve_otp_page.dart';
 import 'package:sgas/src/authentication/view/page/wrapper_page.dart';
-import 'package:sgas/src/setting/presentation/pages/setting_page.dart';
 
 Map<String, WidgetBuilder> routes = {
   RoutePath.wrapper: (context) => const Wrapper(),
@@ -15,5 +14,4 @@ Map<String, WidgetBuilder> routes = {
   RoutePath.recieveOTP: (context) => const RecieveOTPPage(),
   RoutePath.home: (context) => const HomePage(),
   RoutePath.changeNewPassword: (context) => const ChangeNewPasswordPage(),
-  RoutePath.settings: (context) => const SettingPage(),
 };

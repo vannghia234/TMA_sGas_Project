@@ -85,9 +85,7 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
       context.read<LoginCubit>().changeState(Successful());
       AuthenticationEntity entity = AuthenticationEntity(
           username: _username.text, password: _password.text);
-      showAnimationLoading(context);
       var res = await authUseCase.loginUseCase(entity);
-      Navigator.pop(context);
       if (res.code == 200) {
         KeyStorage storage = KeyStorage();
         storage.save(
