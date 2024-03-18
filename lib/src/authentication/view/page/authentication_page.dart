@@ -74,31 +74,45 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
 
   Future<void> handleButtonLogin() async {
     if (_username.text.isEmpty) {
-      context.read<LoginCubit>().changeState(InValidUserName(message: "Bạn chưa nhập tên đăng nhập"));
+      context
+          .read<LoginCubit>()
+          .changeState(InValidUserName(message: "Bạn chưa nhập tên đăng nhập"));
       return;
     } else if (_password.text.isEmpty) {
-      context.read<LoginCubit>().changeState(InValidPassWord(message: "Bạn chưa nhập mật khẩu"));
+      context
+          .read<LoginCubit>()
+          .changeState(InValidPassWord(message: "Bạn chưa nhập mật khẩu"));
       return;
     } else {
       context.read<LoginCubit>().changeState(Successful());
-      AuthenticationEntity entity = AuthenticationEntity(username: _username.text, password: _password.text);
+      AuthenticationEntity entity = AuthenticationEntity(
+          username: _username.text, password: _password.text);
       var res = await authUseCase.loginUseCase(entity);
       if (res.code == 200) {
         KeyStorage storage = KeyStorage();
-        storage.save(accessToken: res.data!.token!.accessToken!, refreshToken: res.data!.token!.accessToken!);
+        storage.save(
+            accessToken: res.data!.token!.accessToken!,
+            refreshToken: res.data!.token!.accessToken!);
         Navigator.pushNamed(context, RoutePath.home);
       } else if (res.code == 40001) {
-        context.read<LoginCubit>().changeState(InValidPassWord(message: "Sai tên đăng nhập hoặc mật khẩu"));
+        context.read<LoginCubit>().changeState(
+            InValidPassWord(message: "Sai tên đăng nhập hoặc mật khẩu"));
       } else if (res.code == 40002) {
-        context.read<LoginCubit>().changeState(InValidPassWord(message: "Tài khoản đã bị khóa"));
+        context
+            .read<LoginCubit>()
+            .changeState(InValidPassWord(message: "Tài khoản đã bị khóa"));
       } else if (res.code == 40003) {
-        context.read<LoginCubit>().changeState(InValidPassWord(message: "Tài khoản của công ty bị khóa"));
+        context.read<LoginCubit>().changeState(
+            InValidPassWord(message: "Tài khoản của công ty bị khóa"));
       } else if (res.code == 40005) {
-        context.read<LoginCubit>().changeState(InValidPassWord(message: "Tên tài khoản chỉ chứa kí tự a-z, A-Z, hoặc 0-9"));
+        context.read<LoginCubit>().changeState(InValidPassWord(
+            message: "Tên tài khoản chỉ chứa kí tự a-z, A-Z, hoặc 0-9"));
       } else if (res.code == 40006) {
-        context.read<LoginCubit>().changeState(InValidPassWord(message: "Tên tài khoản phải từ 6-50 kí tự"));
+        context.read<LoginCubit>().changeState(
+            InValidPassWord(message: "Tên tài khoản phải từ 8-50 kí tự"));
       } else if (res.code == 40007) {
-        context.read<LoginCubit>().changeState(InValidPassWord(message: "Mật khẩu phải từ 6-50 kí tự"));
+        context.read<LoginCubit>().changeState(
+            InValidPassWord(message: "Mật khẩu phải từ 8-50 kí tự"));
       }
     }
   }
@@ -116,7 +130,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                   SvgPicture.asset(IconPath.error),
                   Text(
                     '  ${state.message}',
-                    style: CustomTextStyle.body3(textColor: CustomColor.semanticAlertColor),
+                    style: CustomTextStyle.body3(
+                        textColor: CustomColor.semanticAlertColor),
                   ),
                 ],
               )
@@ -170,7 +185,8 @@ class _AuthenticationPageState extends State<AuthenticationPage> {
                   Image.asset(IconPath.error),
                   Text(
                     '  ${state.message}',
-                    style: CustomTextStyle.body3(textColor: CustomColor.semanticAlertColor),
+                    style: CustomTextStyle.body3(
+                        textColor: CustomColor.semanticAlertColor),
                   ),
                 ],
               )
@@ -204,7 +220,8 @@ class _TitleLogin extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
       child: Text(
         'Đăng nhập',
-        style: CustomTextStyle.headingH4(textColor: CustomColor.textPrimaryColor),
+        style:
+            CustomTextStyle.headingH4(textColor: CustomColor.textPrimaryColor),
       ),
     );
   }
@@ -238,13 +255,15 @@ class _ForgetPasswordText extends StatelessWidget {
 OutlineInputBorder _greyBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
-    borderSide: const BorderSide(color: CustomColor.borderNeutralColor, width: 1),
+    borderSide:
+        const BorderSide(color: CustomColor.borderNeutralColor, width: 1),
   );
 }
 
 OutlineInputBorder _errorBorder() {
   return OutlineInputBorder(
     borderRadius: BorderRadius.circular(8),
-    borderSide: const BorderSide(color: CustomColor.semanticAlertColor, width: 1),
+    borderSide:
+        const BorderSide(color: CustomColor.semanticAlertColor, width: 1),
   );
 }
