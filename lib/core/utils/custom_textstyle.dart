@@ -26,6 +26,14 @@ class CustomTextStyle {
     );
   }
 
+  static TextStyle lable3({Color? textColor}) {
+    return GoogleFonts.inter(
+      fontSize: 14,
+      fontWeight: FontWeight.w600,
+      color: (textColor != null) ? textColor : Colors.black,
+    );
+  }
+
   static TextStyle body1({Color? textColor}) {
     return GoogleFonts.inter(
       fontSize: 18,

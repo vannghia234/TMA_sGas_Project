@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'sGAS',
         routes: routes,
-        initialRoute: RoutePath.login,
+        initialRoute: RoutePath.settings,
       ),
     );
   }

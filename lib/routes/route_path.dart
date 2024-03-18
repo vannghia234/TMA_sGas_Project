@@ -13,4 +13,7 @@ class RoutePath {
   static const unsupportVersion = "/unsupportVersion";
 
   static const errorVersion = "/errorVersion";
+
+  // setting
+  static const settings = "/settings";
 }
