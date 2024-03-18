@@ -37,32 +37,37 @@ class KeyStorage extends Cubit<LoginAuthenticationState> {
     }
 
     logger.d("Read accessToken ${state.accessToken}");
-    if (JwtDecoder.isExpired(state.accessToken)) {
-      logger.d(
-          "AccessToken is expired ?  ${JwtDecoder.isExpired(state.accessToken)}");
-      // Map<String, dynamic> decodedToken = JwtDecoder.decode(state.accessToken);
-      // logger.e("Read decoder $decodedToken");
-      // DateTime expiryDateTime = DateTime.fromMillisecondsSinceEpoch(
-      //     decodedToken["exp"] * 1000,
-      //     isUtc: true);
-      // String formattedExpiry =
-      //     expiryDateTime.toString(); // Chuyển đổi thành chuỗi
-      // print(formattedExpiry); // In ra thời gian hết hạn dưới dạng chuỗi
-
-      if (JwtDecoder.isExpired(state.refreshToken)) {
-        logger.d(
-            "refreshToken is expired ?  ${JwtDecoder.isExpired(state.refreshToken)}");
-        emit(FailAuthentication());
-      } else {
-        var res = await useCase.getAccesstokenFromRefreshToken(
-            refreshToken: state.refreshToken);
-        state.accessToken = res.data!.token!.accessToken!;
-        state.refreshToken = res.data!.token!.refreshToken!;
-        emit(SuccessfulAuthentication());
-      }
+    if (state.accessToken == "") {
+      emit(FailAuthentication());
+      return;
     } else {
-      emit(SuccessfulAuthentication());
-      // TODO
+      if (JwtDecoder.isExpired(state.accessToken)) {
+        logger.d(
+            "AccessToken is expired ?  ${JwtDecoder.isExpired(state.accessToken)}");
+        // Map<String, dynamic> decodedToken = JwtDecoder.decode(state.accessToken);
+        // logger.e("Read decoder $decodedToken");
+        // DateTime expiryDateTime = DateTime.fromMillisecondsSinceEpoch(
+        //     decodedToken["exp"] * 1000,
+        //     isUtc: true);
+        // String formattedExpiry =
+        //     expiryDateTime.toString(); // Chuyển đổi thành chuỗi
+        // print(formattedExpiry); // In ra thời gian hết hạn dưới dạng chuỗi
+
+        if (JwtDecoder.isExpired(state.refreshToken)) {
+          logger.d(
+              "refreshToken is expired ?  ${JwtDecoder.isExpired(state.refreshToken)}");
+          emit(FailAuthentication());
+        } else {
+          var res = await useCase.getAccesstokenFromRefreshToken(
+              refreshToken: state.refreshToken);
+          state.accessToken = res.data!.token!.accessToken!;
+          state.refreshToken = res.data!.token!.refreshToken!;
+          emit(SuccessfulAuthentication());
+        }
+      } else {
+        emit(SuccessfulAuthentication());
+        // TODO
+      }
     }
   }
 
