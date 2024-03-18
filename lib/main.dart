@@ -13,6 +13,7 @@ import 'package:sgas/src/authentication/view/bloc/change_re_password_cubit.dart'
 import 'package:sgas/src/authentication/view/bloc/forget_pass_cubit.dart';
 import 'package:sgas/src/authentication/view/bloc/login_cubit.dart';
 import 'package:sgas/src/authentication/view/bloc/otp_cubit.dart';
+import 'package:sgas/src/authentication/view/utils/key_storage.dart';
 
 void main() {
   HttpOverrides.global = CustomHttpOverrides();
@@ -20,6 +21,7 @@ void main() {
   setOrientations();
 
   configDependencies();
+
   runApp(
     DevicePreview(
       enabled: !kReleaseMode,
@@ -46,6 +48,9 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => getIt<OtpCubit>(),
         ),
+        BlocProvider(
+          create: (context) => getIt<KeyStorage>(),
+        )
         // BlocProvider(
         //   create: (context) => getIt<ChangeNewRePasswordCubit>(),
         // )
@@ -58,7 +63,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'sGAS',
         routes: routes,
-        initialRoute: RoutePath.login,
+        initialRoute: RoutePath.wrapper,
       ),
     );
   }

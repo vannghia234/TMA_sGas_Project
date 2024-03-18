@@ -1,4 +1,5 @@
 class RoutePath {
+  static const wrapper = "/wrapper";
   static const login = '/login';
   static const forgotPassword = '/forgotPassword';
   static const recieveOTP = '/recieveOTP';

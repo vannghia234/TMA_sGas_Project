@@ -24,6 +24,7 @@ dependencies:
   shared_preferences: ^2.2.2
   logger: ^2.1.0
   timer_count_down: ^2.2.2
+  jwt_decoder: ^2.0.1
 
 dev_dependencies:
   flutter_test:

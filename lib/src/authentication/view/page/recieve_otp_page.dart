@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/constants/constants.dart';
 import 'package:sgas/core/utils/custom_color.dart';
@@ -44,8 +43,6 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
   }
 
   Future<void> _sendOTP(BuildContext context) async {
-    print('Mã OTP: $otp');
-
     Map<String, String> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, String>;
     logger.e("Test ${data["phone"]!}");
