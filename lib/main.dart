@@ -23,10 +23,7 @@ void main() {
   configDependencies();
 
   runApp(
-    DevicePreview(
-      enabled: !kReleaseMode,
-      builder: (context) => const MyApp(), // Wrap your app
-    ),
+    const MyApp(),
   );
 }
 
@@ -56,8 +53,6 @@ class MyApp extends StatelessWidget {
         // )
       ],
       child: MaterialApp(
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
         theme: ThemeData.light(),
         darkTheme: ThemeData.dark(),
         debugShowCheckedModeBanner: false,
