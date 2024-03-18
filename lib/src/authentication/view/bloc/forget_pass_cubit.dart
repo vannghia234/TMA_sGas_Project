@@ -35,7 +35,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
 
       var res = await au.forgetPassword(entity);
       if (res.code == 200) {
-        Navigator.pushNamed(context, RoutePath.recieveOTP,
+        Navigator.pushNamed(context, RoutePath.recieveOtp,
             arguments: {"userName": username, "phone": phoneNumber});
       } else if (res.code == 404) {
         // ignore: use_build_context_synchronously

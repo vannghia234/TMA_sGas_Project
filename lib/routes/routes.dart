@@ -11,7 +11,7 @@ Map<String, WidgetBuilder> routes = {
   RoutePath.wrapper: (context) => const Wrapper(),
   RoutePath.login: (context) => const AuthenticationPage(),
   RoutePath.forgotPassword: (context) => const ForgotPasswordPage(),
-  RoutePath.recieveOTP: (context) => const RecieveOTPPage(),
+  RoutePath.recieveOtp: (context) => const RecieveOTPPage(),
   RoutePath.home: (context) => const HomePage(),
   RoutePath.changeNewPassword: (context) => const ChangeNewPasswordPage(),
 };
