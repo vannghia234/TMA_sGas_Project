@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/constants/constants.dart';
 import 'package:sgas/core/utils/custom_color.dart';
@@ -27,6 +28,7 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
       List.generate(6, (index) => TextEditingController());
   List<FocusNode> focusNodes = List.generate(6, (index) => FocusNode());
   String otp = '';
+  int countDownTime = 60;
 
   @override
   void initState() {
@@ -42,14 +44,36 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
     super.dispose();
   }
 
+  void clearOtp() {
+    for (var element in controllers) {
+      element.clear();
+    }
+    focusNodes[0].requestFocus();
+    otp = "";
+  }
+
+  void updateOtp() {
+    otp = "";
+    for (var i = 0; i < controllers.length; i++) {
+      if (controllers[i].text == "") {
+        otp += "_";
+        continue;
+      }
+      otp += controllers[i].text;
+    }
+    logger.f("OTP cuối $otp");
+  }
+
   Future<void> _sendOTP(BuildContext context) async {
     Map<String, String> data =
         ModalRoute.of(context)!.settings.arguments as Map<String, String>;
     logger.e("Test ${data["phone"]!}");
+    logger.f("Mã otp $otp");
 
     var res = await context
         .read<OtpCubit>()
         .sendOtp(userName: data["userName"]!, otpCode: otp);
+    clearOtp();
     if (res.code == 200) {
       // context.read<OtpCubit>().changeState(InitialOtp());
       Map<String, String> arg = {
@@ -111,26 +135,30 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
                       height: 56,
                       width: 48,
                       child: TextField(
+                        inputFormatters: [
+                          FilteringTextInputFormatter.digitsOnly,
+                        ],
                         controller: controllers[index],
                         focusNode: focusNodes[index],
                         keyboardType: TextInputType.number,
                         textAlign: TextAlign.center,
                         maxLength: 1,
                         onChanged: (value) {
+                          updateOtp();
                           if (value.isNotEmpty) {
-                            setState(() {
-                              otp += value;
-                            });
+                            // setState(() {
+                            //   otp += value;
+                            // });
+
                             if (index < controllers.length - 1) {
                               FocusScope.of(context)
                                   .requestFocus(focusNodes[index + 1]);
                             } else {
                               _sendOTP(context);
                             }
-                          } else {
-                            otp = removeCharAtIndex(otp, index);
-                            logger.e("OTP sau xóa $otp");
-
+                          } else if (value.isEmpty) {
+                            // otp = removeCharAtIndex(otp, index);
+                            // logger.e("OTP sau xóa $otp");
                             controllers[index]
                                 .clear(); // Xóa giá trị trong ô TextField nếu giá trị rỗng
 
@@ -230,7 +258,7 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
     return Align(
       alignment: Alignment.centerLeft,
       child: Countdown(
-        seconds: 60,
+        seconds: countDownTime,
         build: (BuildContext context, double time) => RichText(
           text: TextSpan(
               style: CustomTextStyle.body2(),

@@ -5,6 +5,8 @@ import 'package:sgas/routes/route_path.dart';
 import 'package:sgas/src/authentication/domain/entities/forget_password_entity.dart';
 import 'package:sgas/src/authentication/domain/usecases/authenticaion_usecase.dart';
 import 'package:sgas/src/authentication/view/bloc/forget_pass_state.dart';
+import 'package:sgas/src/authentication/view/bloc/otp_cubit.dart';
+import 'package:sgas/src/authentication/view/bloc/otp_state.dart';
 
 class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
   ForgetPasswordCubit() : super(InititalForgetState());
@@ -35,6 +37,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
 
       var res = await au.forgetPassword(entity);
       if (res.code == 200) {
+        context.read<OtpCubit>().changeState(WaittingOtp());
         Navigator.pushNamed(context, RoutePath.recieveOtp,
             arguments: {"userName": username, "phone": phoneNumber});
       } else if (res.code == 404) {

@@ -13,19 +13,21 @@ class ErrorMessage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      children: [
-        SvgPicture.asset(IconPath.error),
-        const SizedBox(
-          width: 5,
-        ),
-        Text(
-          mess,
-          style:
-              CustomTextStyle.body3(textColor: CustomColor.semanticAlertColor),
-        ),
-      ],
+    return FittedBox(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          SvgPicture.asset(IconPath.error),
+          const SizedBox(
+            width: 5,
+          ),
+          Text(
+            mess,
+            style: CustomTextStyle.body3(
+                textColor: CustomColor.semanticAlertColor),
+          ),
+        ],
+      ),
     );
   }
 }
