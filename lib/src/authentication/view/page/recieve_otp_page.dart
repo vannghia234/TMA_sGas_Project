@@ -8,7 +8,6 @@ import 'package:sgas/routes/route_path.dart';
 import 'package:sgas/src/authentication/view/bloc/otp_cubit.dart';
 import 'package:sgas/src/authentication/view/bloc/otp_state.dart';
 import 'package:sgas/src/authentication/view/utils/hide_sdt.dart';
-import 'package:sgas/src/authentication/view/utils/remove_charAt.dart';
 import 'package:sgas/src/authentication/view/widgets/primary_button.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
