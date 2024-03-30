@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:sgas/core/constants/constants.dart';
-import 'package:sgas/src/authentication/data/api/api_url.dart';
+import 'package:sgas/core/helper/logger_helper.dart';
+import 'package:sgas/core/service/locator/api_service_path.dart';
 
 class AuthenticationDataSource {
   Future<String> login(Map<String, String> body) async {
@@ -10,7 +10,7 @@ class AuthenticationDataSource {
       String resultString = "";
 
       HttpClientRequest request =
-          await client.postUrl(Uri.parse(ApiUrl.apiPostLogin));
+          await client.postUrl(Uri.parse(APIServicePath.apiPostLogin));
       request.headers.add('content-type', 'application/json');
       request.write(jsonEncode(body));
       HttpClientResponse response = await request.close();
@@ -30,7 +30,7 @@ class AuthenticationDataSource {
       String resultString = "";
 
       HttpClientRequest request =
-          await client.postUrl(Uri.parse(ApiUrl.apiPostForgetPassword));
+          await client.postUrl(Uri.parse(APIServicePath.apiPostForgetPassword));
       request.headers.add('content-type', 'application/json');
       request.write(jsonEncode(body));
       HttpClientResponse response = await request.close();
@@ -51,7 +51,7 @@ class AuthenticationDataSource {
       String resultString = "";
 
       HttpClientRequest request =
-          await client.postUrl(Uri.parse(ApiUrl.apiPostCompareOtp));
+          await client.postUrl(Uri.parse(APIServicePath.apiPostCompareOtp));
       request.headers.add('content-type', 'application/json');
       request.write(jsonEncode(body));
       HttpClientResponse response = await request.close();
@@ -71,7 +71,7 @@ class AuthenticationDataSource {
     String resultString = "";
 
     HttpClientRequest request =
-        await client.putUrl(Uri.parse(ApiUrl.apiPutUpdatePassword));
+        await client.putUrl(Uri.parse(APIServicePath.apiPutUpdatePassword));
     request.headers.add('content-type', 'application/json');
     request.write(jsonEncode(body));
     HttpClientResponse response = await request.close();
@@ -91,7 +91,7 @@ class AuthenticationDataSource {
       String resultString = "";
 
       HttpClientRequest request = await client
-          .postUrl(Uri.parse(ApiUrl.apiPostRefreshToken + refreshToken));
+          .postUrl(Uri.parse(APIServicePath.apiPostRefreshToken + refreshToken));
       request.headers.add('content-type', 'application/json');
       HttpClientResponse response = await request.close();
       // Đọc dữ liệu từ phản hồi

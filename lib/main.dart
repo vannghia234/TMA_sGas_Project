@@ -4,14 +4,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/http/http_override_config.dart';
 import 'package:sgas/core/config/presentation/orientation_config.dart';
 import 'package:sgas/core/di/dependency_config.dart';
-import 'package:sgas/routes/route_path.dart';
-import 'package:sgas/routes/routes.dart';
-import 'package:sgas/src/authentication/view/bloc/change_password_cubit.dart';
-import 'package:sgas/src/authentication/view/bloc/change_re_password_cubit.dart';
-import 'package:sgas/src/authentication/view/bloc/forget_pass_cubit.dart';
-import 'package:sgas/src/authentication/view/bloc/login_cubit.dart';
-import 'package:sgas/src/authentication/view/bloc/otp_cubit.dart';
-import 'package:sgas/src/authentication/view/utils/key_storage.dart';
+import 'package:sgas/core/config/routes/route_path.dart';
+import 'package:sgas/core/config/routes/routes.dart';
+import 'package:sgas/src/authentication/presentation/bloc/change_password_cubit.dart';
+import 'package:sgas/src/authentication/presentation/bloc/change_re_password_cubit.dart';
+import 'package:sgas/src/authentication/presentation/bloc/forget_pass_cubit.dart';
+import 'package:sgas/src/authentication/presentation/bloc/login_cubit.dart';
+import 'package:sgas/src/authentication/presentation/bloc/otp_cubit.dart';
+import 'package:sgas/src/authentication/presentation/utils/key_storage.dart';
 
 void main() {
   HttpOverrides.global = CustomHttpOverrides();
@@ -56,7 +56,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'sGAS',
         routes: routes,
-        initialRoute: RoutePath.wrapper,
+        initialRoute: RoutePath.forgotPassword,
       ),
     );
   }
