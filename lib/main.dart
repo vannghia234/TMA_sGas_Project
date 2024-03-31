@@ -55,7 +55,7 @@ class MyApp extends StatelessWidget {
         darkTheme: ThemeData.dark(),
         debugShowCheckedModeBanner: false,
         title: 'sGAS',
-        routes: routes,
+        onGenerateRoute: appRoute,
         initialRoute: RoutePath.forgotPassword,
       ),
     );

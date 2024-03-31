@@ -1,23 +1,25 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sgas/core/helper/logger_helper.dart';
-import 'package:sgas/core/helper/screen_helper.dart';
+import 'package:sgas/src/authentication/presentation/widgets/alert_message.dart';
+import 'package:sgas/src/authentication/presentation/widgets/notification_header.dart';
+import 'package:timer_count_down/timer_count_down.dart';
+
 import 'package:sgas/core/config/routes/route_path.dart';
+import 'package:sgas/core/helper/logger_helper.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_style.dart';
 import 'package:sgas/src/authentication/presentation/bloc/otp_cubit.dart';
 import 'package:sgas/src/authentication/presentation/bloc/otp_state.dart';
 import 'package:sgas/src/authentication/presentation/utils/hide_sdt.dart';
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
-import 'package:timer_count_down/timer_count_down.dart';
 
 class RecieveOTPPage extends StatefulWidget {
-  // final String userName;
-  // final String phone;
   const RecieveOTPPage({
     super.key,
+    required this.userInfo,
   });
+  final Map<String, String> userInfo;
 
   @override
   State<RecieveOTPPage> createState() => _RecieveOTPPageState();
@@ -65,23 +67,17 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
   }
 
   Future<void> _sendOTP(BuildContext context) async {
-    Map<String, String> data =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
-    logger.e("Test ${data["phone"]!}");
-    logger.f("Mã otp $otp");
-
     var res = await context
         .read<OtpCubit>()
-        .sendOtp(userName: data["userName"]!, otpCode: otp);
+        .sendOtp(userName: widget.userInfo["username"]!, otpCode: otp);
     clearOtp();
     if (res.code == 200) {
-      // context.read<OtpCubit>().changeState(InitialOtp());
       Map<String, String> arg = {
         "data": res.data!,
-        "username": data["userName"]!
+        "username": widget.userInfo["username"]!
       };
 
-      Navigator.popAndPushNamed(context, RoutePath.changNewPassword,
+      Navigator.popAndPushNamed(context, RoutePath.ChangeNewPassword,
           arguments: arg);
     }
     // Gửi mã OTP ở đây
@@ -89,8 +85,6 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, String> data =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0.0,
@@ -106,7 +100,10 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
       body: SizedBox.expand(
         child: Column(
           children: [
-            _OtpMemoTitle(data: data),
+            NotificationHeader(
+              title:
+                  "Mã OTP đã được gửi về số điện thoại ${hideSDT(widget.userInfo["phone"]!)}",
+            ),
             const SizedBox(height: 24),
             _otpFormField(context),
           ],
@@ -117,7 +114,7 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
 
   Padding _otpFormField(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(horizontal: getWidthScreen(context) * 0.05),
+      padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
@@ -145,10 +142,6 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
                         onChanged: (value) {
                           updateOtp();
                           if (value.isNotEmpty) {
-                            // setState(() {
-                            //   otp += value;
-                            // });
-
                             if (index < controllers.length - 1) {
                               FocusScope.of(context)
                                   .requestFocus(focusNodes[index + 1]);
@@ -156,26 +149,20 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
                               _sendOTP(context);
                             }
                           } else if (value.isEmpty) {
-                            // otp = removeCharAtIndex(otp, index);
-                            // logger.e("OTP sau xóa $otp");
-                            controllers[index]
-                                .clear(); // Xóa giá trị trong ô TextField nếu giá trị rỗng
-
+                            controllers[index].clear();
                             if (index > 0) {
-                              // Di chuyển đến ô trước đó nếu giá trị rỗng và không phải là ô đầu tiên
                               FocusScope.of(context)
                                   .requestFocus(focusNodes[index - 1]);
                             }
                           }
                         },
-                        decoration: const InputDecoration(
-                          counterText: '',
-                          border: OutlineInputBorder(
-                              borderSide: BorderSide(
-                                  color: BaseColor.borderColor, width: 1),
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8))),
-                        ),
+                        decoration: InputDecoration(
+                            counterText: '',
+                            border: _outLineBorderCustom(),
+                            focusedBorder: _outLineBorderCustom(),
+                            enabledBorder: _outLineBorderCustom()),
+                        cursorColor: BaseColor.textPrimaryColor,
+                        cursorRadius: const Radius.circular(4),
                       ),
                     ),
                     const SizedBox(width: 12.4)
@@ -187,43 +174,24 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
           const SizedBox(height: 16),
           BlocBuilder<OtpCubit, OtpState>(
             builder: (context, state) {
-              return (state is TimeOutOtp)
-                  ? Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Mã OTP của bạn đã hết hạn",
-                        style: BaseTextStyle.body2(),
-                      ),
-                    )
-                  : (state is IncorrectOtp)
-                      ? Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            "Mã OTP không chính xác",
-                            style: BaseTextStyle.body2()
-                                .copyWith(color: Colors.red),
-                          ),
-                        )
-                      : (state is OverRequestOtp)
-                          ? Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                state.mess,
-                                style: BaseTextStyle.body2()
-                                    .copyWith(color: Colors.red),
-                              ),
-                            )
-                          : (state is WaittingOtp)
-                              ? _timerCountDown(context)
-                              : (state is InitialOtp)
-                                  ? _timerCountDown(context)
-                                  : const SizedBox();
+              if (state is TimeOutOtp) {
+                return const AlertMessage(
+                  title: "Mã OTP của bạn đã hết hạn",
+                  color: BaseColor.textPrimaryColor,
+                );
+              } else if (state is IncorrectOtp) {
+                return const AlertMessage(
+                  title: "Mã OTP không chính xác",
+                );
+              }
+              if (state is OverRequestOtp) {
+                return AlertMessage(title: state.mess);
+              } else if (state is WaittingOtp) {
+                return _timerCountDown(context);
+              }
+              return const SizedBox.shrink();
             },
           ),
-          // Text(
-          //   'Mã OTP sẽ hết hạn sau 1:20 phút',
-          //   style: BaseTextStyle.body2(),
-          // ),
           const SizedBox(height: 24),
           BlocBuilder<OtpCubit, OtpState>(
             builder: (context, state) {
@@ -231,18 +199,15 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
                   ? PrimaryButton(
                       buttonTitle: "Xác nhận",
                       onPress: () {
-                        // context.read<OtpCubit>().changeState(SentOtp());
+                        _sendOTP(context);
                       },
                     )
                   : PrimaryButton(
                       buttonTitle: "Gửi lại mã OTP",
                       onPress: () {
-                        Map<String, String> data = ModalRoute.of(context)!
-                            .settings
-                            .arguments as Map<String, String>;
-
                         context.read<OtpCubit>().reSendOtp(
-                            userName: data["userName"]!, phone: data["phone"]!);
+                            userName: widget.userInfo["username"]!,
+                            phone: widget.userInfo["phone"]!);
                       },
                     );
             },
@@ -250,6 +215,12 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
         ],
       ),
     );
+  }
+
+  OutlineInputBorder _outLineBorderCustom() {
+    return const OutlineInputBorder(
+        borderSide: BorderSide(color: BaseColor.borderColor, width: 1),
+        borderRadius: BorderRadius.all(Radius.circular(8)));
   }
 
   Align _timerCountDown(BuildContext context) {
@@ -273,37 +244,6 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
           context.read<OtpCubit>().changeState(TimeOutOtp());
           print('Timer is done!');
         },
-      ),
-    );
-  }
-}
-
-class _OtpMemoTitle extends StatelessWidget {
-  const _OtpMemoTitle({
-    super.key,
-    required this.data,
-  });
-
-  final Map<String, String> data;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      color: BaseColor.backgroundNeutralColor,
-      padding: const EdgeInsets.symmetric(vertical: 22, horizontal: 15),
-      child: RichText(
-        textAlign: TextAlign.center,
-        text: TextSpan(
-          text: 'Mã OTP đã được gửi về số điện thoại ',
-          style: BaseTextStyle.body2(color: BaseColor.textSecondaryColor),
-          children: <InlineSpan>[
-            TextSpan(
-              text: hideSDT(data["phone"]!),
-              style: BaseTextStyle.body2(color: BaseColor.textPrimaryColor),
-            ),
-          ],
-        ),
       ),
     );
   }

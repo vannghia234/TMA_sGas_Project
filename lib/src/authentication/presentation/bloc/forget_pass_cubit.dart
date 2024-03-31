@@ -39,7 +39,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
       if (res.code == 200) {
         context.read<OtpCubit>().changeState(WaittingOtp());
         Navigator.pushNamed(context, RoutePath.receiveOTP,
-            arguments: {"userName": username, "phone": phoneNumber});
+            arguments: {"username": username, "phone": phoneNumber});
       } else if (res.code == 404) {
         // ignore: use_build_context_synchronously
         changeState(InvalidForgetUsername(message: "Tài khoản không tồn tại"));

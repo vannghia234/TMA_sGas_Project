@@ -15,7 +15,8 @@ import 'package:sgas/src/authentication/presentation/widgets/text_field_repasswo
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
 
 class ChangeNewPasswordPage extends StatefulWidget {
-  const ChangeNewPasswordPage({super.key});
+  const ChangeNewPasswordPage({super.key, required this.data});
+  final Map<String, String> data;
 
   @override
   State<ChangeNewPasswordPage> createState() => _ChangeNewPasswordPageState();
@@ -39,10 +40,6 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    Map<String, String> data =
-        ModalRoute.of(context)!.settings.arguments as Map<String, String>;
-    logger.e(data.runtimeType);
-
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -50,8 +47,6 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
             Navigator.pop(context);
-
-            //
           },
         ),
         centerTitle: false,
@@ -116,9 +111,9 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
                       var res = await context
                           .read<ChangeRepasswordCubit>()
                           .updatePass(
-                              token: data["data"]!,
+                              token: widget.data["data"]!,
                               newPassword: _rePasswordController.text,
-                              username: data["username"]!);
+                              username: widget.data["username"]!);
                       if (res.code == 200) {
                         logger.e("Đổi mật khẩu thành công ${res.data}");
                         Navigator.pushNamed(context, RoutePath.login);

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sgas/core/helper/screen_helper.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_style.dart';
 import 'package:sgas/src/authentication/presentation/bloc/forget_pass_cubit.dart';
 import 'package:sgas/src/authentication/presentation/bloc/forget_pass_state.dart';
+import 'package:sgas/src/authentication/presentation/widgets/notification_header.dart';
 import 'package:sgas/src/authentication/presentation/widgets/text_field_error_message.dart';
 import 'package:sgas/src/authentication/presentation/widgets/label_textfield.dart';
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
@@ -46,20 +46,14 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ),
       body: Column(
         children: [
-          Container(
-            color: BaseColor.backgroundNeutralColor,
-            padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
-            child: Text(
-              'Nhập email và số điện thoại, sau đó nhấn gửi mã OTP',
-              style: BaseTextStyle.body2(color: BaseColor.textSecondaryColor),
-            ),
+          const NotificationHeader(
+            title: "Nhập email và số điện thoại, sau đó nhấn gửi mã OTP",
           ),
           const SizedBox(height: 24),
           BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
             builder: (context, state) {
               return Padding(
-                padding: EdgeInsets.symmetric(
-                    horizontal: getWidthScreen(context) * 0.05),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -99,18 +93,4 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       ),
     );
   }
-}
-
-OutlineInputBorder _greyBorder() {
-  return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(8),
-    borderSide: const BorderSide(color: BaseColor.borderColor, width: 1),
-  );
-}
-
-OutlineInputBorder _errorBorder() {
-  return OutlineInputBorder(
-    borderRadius: BorderRadius.circular(8),
-    borderSide: const BorderSide(color: BaseColor.alertColor, width: 1),
-  );
 }

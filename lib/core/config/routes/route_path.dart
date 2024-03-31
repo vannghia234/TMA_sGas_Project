@@ -3,5 +3,5 @@ class RoutePath {
   static const login = '/login';
   static const forgotPassword = '/forgotPassword';
   static const receiveOTP = '/receive_otp';
-  static const changNewPassword = '/change_new_password';
+  static const ChangeNewPassword = '/change_new_password';
 }
