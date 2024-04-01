@@ -7,16 +7,15 @@ import 'package:sgas/core/di/dependency_config.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
 import 'package:sgas/core/config/routes/routes.dart';
 import 'package:sgas/src/authentication/presentation/bloc/change_password_cubit.dart';
-import 'package:sgas/src/authentication/presentation/bloc/change_re_password_cubit.dart';
 import 'package:sgas/src/authentication/presentation/bloc/forget_pass_cubit.dart';
 import 'package:sgas/src/authentication/presentation/bloc/login_cubit.dart';
 import 'package:sgas/src/authentication/presentation/bloc/otp_cubit.dart';
 import 'package:sgas/src/authentication/presentation/utils/key_storage.dart';
 
 void main() {
-  HttpOverrides.global = CustomHttpOverrides();
-
   setOrientations();
+
+  HttpOverrides.global = CustomHttpOverrides();
 
   configDependencies();
 
@@ -33,7 +32,6 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => getIt<LoginCubit>()),
-        BlocProvider(create: (_) => getIt<ChangeRepasswordCubit>()),
         BlocProvider(
           create: (context) => getIt<ChangePasswordCubit>(),
         ),
@@ -43,12 +41,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => getIt<OtpCubit>(),
         ),
-        BlocProvider(
-          create: (context) => getIt<KeyStorage>(),
-        )
-        // BlocProvider(
-        //   create: (context) => getIt<ChangeNewRePasswordCubit>(),
-        // )
       ],
       child: MaterialApp(
         theme: ThemeData.light(),
@@ -56,7 +48,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'sGAS',
         onGenerateRoute: appRoute,
-        initialRoute: RoutePath.forgotPassword,
+        initialRoute: RoutePath.login,
       ),
     );
   }

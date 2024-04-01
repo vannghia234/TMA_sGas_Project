@@ -67,19 +67,19 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
   }
 
   Future<void> _sendOTP(BuildContext context) async {
-    var res = await context
-        .read<OtpCubit>()
-        .sendOtp(userName: widget.userInfo["username"]!, otpCode: otp);
-    clearOtp();
-    if (res.code == 200) {
-      Map<String, String> arg = {
-        "data": res.data!,
-        "username": widget.userInfo["username"]!
-      };
+    // var res = await context
+    //     .read<OtpCubit>()
+    //     .sendOtp(userName: widget.userInfo["username"]!, otpCode: otp);
+    // clearOtp();
+    // if (res.code == 200) {
+    //   Map<String, String> arg = {
+    //     "data": res.data!,
+    //     "username": widget.userInfo["username"]!
+    //   };
 
-      Navigator.popAndPushNamed(context, RoutePath.ChangeNewPassword,
-          arguments: arg);
-    }
+    //   Navigator.popAndPushNamed(context, RoutePath.ChangeNewPassword,
+    //       arguments: arg);
+    // }
     // Gửi mã OTP ở đây
   }
 

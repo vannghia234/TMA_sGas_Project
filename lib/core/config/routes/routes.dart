@@ -4,7 +4,6 @@ import 'package:sgas/src/authentication/presentation/page/login_page.dart';
 import 'package:sgas/src/authentication/presentation/page/change_new_password_page.dart';
 import 'package:sgas/src/authentication/presentation/page/forgot_password_page.dart';
 import 'package:sgas/src/authentication/presentation/page/recieve_otp_page.dart';
-import 'package:sgas/src/authentication/presentation/page/wrapper_page.dart';
 
 Route appRoute(RouteSettings settings) {
   switch (settings.name) {
@@ -30,10 +29,6 @@ Route appRoute(RouteSettings settings) {
         builder: (context) => RecieveOTPPage(
           userInfo: model,
         ),
-      );
-    case RoutePath.wrapper:
-      return MaterialPageRoute(
-        builder: (context) => const Wrapper(),
       );
 
     default:

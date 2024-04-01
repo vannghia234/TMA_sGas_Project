@@ -35,21 +35,21 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
       ForgetPasswordEntity entity =
           ForgetPasswordEntity(username: username, phone: phoneNumber);
 
-      var res = await au.forgetPassword(entity);
-      if (res.code == 200) {
-        context.read<OtpCubit>().changeState(WaittingOtp());
-        Navigator.pushNamed(context, RoutePath.receiveOTP,
-            arguments: {"username": username, "phone": phoneNumber});
-      } else if (res.code == 404) {
-        // ignore: use_build_context_synchronously
-        changeState(InvalidForgetUsername(message: "Tài khoản không tồn tại"));
-      } else if (res.code == 400) {
-        // ignore: use_build_context_synchronously
-        changeState(InvalidForgetPhoneNumber(message: "${res.data}"));
-      } else if (res.code == 40015) {
-        changeState(
-            InvalidForgetPhoneNumber(message: "Số điện thoại không tồn tại"));
-      }
+      // var res = await au.forgetPassword(entity);
+      // if (res.code == 200) {
+      //   context.read<OtpCubit>().changeState(WaittingOtp());
+      //   Navigator.pushNamed(context, RoutePath.receiveOTP,
+      //       arguments: {"username": username, "phone": phoneNumber});
+      // } else if (res.code == 404) {
+      //   // ignore: use_build_context_synchronously
+      //   changeState(InvalidForgetUsername(message: "Tài khoản không tồn tại"));
+      // } else if (res.code == 400) {
+      //   // ignore: use_build_context_synchronously
+      //   changeState(InvalidForgetPhoneNumber(message: "${res.data}"));
+      // } else if (res.code == 40015) {
+      //   changeState(
+      //       InvalidForgetPhoneNumber(message: "Số điện thoại không tồn tại"));
+      // }
     }
   }
 }

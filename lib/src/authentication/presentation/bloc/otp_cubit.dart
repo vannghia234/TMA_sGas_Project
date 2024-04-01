@@ -16,23 +16,23 @@ class OtpCubit extends Cubit<OtpState> {
       {required String userName, required String phone}) async {
     ForgetPasswordEntity entity =
         ForgetPasswordEntity(username: userName, phone: phone);
-    var res = await usecase.forgetPassword(entity);
-    if (res.code == 200) {
-      changeState(WaittingOtp());
-    } else if (res.code == 400) {
+    // var res = await usecase.forgetPassword(entity);
+    // if (res.code == 200) {
+    //   changeState(WaittingOtp());
+    // } else if (res.code == 400) {
 
-      changeState(OverRequestOtp(mess: res.data!));
-    }
+    //   changeState(OverRequestOtp(mess: res.data!));
+    // }
   }
 
-  Future<OtpModel> sendOtp(
-      {required String userName, required String otpCode}) async {
-    CompareOtpEntity entity =
-        CompareOtpEntity(userName: userName, otpCode: otpCode);
-    var res = await usecase.compareOtp(entity);
-    if (res.code == 40016) {
-      changeState(IncorrectOtp());
-    }
-    return res;
-  }
+  // Future<OtpModel> sendOtp(
+  //     {required String userName, required String otpCode}) async {
+  //   CompareOtpEntity entity =
+  //       CompareOtpEntity(userName: userName, otpCode: otpCode);
+  //   // var res = await usecase.compareOtp(entity);
+  //   // if (res.code == 40016) {
+  //   //   changeState(IncorrectOtp());
+  //   // }
+  //   // return res;
+  // }
 }

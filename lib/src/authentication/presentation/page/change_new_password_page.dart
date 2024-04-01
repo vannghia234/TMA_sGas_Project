@@ -1,18 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sgas/core/ui/resource/image_path.dart';
-import 'package:sgas/core/ui/style/base_color.dart';
-import 'package:sgas/core/ui/style/base_style.dart';
+import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/helper/logger_helper.dart';
-import 'package:sgas/core/helper/screen_helper.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
 import 'package:sgas/src/authentication/presentation/bloc/change_password_cubit.dart';
 import 'package:sgas/src/authentication/presentation/bloc/change_password_state.dart';
-import 'package:sgas/src/authentication/presentation/bloc/change_re_password_cubit.dart';
-import 'package:sgas/src/authentication/presentation/widgets/text_field_password.dart';
-import 'package:sgas/src/authentication/presentation/widgets/text_field_repassword.dart';
+import 'package:sgas/src/authentication/presentation/utils/regex_check_valid.dart';
+import 'package:sgas/src/authentication/presentation/widgets/label_textfield.dart';
+import 'package:sgas/src/authentication/presentation/widgets/password_validation_widget.dart';
+import 'package:sgas/src/authentication/presentation/widgets/text_field_error_message.dart';
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
+import 'package:sgas/src/common/presentation/widget/text_field/text_field_common.dart';
+
+class ValidationStatus {
+  static const String valid = "ok";
+  static const String inValid = "notOk";
+}
 
 class ChangeNewPasswordPage extends StatefulWidget {
   const ChangeNewPasswordPage({super.key, required this.data});
@@ -25,17 +30,28 @@ class ChangeNewPasswordPage extends StatefulWidget {
 class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
   final _passwordController = TextEditingController();
   final _rePasswordController = TextEditingController();
-  List<String> errorlists = [
-    "Tối thiểu 8 ký tự",
-    "Chứa ít nhất 1 ký tự chữ",
-    "Chứa ít nhất một ký tự số"
+  List<Map<String, String>> validationLists = [
+    {"title": "Tối thiểu 8 ký tự", "status": ValidationStatus.inValid},
+    {"title": "Chứa ít nhất 1 ký tự chữ", "status": ValidationStatus.inValid},
+    {"title": "Chứa ít nhất một ký tự số", "status": ValidationStatus.inValid},
   ];
+  bool isHiddenPassword = true;
+  bool isHiddenRePassword = true;
 
   @override
   void dispose() {
     super.dispose();
     _passwordController.dispose();
     _rePasswordController.dispose();
+  }
+
+  bool _isAllValidList(List<Map<String, String>> lists) {
+    for (var element in lists) {
+      if (element["status"] == ValidationStatus.inValid) {
+        return false;
+      }
+    }
+    return true;
   }
 
   @override
@@ -52,137 +68,148 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
         centerTitle: false,
         title: const Text('Đổi mật khẩu'),
       ),
-      body: SafeArea(
-        child: Padding(
-          padding:
-              EdgeInsets.symmetric(horizontal: getWidthScreen(context) * 0.05),
-          child: Column(
-            children: [
-              SizedBox(
-                height: getHeightScreen(context) * 0.05,
-              ),
-              TextFieldPassowrd(
-                  controller: _passwordController,
-                  title: "Mật khẩu",
-                  hintText: "Nhập mật khẩu",
-                  isObsuretext: true),
-              SizedBox(
-                height: getHeightScreen(context) * 0.02,
-              ),
-              TextFieldRePassword(
-                  controller: _rePasswordController,
-                  title: "Xác nhận mật khẩu",
-                  hintText: "Nhập lại mật khẩu",
-                  isObsuretext: true),
-              SizedBox(
-                height: getHeightScreen(context) * 0.03,
-              ),
-              Flexible(
-                child: BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
-                  builder: (context, state) => ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: errorlists.length,
-                    itemBuilder: (context, index) => Padding(
-                      padding: const EdgeInsets.only(bottom: 5),
-                      child: (state is InValidPassword)
-                          ? _ErrorMess(index, state)
-                          : _ErrorMessDefault(index),
+      body: BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
+        builder: (context, state) {
+          return SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: SizedBox.expand(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(
+                      height: 24,
                     ),
-                  ),
-                ),
-              ),
+                    const LabelTextField(title: "Mật khẩu"),
+                    TextFieldCommon(
+                      controller: _passwordController,
+                      hintText: "Nhập mật khẩu",
+                      isHidden: isHiddenPassword,
+                      onChange: (value) {
+                        setState(() {
+                          if (value.length >= 8) {
+                            validationLists[0]["status"] =
+                                ValidationStatus.valid;
+                          } else {
+                            validationLists[0]["status"] =
+                                ValidationStatus.inValid;
+                          }
+                          if (atLeast1LetterExist(value)) {
+                            validationLists[1]["status"] =
+                                ValidationStatus.valid;
+                          } else {
+                            validationLists[1]["status"] =
+                                ValidationStatus.inValid;
+                          }
 
-              SizedBox(
-                height: getHeightScreen(context) * 0.03,
-              ),
-              //Button
-              BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
-                builder: (context, state) => PrimaryButton(
-                  buttonTitle: "Xác nhận",
-                  onPress: () async {
-                    if (_passwordController.text !=
-                        _rePasswordController.text) {
-                      context.read<ChangeRepasswordCubit>().changeState(
-                          InValidRePassword(message: "Mật khẩu không khớp"));
-                    } else {
-                      context
-                          .read<ChangeRepasswordCubit>()
-                          .changeState(SuccessValidPassword());
-                      var res = await context
-                          .read<ChangeRepasswordCubit>()
-                          .updatePass(
-                              token: widget.data["data"]!,
-                              newPassword: _rePasswordController.text,
-                              username: widget.data["username"]!);
-                      if (res.code == 200) {
-                        logger.e("Đổi mật khẩu thành công ${res.data}");
-                        Navigator.pushNamed(context, RoutePath.login);
-                      }
-                    }
-                  },
+                          if (atLeast1NumberExist(value)) {
+                            validationLists[2]["status"] =
+                                ValidationStatus.valid;
+                          } else {
+                            validationLists[2]["status"] =
+                                ValidationStatus.inValid;
+                          }
+                        });
+                      },
+                      suffixIcon: IconButton(
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            isHiddenPassword = !isHiddenPassword;
+                          });
+                        },
+                        icon: SvgPicture.asset(
+                          (isHiddenPassword)
+                              ? IconPath.showPassword
+                              : IconPath.hidePassword,
+                          fit: BoxFit.scaleDown,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 16,
+                    ),
+                    const LabelTextField(title: "Xác nhận mật khẩu"),
+                    TextFieldCommon(
+                      onChange: (value) {
+                        context
+                            .read<ChangePasswordCubit>()
+                            .changeState(InitialChangePassWord());
+                      },
+                      controller: _rePasswordController,
+                      hintText: "Nhập lại mật khẩu",
+                      error: (state is InValidPassword)
+                          ? TextFieldErrorMessage(
+                              mess: state.message,
+                            )
+                          : null,
+                      isHidden: isHiddenRePassword,
+                      suffixIcon: IconButton(
+                        highlightColor: Colors.transparent,
+                        onPressed: () {
+                          setState(() {
+                            isHiddenRePassword = !isHiddenRePassword;
+                          });
+                        },
+                        icon: SvgPicture.asset(
+                          (isHiddenRePassword)
+                              ? IconPath.showPassword
+                              : IconPath.hidePassword,
+                          fit: BoxFit.scaleDown,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    PasswordValidationWidget(
+                      lists: validationLists,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                    if (_isAllValidList(validationLists))
+                      PrimaryButton(
+                        buttonTitle: "Xác nhận",
+                        onPress: () async {
+                          if (_rePasswordController.text.isEmpty) {
+                            context.read<ChangePasswordCubit>().changeState(
+                                InValidPassword(
+                                    message: "Vui lòng nhập lại mật khẩu"));
+                            return;
+                          }
+                          if (_passwordController.text !=
+                              _rePasswordController.text) {
+                            context.read<ChangePasswordCubit>().changeState(
+                                InValidPassword(
+                                    message: "Mật khẩu không khớp"));
+                            return;
+                          } else {
+                            // var res = await context
+                            //     .read<ChangePasswordCubit>()
+                            //     .updatePass(
+                            //         token: widget.data["data"]!,
+                            //         newPassword: _passwordController.text,
+                            //         username: widget.data["username"]!);
+                            // if (res.code == 200) {
+                            //   logger.e("Đổi mật khẩu thành công ${res.data}");
+                            //   Navigator.popAndPushNamed(
+                            //       context, RoutePath.login);
+                            // }
+                          }
+                        },
+                      )
+                    else
+                      const PrimaryButton(
+                        buttonTitle: "Xác nhận",
+                      )
+                  ],
                 ),
-              )
-            ],
-          ),
-        ),
+              ),
+            ),
+          );
+        },
       ),
-    );
-  }
-
-  Row _ErrorMessDefault(int index) {
-    return Row(
-      children: [
-        SvgPicture.asset(
-          ImagePath.checkCircle,
-          height: 24,
-          width: 24,
-        ),
-        const SizedBox(
-          width: 5,
-        ),
-        Text(
-          errorlists[index],
-          style: BaseTextStyle.body2(color: BaseColor.textSecondaryColor),
-        )
-      ],
-    );
-  }
-
-  Row _ErrorMess(int index, InValidPassword state) {
-    return Row(
-      children: [
-        if (index == 0 && state.isEnoughCharacter)
-          SvgPicture.asset(
-            ImagePath.fillCheckCircle,
-            height: 24,
-            width: 24,
-          )
-        else if (index == 1 && state.isContainLetter)
-          SvgPicture.asset(
-            ImagePath.fillCheckCircle,
-            height: 24,
-            width: 24,
-          )
-        else if (index == 2 && state.isContainNumber)
-          SvgPicture.asset(
-            ImagePath.fillCheckCircle,
-            height: 24,
-            width: 24,
-          )
-        else
-          SvgPicture.asset(
-            ImagePath.checkCircle,
-            height: 24,
-            width: 24,
-          ),
-        const SizedBox(
-          width: 5,
-        ),
-        Text(
-          errorlists[index],
-          style: BaseTextStyle.body2(color: BaseColor.textSecondaryColor),
-        )
-      ],
     );
   }
 }

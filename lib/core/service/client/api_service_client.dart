@@ -22,7 +22,6 @@ Future<void> handleAPIExceptionByStatusCode(
   // if (!isValid) {
   //   GetIt.instance.get<AuthenticationCubit>().forceLogout();
   //   return;
-
   // }
   if (statusCode == 400) throw BadRequestException();
   if (statusCode == 401) throw AuthorizationException();
@@ -94,7 +93,7 @@ class ApiServiceClient {
       http.Response response = await client.post(Uri.parse(uri),
           headers: headers, body: jsonEncode(params));
 
-      await handleAPIExceptionByStatusCode(uri, response.statusCode, "Post");
+      await handleAPIExceptionByStatusCode(uri, response.statusCode, "POST");
       Map<String, dynamic> result =
           json.decode(utf8.decode(response.bodyBytes));
       return result;

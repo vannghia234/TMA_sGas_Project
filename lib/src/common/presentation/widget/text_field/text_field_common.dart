@@ -10,11 +10,12 @@ class TextFieldCommon extends StatelessWidget {
       this.error,
       this.suffixIcon,
       this.onChange,
-      this.isHidden, this.hintText});
+      this.isHidden,
+      this.hintText});
   final TextEditingController? controller;
   final Widget? error;
   final Widget? suffixIcon;
-  final ValueChanged? onChange;
+  final ValueChanged<String>? onChange;
   final bool? isHidden;
   final String? hintText;
 

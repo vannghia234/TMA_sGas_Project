@@ -9,10 +9,10 @@ class BaseColor {
 
   static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color backgroundNeutralColor = Color(0xFFF3F7F7);
+  static const Color backgroundDisableColor = Color(0xFFEAEBEB);
 
   static const Color dividerColor = Color(0xFFD5D7D7);
   static const Color borderColor = Color(0xFFC0C4C4);
-
   static const Color buttonPrimaryColor = Color(0xFF18A0A0);
 
   static const Color alertColor = Color(0xFFFF1B0A);
