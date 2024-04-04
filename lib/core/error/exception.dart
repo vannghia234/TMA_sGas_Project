@@ -3,6 +3,9 @@ class APIServiceException implements Exception {}
 // 5xx response status code
 class ServerException implements APIServiceException {}
 
+// 404 response status
+class NotFoundException implements APIServiceException {}
+
 // 401
 class AuthorizationException implements APIServiceException {}
 
@@ -10,7 +13,10 @@ class AuthorizationException implements APIServiceException {}
 class ForbiddenException implements APIServiceException {}
 
 // 400
-class BadRequestException implements APIServiceException {}
+class BadRequestException implements APIServiceException {
+  String? statusCode;
+  BadRequestException({this.statusCode});
+}
 
 //fail to parse data to model
 class DataParsingException implements APIServiceException {}

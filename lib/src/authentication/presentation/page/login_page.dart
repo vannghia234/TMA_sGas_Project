@@ -8,10 +8,7 @@ import 'package:sgas/core/ui/resource/image_path.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_style.dart';
-import 'package:sgas/src/authentication/domain/entities/authentication_entity.dart';
-import 'package:sgas/src/authentication/domain/usecases/authenticaion_usecase.dart';
 import 'package:sgas/src/authentication/presentation/bloc/login_cubit.dart';
-import 'package:sgas/src/authentication/presentation/utils/key_storage.dart';
 import 'package:sgas/src/authentication/presentation/widgets/label_textfield.dart';
 import 'package:sgas/src/authentication/presentation/widgets/text_field_error_message.dart';
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
@@ -112,50 +109,9 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> handleButtonLogin() async {
-    if (_username.text.isEmpty) {
-      context
-          .read<LoginCubit>()
-          .changeState(InValidUserName(message: "Bạn chưa nhập tên đăng nhập"));
-      return;
-    } else if (_password.text.isEmpty) {
-      context
-          .read<LoginCubit>()
-          .changeState(InValidPassWord(message: "Bạn chưa nhập mật khẩu"));
-      return;
-    } else {
-      AuthenticationUseCase authUseCase = AuthenticationUseCase();
-
-      context.read<LoginCubit>().changeState(Successful());
-      AuthenticationEntity entity = AuthenticationEntity(
-          username: _username.text, password: _password.text);
-      // var res = await authUseCase.loginUseCase(entity);
-      // if (res.code == 200) {
-      //   KeyStorage storage = KeyStorage();
-      //   storage.save(
-      //       accessToken: res.data!.token!.accessToken!,
-      //       refreshToken: res.data!.token!.accessToken!);
-      //   // Navigator.pushNamed(context, RoutePath.home);
-      // } else if (res.code == 40001) {
-      //   context.read<LoginCubit>().changeState(
-      //       InValidPassWord(message: "Sai tên đăng nhập hoặc mật khẩu"));
-      // } else if (res.code == 40002) {
-      //   getIt
-      //       .get<LoginCubit>()
-      //       .changeState(InValidPassWord(message: "Tài khoản đã bị khóa"));
-      // } else if (res.code == 40003) {
-      //   context.read<LoginCubit>().changeState(
-      //       InValidPassWord(message: "Tài khoản của công ty bị khóa"));
-      // } else if (res.code == 40005) {
-      //   context.read<LoginCubit>().changeState(InValidPassWord(
-      //       message: "Tên tài khoản chỉ chứa kí tự a-z, A-Z, hoặc 0-9"));
-      // } else if (res.code == 40006) {
-      //   context.read<LoginCubit>().changeState(
-      //       InValidPassWord(message: "Tên tài khoản phải từ 8-50 kí tự"));
-      // } else if (res.code == 40007) {
-      //   context.read<LoginCubit>().changeState(
-      //       InValidPassWord(message: "Mật khẩu phải từ 8-50 kí tự"));
-      // }
-    }
+    await getIt
+        .get<LoginCubit>()
+        .login(username: _username.text, password: _password.text);
   }
 }
 

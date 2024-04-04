@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/helper/pattern_regrex_helper.dart';
-import 'package:sgas/core/config/routes/route_path.dart';
 import 'package:sgas/src/authentication/domain/entities/forget_password_entity.dart';
 import 'package:sgas/src/authentication/domain/usecases/authenticaion_usecase.dart';
 import 'package:sgas/src/authentication/presentation/bloc/forget_pass_state.dart';
-import 'package:sgas/src/authentication/presentation/bloc/otp_cubit.dart';
-import 'package:sgas/src/authentication/presentation/bloc/otp_state.dart';
 
 class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
   ForgetPasswordCubit() : super(InititalForgetState());

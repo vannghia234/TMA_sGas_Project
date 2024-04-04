@@ -2,9 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-
 import 'dart:io' as Io;
-
 import 'package:sgas/core/error/exception.dart';
 import 'package:sgas/core/helper/logger_helper.dart';
 
@@ -12,20 +10,19 @@ const _defaultApiWaitingDuration = Duration(seconds: 30);
 const _defaultApiGetFileWaitingDuration = Duration(minutes: 5);
 
 Future<void> handleAPIExceptionByStatusCode(
-  String uri,
-  int statusCode,
-  String method,
-) async {
+    String uri, int statusCode, String method,
+    {String? codeBadRequest}) async {
   if (statusCode == 200) return;
-  logger.d("[API failure] $statusCode $method $uri");
+  logger.e("[API failure] $statusCode $method $uri badRequest $codeBadRequest");
   // bool isValid = await AuthenticationBrick().authenticate();
   // if (!isValid) {
   //   GetIt.instance.get<AuthenticationCubit>().forceLogout();
   //   return;
   // }
-  if (statusCode == 400) throw BadRequestException();
+  if (statusCode == 400) throw BadRequestException(statusCode: codeBadRequest);
   if (statusCode == 401) throw AuthorizationException();
   if (statusCode == 403) throw ForbiddenException();
+  if (statusCode == 404) throw NotFoundException();
   throw ServerException();
 }
 
@@ -79,7 +76,7 @@ class ApiServiceClient {
   static Future<Map<String, dynamic>> post({
     required String uri,
     bool withToken = true,
-    required Map<String, String> params,
+    Map<String, String>? params,
     Duration? apiWaitingDuration,
     bool isSecondTime = false,
   }) async {
@@ -91,9 +88,12 @@ class ApiServiceClient {
       Future.delayed(apiWaitingDuration ?? _defaultApiWaitingDuration)
           .whenComplete(() => client.close());
       http.Response response = await client.post(Uri.parse(uri),
-          headers: headers, body: jsonEncode(params));
+          headers: headers, body: (params != null) ? jsonEncode(params) : null);
 
-      await handleAPIExceptionByStatusCode(uri, response.statusCode, "POST");
+      await handleAPIExceptionByStatusCode(uri, response.statusCode, "POST",
+          codeBadRequest: (response.statusCode == 400)
+              ? json.decode(utf8.decode(response.bodyBytes))["code"].toString()
+              : null);
       Map<String, dynamic> result =
           json.decode(utf8.decode(response.bodyBytes));
       return result;

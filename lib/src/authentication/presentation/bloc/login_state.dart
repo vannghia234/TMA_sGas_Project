@@ -17,6 +17,6 @@ class InValidPassWord extends LoginState {
   InValidPassWord({super.message});
 }
 
-class Successful extends LoginState {
-  Successful({super.message});
+class SuccessfulLogin extends LoginState {
+  SuccessfulLogin({super.message});
 }

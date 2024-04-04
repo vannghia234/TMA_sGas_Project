@@ -1,6 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sgas/src/authentication/data/models/change_password_model.dart';
-import 'package:sgas/src/authentication/domain/entities/change_pass_entity.dart';
 import 'package:sgas/src/authentication/domain/usecases/authenticaion_usecase.dart';
 import 'package:sgas/src/authentication/presentation/bloc/change_password_state.dart';
 
