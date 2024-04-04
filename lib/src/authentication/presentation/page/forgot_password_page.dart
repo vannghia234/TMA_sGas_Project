@@ -61,7 +61,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     TextFieldCommon(
                       hintText: "Nhập tên đăng nhập",
                       controller: _username,
-                      error: (state is InvalidForgetUsername)
+                      error: (state is InvalidForgetUsernameState)
                           ? TextFieldErrorMessage(mess: state.message)
                           : null,
                     ),
@@ -70,7 +70,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     TextFieldCommon(
                       hintText: "Nhập số điện thoại",
                       controller: _phoneNumber,
-                      error: (state is InvalidForgetPhoneNumber)
+                      error: (state is InvalidForgetPhoneNumberState)
                           ? TextFieldErrorMessage(mess: state.message)
                           : null,
                     ),
@@ -80,8 +80,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       onPress: () async {
                         await context
                             .read<ForgetPasswordCubit>()
-                            .handleForgetPasswordEvent(
-                                context, _username.text, _phoneNumber.text);
+                            .forgetPassword(_username.text, _phoneNumber.text);
                       },
                     )
                   ],

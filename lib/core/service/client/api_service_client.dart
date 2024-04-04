@@ -4,22 +4,25 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'dart:io' as Io;
 import 'package:sgas/core/error/exception.dart';
-import 'package:sgas/core/helper/logger_helper.dart';
+import 'package:sgas/core/utils/helper/logger_helper.dart';
 
 const _defaultApiWaitingDuration = Duration(seconds: 30);
 const _defaultApiGetFileWaitingDuration = Duration(minutes: 5);
 
 Future<void> handleAPIExceptionByStatusCode(
     String uri, int statusCode, String method,
-    {String? codeBadRequest}) async {
+    {String? codeBadRequest, String? data}) async {
   if (statusCode == 200) return;
-  logger.e("[API failure] $statusCode $method $uri badRequest $codeBadRequest");
+  logger.e(
+      "[API failure] $statusCode $method $uri badRequestCode $codeBadRequest");
   // bool isValid = await AuthenticationBrick().authenticate();
   // if (!isValid) {
   //   GetIt.instance.get<AuthenticationCubit>().forceLogout();
   //   return;
   // }
-  if (statusCode == 400) throw BadRequestException(statusCode: codeBadRequest);
+  if (statusCode == 400) {
+    throw BadRequestException(statusCode: codeBadRequest, data: data);
+  }
   if (statusCode == 401) throw AuthorizationException();
   if (statusCode == 403) throw ForbiddenException();
   if (statusCode == 404) throw NotFoundException();
@@ -73,10 +76,43 @@ class ApiServiceClient {
     }
   }
 
+  static Future<Map<String, dynamic>> put(
+      {required String uri,
+      bool withToken = true,
+      Map<String, dynamic>? params,
+      Duration? apiWaitingDuration,
+      bool isSecondTime = false}) async {
+    try {
+      final client = http.Client();
+      Map<String, String> headers = await _headers(withToken: withToken);
+      Future.delayed(apiWaitingDuration ?? _defaultApiGetFileWaitingDuration)
+          .whenComplete(() => client.close());
+      var response = await client.put(Uri.parse(uri),
+          headers: headers, body: (params != null) ? jsonEncode(params) : null);
+      await handleAPIExceptionByStatusCode(uri, response.statusCode, "PUT");
+      Map<String, dynamic> result =
+          json.decode(utf8.decode(response.bodyBytes));
+      return result;
+    } on Io.SocketException catch (_) {
+      throw ServerException();
+    } catch (e) {
+      if (isSecondTime) {
+        rethrow;
+      } else {
+        return await put(
+            uri: uri,
+            params: params,
+            isSecondTime: true,
+            withToken: withToken,
+            apiWaitingDuration: apiWaitingDuration);
+      }
+    }
+  }
+
   static Future<Map<String, dynamic>> post({
     required String uri,
     bool withToken = true,
-    Map<String, String>? params,
+    Map<String, dynamic>? params,
     Duration? apiWaitingDuration,
     bool isSecondTime = false,
   }) async {
@@ -84,16 +120,24 @@ class ApiServiceClient {
       final client = http.Client();
       Map<String, String> headers = await _headers(withToken: withToken);
 
-      /// Force close after defined waiting time
       Future.delayed(apiWaitingDuration ?? _defaultApiWaitingDuration)
           .whenComplete(() => client.close());
       http.Response response = await client.post(Uri.parse(uri),
           headers: headers, body: (params != null) ? jsonEncode(params) : null);
 
+      String? codeBadReq;
+      String? data;
+
+      if (response.statusCode == 400) {
+        codeBadReq =
+            json.decode(utf8.decode(response.bodyBytes))["code"].toString();
+        data = json.decode(utf8.decode(response.bodyBytes))["data"].toString();
+      }
+      logger.f(
+          "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
+
       await handleAPIExceptionByStatusCode(uri, response.statusCode, "POST",
-          codeBadRequest: (response.statusCode == 400)
-              ? json.decode(utf8.decode(response.bodyBytes))["code"].toString()
-              : null);
+          codeBadRequest: codeBadReq, data: data);
       Map<String, dynamic> result =
           json.decode(utf8.decode(response.bodyBytes));
       return result;

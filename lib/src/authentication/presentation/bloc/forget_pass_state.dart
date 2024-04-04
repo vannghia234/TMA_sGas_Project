@@ -2,15 +2,17 @@ abstract class ForgetPasswordState {
   final String message;
   ForgetPasswordState({this.message = ""});
 }
-class InititalForgetState extends ForgetPasswordState {
-  InititalForgetState({super.message});
-}
-class InvalidForgetUsername extends ForgetPasswordState {
-  InvalidForgetUsername({super.message});
+
+class InitialForgetState extends ForgetPasswordState {
+  InitialForgetState({super.message});
 }
 
-class InvalidForgetPhoneNumber extends ForgetPasswordState {
-  InvalidForgetPhoneNumber({super.message});
+class InvalidForgetUsernameState extends ForgetPasswordState {
+  InvalidForgetUsernameState({super.message});
 }
 
-class ValidForget extends ForgetPasswordState {}
+class InvalidForgetPhoneNumberState extends ForgetPasswordState {
+  InvalidForgetPhoneNumberState({super.message});
+}
+
+class ValidatedForgetState extends ForgetPasswordState {}

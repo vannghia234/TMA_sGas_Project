@@ -6,7 +6,7 @@ import 'package:sgas/src/authentication/presentation/widgets/notification_header
 import 'package:timer_count_down/timer_count_down.dart';
 
 import 'package:sgas/core/config/routes/route_path.dart';
-import 'package:sgas/core/helper/logger_helper.dart';
+import 'package:sgas/core/utils/helper/logger_helper.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_style.dart';
 import 'package:sgas/src/authentication/presentation/bloc/otp_cubit.dart';

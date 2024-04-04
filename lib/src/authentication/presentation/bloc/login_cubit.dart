@@ -1,6 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sgas/core/helper/logger_helper.dart';
+import 'package:sgas/core/utils/helper/logger_helper.dart';
 import 'package:sgas/src/authentication/data/models/login_params.dart';
 import 'package:sgas/src/authentication/domain/failure/failure.dart';
 import 'package:sgas/src/authentication/domain/usecases/authenticaion_usecase.dart';

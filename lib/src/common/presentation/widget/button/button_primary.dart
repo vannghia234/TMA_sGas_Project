@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sgas/core/helper/screen_helper.dart';
+import 'package:sgas/core/utils/helper/screen_helper.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_style.dart';
 
