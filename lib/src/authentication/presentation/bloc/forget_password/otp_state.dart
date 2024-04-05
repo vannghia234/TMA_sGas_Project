@@ -1,3 +1,4 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 abstract class OtpState {}
 
 class InitialOtp extends OtpState {}
@@ -6,9 +7,12 @@ class IncorrectOtp extends OtpState {}
 
 class TimeOutOtp extends OtpState {}
 
-class WaittingOtp extends OtpState {}
+class WaitingOtp extends OtpState {}
 
 class OverRequestOtp extends OtpState {
-  final String mess;
-  OverRequestOtp({required this.mess});
+  String? mess;
+  OverRequestOtp({this.mess});
+}
+
+class CorrectOtp extends OtpState {
 }

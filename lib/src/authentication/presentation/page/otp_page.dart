@@ -1,31 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sgas/core/config/routes/route_path.dart';
+import 'package:sgas/core/di/dependency_config.dart';
 import 'package:sgas/src/authentication/presentation/widgets/alert_message.dart';
 import 'package:sgas/src/authentication/presentation/widgets/notification_header.dart';
 import 'package:timer_count_down/timer_count_down.dart';
-
-import 'package:sgas/core/config/routes/route_path.dart';
-import 'package:sgas/core/utils/helper/logger_helper.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_style.dart';
-import 'package:sgas/src/authentication/presentation/bloc/otp_cubit.dart';
-import 'package:sgas/src/authentication/presentation/bloc/otp_state.dart';
+import 'package:sgas/src/authentication/presentation/bloc/forget_password/otp_cubit.dart';
+import 'package:sgas/src/authentication/presentation/bloc/forget_password/otp_state.dart';
 import 'package:sgas/src/authentication/presentation/utils/hide_sdt.dart';
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
 
-class RecieveOTPPage extends StatefulWidget {
-  const RecieveOTPPage({
+class OTPPage extends StatefulWidget {
+  const OTPPage({
     super.key,
     required this.userInfo,
   });
   final Map<String, String> userInfo;
 
   @override
-  State<RecieveOTPPage> createState() => _RecieveOTPPageState();
+  State<OTPPage> createState() => _OTPPageState();
 }
 
-class _RecieveOTPPageState extends State<RecieveOTPPage> {
+class _OTPPageState extends State<OTPPage> {
   List<TextEditingController> controllers =
       List.generate(6, (index) => TextEditingController());
   List<FocusNode> focusNodes = List.generate(6, (index) => FocusNode());
@@ -34,6 +33,7 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
 
   @override
   void initState() {
+    getIt.get<OtpCubit>().emit(InitialOtp());
     focusNodes[0].requestFocus();
     super.initState();
   }
@@ -57,30 +57,25 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
   void updateOtp() {
     otp = "";
     for (var i = 0; i < controllers.length; i++) {
-      if (controllers[i].text == "") {
-        otp += "_";
-        continue;
-      }
       otp += controllers[i].text;
     }
-    logger.f("OTP cuối $otp");
   }
 
   Future<void> _sendOTP(BuildContext context) async {
-    // var res = await context
-    //     .read<OtpCubit>()
-    //     .sendOtp(userName: widget.userInfo["username"]!, otpCode: otp);
-    // clearOtp();
-    // if (res.code == 200) {
-    //   Map<String, String> arg = {
-    //     "data": res.data!,
-    //     "username": widget.userInfo["username"]!
-    //   };
+    var res = await getIt
+        .get<OtpCubit>()
+        .sentOTP(username: widget.userInfo["username"]!, otp: otp);
 
-    //   Navigator.popAndPushNamed(context, RoutePath.ChangeNewPassword,
-    //       arguments: arg);
-    // }
-    // Gửi mã OTP ở đây
+    clearOtp();
+    if (res.code == 200) {
+      Map<String, String> arg = {
+        "data": res.data!,
+        "username": widget.userInfo["username"]!
+      };
+
+      Navigator.popAndPushNamed(context, RoutePath.changePassword,
+          arguments: arg);
+    }
   }
 
   @override
@@ -173,6 +168,7 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
           ),
           const SizedBox(height: 16),
           BlocBuilder<OtpCubit, OtpState>(
+            bloc: getIt.get<OtpCubit>(),
             builder: (context, state) {
               if (state is TimeOutOtp) {
                 return const AlertMessage(
@@ -186,7 +182,11 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
               }
               if (state is OverRequestOtp) {
                 return AlertMessage(title: state.mess);
-              } else if (state is WaittingOtp) {
+              }
+              if (state is WaitingOtp) {
+                return _timerCountDown(context);
+              }
+              if (state is InitialOtp) {
                 return _timerCountDown(context);
               }
               return const SizedBox.shrink();
@@ -194,8 +194,9 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
           ),
           const SizedBox(height: 24),
           BlocBuilder<OtpCubit, OtpState>(
+            bloc: getIt.get<OtpCubit>(),
             builder: (context, state) {
-              return (state is WaittingOtp)
+              return (state is WaitingOtp)
                   ? PrimaryButton(
                       buttonTitle: "Xác nhận",
                       onPress: () {
@@ -205,8 +206,8 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
                   : PrimaryButton(
                       buttonTitle: "Gửi lại mã OTP",
                       onPress: () {
-                        context.read<OtpCubit>().reSendOtp(
-                            userName: widget.userInfo["username"]!,
+                        getIt.get<OtpCubit>().reSendOtp(
+                            username: widget.userInfo["username"]!,
                             phone: widget.userInfo["phone"]!);
                       },
                     );
@@ -241,7 +242,7 @@ class _RecieveOTPPageState extends State<RecieveOTPPage> {
         ),
         interval: const Duration(seconds: 1),
         onFinished: () {
-          context.read<OtpCubit>().changeState(TimeOutOtp());
+          getIt.get<OtpCubit>().emit(TimeOutOtp());
           print('Timer is done!');
         },
       ),

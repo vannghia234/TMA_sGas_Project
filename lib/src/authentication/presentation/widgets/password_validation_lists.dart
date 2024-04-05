@@ -3,21 +3,21 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sgas/core/ui/resource/image_path.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_style.dart';
-import 'package:sgas/src/authentication/presentation/page/change_new_password_page.dart';
+import 'package:sgas/src/authentication/presentation/page/change_password_page.dart';
 
-class PasswordValidationWidget extends StatefulWidget {
-  const PasswordValidationWidget({
+class PasswordValidationLists extends StatefulWidget {
+  const PasswordValidationLists({
     super.key,
     required this.lists,
   });
   final List<Map<String, String>> lists;
 
   @override
-  State<PasswordValidationWidget> createState() =>
-      _PasswordValidationWidgetState();
+  State<PasswordValidationLists> createState() =>
+      _PasswordValidationListsState();
 }
 
-class _PasswordValidationWidgetState extends State<PasswordValidationWidget> {
+class _PasswordValidationListsState extends State<PasswordValidationLists> {
   @override
   Widget build(BuildContext context) {
     return Column(

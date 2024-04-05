@@ -7,19 +7,20 @@ class APIServicePath {
   static String login() =>
       APIPathModel(serviceHost: baseUrl, endpoint: "/api/user/auth/login")
           .toStringPath();
+
   static String refreshToken({required Map<String, String> params}) =>
       APIPathModel(
               serviceHost: baseUrl,
               endpoint: "/api/user/auth/refresh",
               params: params)
           .toStringPath();
+
   static String logout({required Map<String, String> params}) => APIPathModel(
           serviceHost: baseUrl,
           endpoint: "/api/user/auth/logout",
           params: params)
       .toStringPath();
 
-  // user
   static String forgetPassword() => APIPathModel(
           serviceHost: baseUrl, endpoint: "/api/user/users/forget-password")
       .toStringPath();

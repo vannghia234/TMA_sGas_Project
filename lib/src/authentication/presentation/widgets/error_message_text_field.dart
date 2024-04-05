@@ -4,8 +4,8 @@ import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_style.dart';
 
-class TextFieldErrorMessage extends StatelessWidget {
-  const TextFieldErrorMessage({
+class ErrorMessageTextField extends StatelessWidget {
+  const ErrorMessageTextField({
     super.key,
     required this.mess,
   });

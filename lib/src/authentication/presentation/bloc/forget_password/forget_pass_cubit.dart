@@ -1,13 +1,15 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sgas/core/config/routes/route_path.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/core/utils/helper/pattern_regex_helper.dart';
 import 'package:sgas/src/authentication/data/models/forget_params.dart';
 import 'package:sgas/src/authentication/domain/usecases/authenticaion_usecase.dart';
-import 'package:sgas/src/authentication/presentation/bloc/forget_pass_state.dart';
+import 'package:sgas/src/authentication/presentation/bloc/forget_password/forget_pass_state.dart';
+import 'package:sgas/src/common/utils/contant/global_key.dart';
 
 class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
   ForgetPasswordCubit() : super(InitialForgetState());
-  final _usecase = AuthenticationUseCase();
+  final _useCase = AuthenticationUseCase();
 
   Future<void> forgetPassword(String username, String phoneNumber) async {
     if (username.isEmpty) {
@@ -25,22 +27,26 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
       emit(InitialForgetState());
       ForgetParams params =
           ForgetParams(username: username, phone: phoneNumber);
-      var result = await _usecase.forgetPassword(params);
+      var result = await _useCase.forgetPassword(params);
       if (result.isLeft) {
         if (result.left is NotFoundFailure) {
           emit(InvalidForgetUsernameState(
               message: "Không tìm thấy tài khoản này"));
         } else if (result.left is BadRequestFailure) {
           var instance = result.left as BadRequestFailure;
-          if (instance.statusCode == 400) {
+          if (instance.statusCode == "400") {
+            emit(InvalidForgetPhoneNumberState(message: "${instance.data}"));
+          } else {
             emit(InvalidForgetPhoneNumberState(
                 message: "Số điện thoại không chính xác"));
-          } else {
-            emit(InvalidForgetPhoneNumberState(message: "${instance.data}"));
           }
         }
       }
-      if (result.isRight) emit(ValidatedForgetState());
+      if (result.isRight) {
+        emit(ValidatedForgetState());
+        navigatorKey.currentState?.pushNamed(RoutePath.receiveOTP,
+            arguments: {"username": username, "phone": phoneNumber});
+      }
     }
   }
 }

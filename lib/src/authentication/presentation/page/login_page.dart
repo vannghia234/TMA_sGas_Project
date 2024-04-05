@@ -8,9 +8,9 @@ import 'package:sgas/core/ui/resource/image_path.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_style.dart';
-import 'package:sgas/src/authentication/presentation/bloc/login_cubit.dart';
+import 'package:sgas/src/authentication/presentation/bloc/login/login_cubit.dart';
 import 'package:sgas/src/authentication/presentation/widgets/label_textfield.dart';
-import 'package:sgas/src/authentication/presentation/widgets/text_field_error_message.dart';
+import 'package:sgas/src/authentication/presentation/widgets/error_message_text_field.dart';
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/text_field_common.dart';
 
@@ -37,6 +37,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: BlocBuilder<LoginCubit, LoginState>(
+        bloc: getIt.get<LoginCubit>(),
         builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 25),
@@ -60,7 +61,7 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: "Nhập tên đăng nhập",
                     controller: _username,
                     error: (state is InValidUserName)
-                        ? TextFieldErrorMessage(
+                        ? ErrorMessageTextField(
                             mess: state.message,
                           )
                         : null,
@@ -86,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
                     isHidden: isHidden,
                     controller: _password,
                     error: (state is InValidPassWord)
-                        ? TextFieldErrorMessage(
+                        ? ErrorMessageTextField(
                             mess: state.message,
                           )
                         : null,

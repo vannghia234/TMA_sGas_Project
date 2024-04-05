@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/src/authentication/domain/usecases/authenticaion_usecase.dart';
-import 'package:sgas/src/authentication/presentation/bloc/change_password_state.dart';
+import 'package:sgas/src/authentication/presentation/bloc/forget_password/change_password_state.dart';
 
 class ChangePasswordCubit extends Cubit<ChangePasswordState> {
   ChangePasswordCubit() : super(InitialChangePassWord());

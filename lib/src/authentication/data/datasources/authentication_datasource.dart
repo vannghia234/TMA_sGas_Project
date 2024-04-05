@@ -8,13 +8,14 @@ import 'package:sgas/src/authentication/data/models/change_password_params.dart'
 import 'package:sgas/src/authentication/data/models/compare_otp_params.dart';
 import 'package:sgas/src/authentication/data/models/forget_params.dart';
 import 'package:sgas/src/authentication/data/models/login_params.dart';
+import 'package:sgas/src/authentication/data/models/otp_model.dart';
 import 'package:sgas/src/authentication/data/models/token_model.dart';
 import 'package:sgas/src/authentication/domain/failure/failure.dart';
 
 abstract class AuthenticationDataSourceInterface {
   Future<Either<LoginFailure, void>> login(LoginParams params);
   Future<void> forgetPassword(ForgetParams params);
-  Future<void> compareOTP(CompareOTPParams params);
+  Future<OTPModel> compareOTP(CompareOTPParams params);
   Future<void> changePassword(ChangePasswordParams params);
   Future<void> refresh({required String refreshToken});
 }
@@ -70,7 +71,10 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
           params: params.toMap(),
           uri: APIServicePath.updatePassword(),
           withToken: false);
-    } catch (e) {}
+    } catch (e) {
+      // todo:
+
+    }
   }
 
   @override
@@ -82,7 +86,7 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
               params: {"refreshToken": refreshToken}));
       TokenModel token = TokenModel.fromJson(res["data"]["token"]);
       await LocalAuthenticationDataSource().saveToken(token);
-      logger.e("Log refreshToken ${res["code"]}");
+      logger.e("Log refreshTokenCode ${res["code"]}");
     } catch (e) {
       if (e is Exception) {
         rethrow;
@@ -92,12 +96,13 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
   }
 
   @override
-  Future<void> compareOTP(CompareOTPParams params) async {
+  Future<OTPModel> compareOTP(CompareOTPParams params) async {
     try {
-      await ApiServiceClient.post(
+      var response = await ApiServiceClient.post(
           uri: APIServicePath.compareOTP(),
           withToken: false,
           params: params.toMap());
+      return OTPModel.fromMap(response);
     } catch (e) {
       // not found username 404, incorrect OTP 400
       if (e is Exception) {

@@ -5,17 +5,17 @@ class AlertMessage extends StatelessWidget {
   const AlertMessage({
     super.key,
     this.color,
-    required this.title,
+    this.title,
   });
   final Color? color;
-  final String title;
+  final String? title;
 
   @override
   Widget build(BuildContext context) {
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-        title,
+        title ?? '',
         style: BaseTextStyle.body2(color: color ?? Colors.red),
       ),
     );

@@ -5,12 +5,13 @@ import 'package:sgas/core/config/http/http_override_config.dart';
 import 'package:sgas/core/config/presentation/orientation_config.dart';
 import 'package:sgas/core/di/dependency_config.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
-import 'package:sgas/core/config/routes/routes.dart';
+import 'package:sgas/core/config/routes/route.dart';
 import 'package:sgas/src/authentication/data/datasources/authentication_datasource.dart';
-import 'package:sgas/src/authentication/presentation/bloc/change_password_cubit.dart';
-import 'package:sgas/src/authentication/presentation/bloc/forget_pass_cubit.dart';
-import 'package:sgas/src/authentication/presentation/bloc/login_cubit.dart';
-import 'package:sgas/src/authentication/presentation/bloc/otp_cubit.dart';
+import 'package:sgas/src/authentication/presentation/bloc/forget_password/change_password_cubit.dart';
+import 'package:sgas/src/authentication/presentation/bloc/forget_password/forget_pass_cubit.dart';
+import 'package:sgas/src/authentication/presentation/bloc/login/login_cubit.dart';
+import 'package:sgas/src/authentication/presentation/bloc/forget_password/otp_cubit.dart';
+import 'package:sgas/src/common/utils/contant/global_key.dart';
 
 void main() {
   setOrientations();
@@ -29,27 +30,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => getIt<LoginCubit>()),
-        BlocProvider(
-          create: (context) => getIt<ChangePasswordCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<ForgetPasswordCubit>(),
-        ),
-        BlocProvider(
-          create: (context) => getIt<OtpCubit>(),
-        ),
-      ],
-      child: MaterialApp(
-        theme: ThemeData.light(),
-        darkTheme: ThemeData.dark(),
-        debugShowCheckedModeBanner: false,
-        title: 'sGAS',
-        onGenerateRoute: appRoute,
-        initialRoute: RoutePath.login,
-      ),
+    return MaterialApp(
+      theme: ThemeData.light(),
+      darkTheme: ThemeData.dark(),
+      navigatorKey: navigatorKey,
+      scaffoldMessengerKey: scaffoldMessengerKey,
+      debugShowCheckedModeBanner: false,
+      title: 'sGAS',
+      onGenerateRoute: appRoute,
+      initialRoute: RoutePath.login,
     );
   }
 }

@@ -2,9 +2,12 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'dart:io' as Io;
 import 'package:sgas/core/error/exception.dart';
 import 'package:sgas/core/utils/helper/logger_helper.dart';
+import 'package:sgas/src/authentication/domain/usecases/authenticaion_usecase.dart';
+import 'package:sgas/src/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 
 const _defaultApiWaitingDuration = Duration(seconds: 30);
 const _defaultApiGetFileWaitingDuration = Duration(minutes: 5);
@@ -15,9 +18,9 @@ Future<void> handleAPIExceptionByStatusCode(
   if (statusCode == 200) return;
   logger.e(
       "[API failure] $statusCode $method $uri badRequestCode $codeBadRequest");
-  // bool isValid = await AuthenticationBrick().authenticate();
+  // bool isValid = await AuthenticationUseCase().authenticate();
   // if (!isValid) {
-  //   GetIt.instance.get<AuthenticationCubit>().forceLogout();
+  //   getIt.get<AuthenticationCubit>().forceLogout();
   //   return;
   // }
   if (statusCode == 400) {
@@ -33,7 +36,8 @@ class ApiServiceClient {
   static Future<Map<String, String>> _headers({
     bool withToken = true,
   }) async {
-    String? token = "";
+    String token = "";
+    // String? token = await AuthenticationUseCase().getAccessToken();
     return {
       HttpHeaders.acceptHeader: "application/json",
       if (withToken == true) HttpHeaders.authorizationHeader: "Bearer $token",
@@ -117,6 +121,7 @@ class ApiServiceClient {
     bool isSecondTime = false,
   }) async {
     try {
+      logger.d("POST STARTING");
       final client = http.Client();
       Map<String, String> headers = await _headers(withToken: withToken);
 

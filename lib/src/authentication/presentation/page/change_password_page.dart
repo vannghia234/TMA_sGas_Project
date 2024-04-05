@@ -2,15 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:sgas/core/di/dependency_config.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/utils/helper/logger_helper.dart';
-import 'package:sgas/core/config/routes/route_path.dart';
-import 'package:sgas/src/authentication/presentation/bloc/change_password_cubit.dart';
-import 'package:sgas/src/authentication/presentation/bloc/change_password_state.dart';
+import 'package:sgas/src/authentication/presentation/bloc/forget_password/change_password_cubit.dart';
+import 'package:sgas/src/authentication/presentation/bloc/forget_password/change_password_state.dart';
 import 'package:sgas/src/authentication/presentation/utils/regex_check_valid.dart';
 import 'package:sgas/src/authentication/presentation/widgets/label_textfield.dart';
-import 'package:sgas/src/authentication/presentation/widgets/password_validation_widget.dart';
-import 'package:sgas/src/authentication/presentation/widgets/text_field_error_message.dart';
+import 'package:sgas/src/authentication/presentation/widgets/password_validation_lists.dart';
+import 'package:sgas/src/authentication/presentation/widgets/error_message_text_field.dart';
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/text_field_common.dart';
 
@@ -19,15 +19,15 @@ class ValidationStatus {
   static const String inValid = "notOk";
 }
 
-class ChangeNewPasswordPage extends StatefulWidget {
-  const ChangeNewPasswordPage({super.key, required this.data});
+class ChangePasswordPage extends StatefulWidget {
+  const ChangePasswordPage({super.key, required this.data});
   final Map<String, String> data;
 
   @override
-  State<ChangeNewPasswordPage> createState() => _ChangeNewPasswordPageState();
+  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
 }
 
-class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
+class _ChangePasswordPageState extends State<ChangePasswordPage> {
   final _passwordController = TextEditingController();
   final _rePasswordController = TextEditingController();
   List<Map<String, String>> validationLists = [
@@ -56,6 +56,7 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
 
   @override
   Widget build(BuildContext context) {
+    logger.d("DEBUG change_password page ${widget.data["data"]}");
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -69,6 +70,7 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
         title: const Text('Đổi mật khẩu'),
       ),
       body: BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
+        bloc: getIt.get<ChangePasswordCubit>(),
         builder: (context, state) {
           return SafeArea(
             child: Padding(
@@ -86,30 +88,7 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
                       hintText: "Nhập mật khẩu",
                       isHidden: isHiddenPassword,
                       onChange: (value) {
-                        setState(() {
-                          if (value.length >= 8) {
-                            validationLists[0]["status"] =
-                                ValidationStatus.valid;
-                          } else {
-                            validationLists[0]["status"] =
-                                ValidationStatus.inValid;
-                          }
-                          if (atLeast1LetterExist(value)) {
-                            validationLists[1]["status"] =
-                                ValidationStatus.valid;
-                          } else {
-                            validationLists[1]["status"] =
-                                ValidationStatus.inValid;
-                          }
-
-                          if (atLeast1NumberExist(value)) {
-                            validationLists[2]["status"] =
-                                ValidationStatus.valid;
-                          } else {
-                            validationLists[2]["status"] =
-                                ValidationStatus.inValid;
-                          }
-                        });
+                        _handleOnChange(value);
                       },
                       suffixIcon: IconButton(
                         highlightColor: Colors.transparent,
@@ -139,7 +118,7 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
                       controller: _rePasswordController,
                       hintText: "Nhập lại mật khẩu",
                       error: (state is InValidPassword)
-                          ? TextFieldErrorMessage(
+                          ? ErrorMessageTextField(
                               mess: state.message,
                             )
                           : null,
@@ -162,7 +141,7 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
                     const SizedBox(
                       height: 24,
                     ),
-                    PasswordValidationWidget(
+                    PasswordValidationLists(
                       lists: validationLists,
                     ),
                     const SizedBox(
@@ -211,5 +190,26 @@ class _ChangeNewPasswordPageState extends State<ChangeNewPasswordPage> {
         },
       ),
     );
+  }
+
+  void _handleOnChange(String value) {
+    return setState(() {
+      if (value.length >= 8) {
+        validationLists[0]["status"] = ValidationStatus.valid;
+      } else {
+        validationLists[0]["status"] = ValidationStatus.inValid;
+      }
+      if (atLeast1LetterExist(value)) {
+        validationLists[1]["status"] = ValidationStatus.valid;
+      } else {
+        validationLists[1]["status"] = ValidationStatus.inValid;
+      }
+
+      if (atLeast1NumberExist(value)) {
+        validationLists[2]["status"] = ValidationStatus.valid;
+      } else {
+        validationLists[2]["status"] = ValidationStatus.inValid;
+      }
+    });
   }
 }
