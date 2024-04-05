@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sgas/core/config/routes/route_path.dart';
 import 'package:sgas/core/di/dependency_config.dart';
 import 'package:sgas/src/authentication/presentation/widgets/alert_message.dart';
 import 'package:sgas/src/authentication/presentation/widgets/notification_header.dart';
@@ -33,7 +32,7 @@ class _OTPPageState extends State<OTPPage> {
 
   @override
   void initState() {
-    getIt.get<OtpCubit>().emit(InitialOtp());
+    getIt.get<OtpCubit>().changeState(InitialOtp());
     focusNodes[0].requestFocus();
     super.initState();
   }
@@ -62,20 +61,10 @@ class _OTPPageState extends State<OTPPage> {
   }
 
   Future<void> _sendOTP(BuildContext context) async {
-    var res = await getIt
+    await getIt
         .get<OtpCubit>()
         .sentOTP(username: widget.userInfo["username"]!, otp: otp);
-
     clearOtp();
-    if (res.code == 200) {
-      Map<String, String> arg = {
-        "data": res.data!,
-        "username": widget.userInfo["username"]!
-      };
-
-      Navigator.popAndPushNamed(context, RoutePath.changePassword,
-          arguments: arg);
-    }
   }
 
   @override
@@ -242,8 +231,7 @@ class _OTPPageState extends State<OTPPage> {
         ),
         interval: const Duration(seconds: 1),
         onFinished: () {
-          getIt.get<OtpCubit>().emit(TimeOutOtp());
-          print('Timer is done!');
+          getIt.get<OtpCubit>().changeState(TimeOutOtp());
         },
       ),
     );

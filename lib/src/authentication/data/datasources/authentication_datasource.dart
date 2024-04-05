@@ -67,13 +67,14 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
   @override
   Future<void> changePassword(ChangePasswordParams params) async {
     try {
-      await ApiServiceClient.post(
+      await ApiServiceClient.put(
           params: params.toMap(),
           uri: APIServicePath.updatePassword(),
           withToken: false);
     } catch (e) {
-      // todo:
-
+      if (e is Exception) {
+        rethrow;
+      }
     }
   }
 

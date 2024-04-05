@@ -11,6 +11,10 @@ class OtpCubit extends Cubit<OtpState> {
   OtpCubit() : super(InitialOtp());
   final AuthenticationUseCase _useCase = AuthenticationUseCase();
 
+  changeState(OtpState state) {
+    emit(state);
+  }
+
   sentOTP({required String username, required String otp}) async {
     var otpResult = await _useCase
         .compareOTP(CompareOTPParams(username: username, oneTimeOtp: otp));
@@ -26,7 +30,10 @@ class OtpCubit extends Cubit<OtpState> {
     }
     emit(CorrectOtp());
     navigatorKey.currentState?.popAndPushNamed(RoutePath.changePassword,
-        arguments: <String, String>{"data": otpResult.right.data!});
+        arguments: <String, String>{
+          "data": otpResult.right.data!,
+          "username": username
+        });
   }
 
   Future<void> reSendOtp(

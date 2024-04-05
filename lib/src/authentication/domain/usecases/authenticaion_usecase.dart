@@ -2,6 +2,7 @@ import 'package:either_dart/either.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/src/authentication/data/datasources/authentication_datasource.dart';
 import 'package:sgas/src/authentication/data/datasources/local_authentication_datasource.dart';
+import 'package:sgas/src/authentication/data/models/change_password_params.dart';
 import 'package:sgas/src/authentication/data/models/compare_otp_params.dart';
 import 'package:sgas/src/authentication/data/models/forget_params.dart';
 import 'package:sgas/src/authentication/data/models/login_params.dart';
@@ -15,6 +16,7 @@ abstract class AuthenticationUseCaseInterface {
   Future<bool> authenticate();
   Future<String?> getAccessToken();
   Future<void> removeAllToken();
+  Future<Either<Failure, void>> changePassword(ChangePasswordParams params);
 }
 
 class AuthenticationUseCase extends AuthenticationUseCaseInterface {
@@ -64,6 +66,17 @@ class AuthenticationUseCase extends AuthenticationUseCaseInterface {
     try {
       var result = await _dataSource.compareOTP(params);
       return Right(result);
+    } catch (e) {
+      return Left(convertExceptionToFailure(e));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> changePassword(
+      ChangePasswordParams params) async {
+    try {
+      await _dataSource.changePassword(params);
+      return const Right(null);
     } catch (e) {
       return Left(convertExceptionToFailure(e));
     }

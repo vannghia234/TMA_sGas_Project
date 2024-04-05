@@ -2,12 +2,9 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'dart:io' as Io;
 import 'package:sgas/core/error/exception.dart';
 import 'package:sgas/core/utils/helper/logger_helper.dart';
-import 'package:sgas/src/authentication/domain/usecases/authenticaion_usecase.dart';
-import 'package:sgas/src/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 
 const _defaultApiWaitingDuration = Duration(seconds: 30);
 const _defaultApiGetFileWaitingDuration = Duration(minutes: 5);
@@ -61,6 +58,9 @@ class ApiServiceClient {
       http.Response response =
           await client.get(Uri.parse(uri), headers: headers);
 
+      logger.f(
+          "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
+
       await handleAPIExceptionByStatusCode(uri, response.statusCode, "GET");
       Map<String, dynamic> result =
           json.decode(utf8.decode(response.bodyBytes));
@@ -93,6 +93,8 @@ class ApiServiceClient {
           .whenComplete(() => client.close());
       var response = await client.put(Uri.parse(uri),
           headers: headers, body: (params != null) ? jsonEncode(params) : null);
+      logger.f(
+          "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
       await handleAPIExceptionByStatusCode(uri, response.statusCode, "PUT");
       Map<String, dynamic> result =
           json.decode(utf8.decode(response.bodyBytes));
@@ -121,7 +123,6 @@ class ApiServiceClient {
     bool isSecondTime = false,
   }) async {
     try {
-      logger.d("POST STARTING");
       final client = http.Client();
       Map<String, String> headers = await _headers(withToken: withToken);
 

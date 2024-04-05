@@ -37,6 +37,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   ];
   bool isHiddenPassword = true;
   bool isHiddenRePassword = true;
+  @override
+  void initState() {
+    logger.f(
+        "debug changePass ${widget.data["username"]} ${widget.data["data"]}}");
+    super.initState();
+  }
 
   @override
   void dispose() {
@@ -56,7 +62,6 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
   @override
   Widget build(BuildContext context) {
-    logger.d("DEBUG change_password page ${widget.data["data"]}");
     return Scaffold(
       appBar: AppBar(
         titleSpacing: 0,
@@ -111,13 +116,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     const LabelTextField(title: "Xác nhận mật khẩu"),
                     TextFieldCommon(
                       onChange: (value) {
-                        context
-                            .read<ChangePasswordCubit>()
+                        getIt
+                            .get<ChangePasswordCubit>()
                             .changeState(InitialChangePassWord());
                       },
                       controller: _rePasswordController,
                       hintText: "Nhập lại mật khẩu",
-                      error: (state is InValidPassword)
+                      error: (state is InValidRePassword)
                           ? ErrorMessageTextField(
                               mess: state.message,
                             )
@@ -151,31 +156,11 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                       PrimaryButton(
                         buttonTitle: "Xác nhận",
                         onPress: () async {
-                          if (_rePasswordController.text.isEmpty) {
-                            context.read<ChangePasswordCubit>().changeState(
-                                InValidPassword(
-                                    message: "Vui lòng nhập lại mật khẩu"));
-                            return;
-                          }
-                          if (_passwordController.text !=
-                              _rePasswordController.text) {
-                            context.read<ChangePasswordCubit>().changeState(
-                                InValidPassword(
-                                    message: "Mật khẩu không khớp"));
-                            return;
-                          } else {
-                            // var res = await context
-                            //     .read<ChangePasswordCubit>()
-                            //     .updatePass(
-                            //         token: widget.data["data"]!,
-                            //         newPassword: _passwordController.text,
-                            //         username: widget.data["username"]!);
-                            // if (res.code == 200) {
-                            //   logger.e("Đổi mật khẩu thành công ${res.data}");
-                            //   Navigator.popAndPushNamed(
-                            //       context, RoutePath.login);
-                            // }
-                          }
+                          getIt.get<ChangePasswordCubit>().updatePass(
+                              token: widget.data["data"]!,
+                              password: _passwordController.text,
+                              rePassword: _rePasswordController.text,
+                              username: widget.data["username"]!);
                         },
                       )
                     else
