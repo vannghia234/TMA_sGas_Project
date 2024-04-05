@@ -1,0 +1,16 @@
+{
+    "btn_login": "Đăng nhập",
+    "lbl_not_found_error": "Xin lỗi có vẻ trang bạn muốn tìm không tồn tại",
+    "btn_back": "Quay về",
+    "btn_try_again": "Thử lại",
+    "lbl_disconnect": "Không thể kết nối đến máy chủ",
+    "txt_check_network": "Hãy kiểm tra lại mạng hoặc nhấn thử lại",
+    "txt_update_version": "Vui lòng cập nhật lên phiên bản mới",
+    "btn_update": "Cập nhật",
+    "txt_try_again": "Vui lòng thử lại",
+    "lbl_error_version": "Đã có lỗi xảy ra trong lúc tải dữ liệu",
+    "txt_version": "Phiên bản",
+    "txt_no_support": "không còn được hỗ trợ",
+    "txt_error_occur": "Đã có lỗi xảy ra",
+    "txt_update_language_notify": "Thay đổi ngôn ngữ thành công"
+}

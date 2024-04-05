@@ -1,0 +1,16 @@
+{
+    "btn_login": "Log in",
+    "lbl_not_found_error": "Sorry, it seems the page you are looking for does not exist",
+    "btn_back": "Back",
+    "btn_try_again": "Try again",
+    "lbl_disconnect": "Unable to connect to the server",
+    "txt_check_network": "Please check your network or try again",
+    "txt_update_version": "Please update to the latest version",
+    "btn_update": "Update",
+    "txt_try_again": "Please try again",
+    "lbl_error_version": "An error occurred while loading the data",
+    "txt_version": "Version",
+    "txt_no_support": "no longer supported",
+    "txt_error_occur": "An error occurred",
+    "txt_update_language_notify": "Language change successful"
+}

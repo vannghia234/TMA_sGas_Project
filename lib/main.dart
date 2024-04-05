@@ -1,8 +1,17 @@
-import 'package:flutter/material.dart';
-import 'package:sgas/src/authentication/view/page/authentication_page.dart';
+import 'dart:io';
 
-void main() {
-  runApp(const MyApp());
+import 'package:flutter/material.dart';
+import 'package:sgas/core/config/dependency/dependency_config.dart';
+import 'package:sgas/core/config/http/http_override_config.dart';
+import 'package:sgas/core/config/presentation/orientation_config.dart';
+import 'package:sgas/core/config/presentation/system_ui_overlay_config.dart';
+import 'package:sgas/src/base/initial_layer/presentation/layer/initial_layer.dart';
+
+Future<void> main() async {
+  setOrientations();
+  HttpOverrides.global = CustomHttpOverrides();
+  await configureDependencies();
+  runApp(buildSystemUiOverlay(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -10,10 +19,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
-      home: AuthenticationPage(),
-    );
+    return const InitialLayer();
   }
 }
