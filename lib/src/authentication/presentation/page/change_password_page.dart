@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:sgas/core/di/dependency_config.dart';
+import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/utils/helper/logger_helper.dart';
 import 'package:sgas/src/authentication/presentation/bloc/forget_password/change_password_cubit.dart';

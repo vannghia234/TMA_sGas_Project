@@ -11,7 +11,7 @@ const _defaultApiGetFileWaitingDuration = Duration(minutes: 5);
 
 Future<void> handleAPIExceptionByStatusCode(
     String uri, int statusCode, String method,
-    {String? codeBadRequest, String? data}) async {
+    {int? codeBadRequest, String? data}) async {
   if (statusCode == 200) return;
   logger.e(
       "[API failure] $statusCode $method $uri badRequestCode $codeBadRequest");
@@ -131,12 +131,12 @@ class ApiServiceClient {
       http.Response response = await client.post(Uri.parse(uri),
           headers: headers, body: (params != null) ? jsonEncode(params) : null);
 
-      String? codeBadReq;
+      int? codeBadReq;
       String? data;
 
       if (response.statusCode == 400) {
         codeBadReq =
-            json.decode(utf8.decode(response.bodyBytes))["code"].toString();
+            json.decode(utf8.decode(response.bodyBytes))["code"];
         data = json.decode(utf8.decode(response.bodyBytes))["data"].toString();
       }
       logger.f(

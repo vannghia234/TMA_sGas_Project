@@ -1,10 +1,13 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sgas/core/config/routes/route_path.dart';
+import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/core/utils/helper/logger_helper.dart';
 import 'package:sgas/src/authentication/data/models/login_params.dart';
 import 'package:sgas/src/authentication/domain/failure/failure.dart';
 import 'package:sgas/src/authentication/domain/usecases/authenticaion_usecase.dart';
 import 'package:sgas/src/authentication/presentation/utils/regex_check_valid.dart';
+import 'package:sgas/src/common/utils/contant/global_key.dart';
 
 part 'login_state.dart';
 
@@ -33,7 +36,7 @@ class LoginCubit extends Cubit<LoginState> {
     }
     LoginParams loginParams =
         LoginParams(username: username, password: password);
-    Either<LoginFailure, void> result = await _useCase.login(loginParams);
+    Either<Failure, void> result = await _useCase.login(loginParams);
     if (result.isLeft) {
       if (result.left is InCorrectUserNamePasswordFailure) {
         emit(InValidPassWord(message: "Sai tài khoản hoặc mật khẩu"));
@@ -47,5 +50,6 @@ class LoginCubit extends Cubit<LoginState> {
       }
     }
     emit(SuccessfulLogin());
+    navigatorKey.currentState?.pushNamed(RoutePath.home);
   }
 }

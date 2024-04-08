@@ -1,4 +1,5 @@
 import 'package:either_dart/either.dart';
+import 'package:sgas/core/error/exception.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/src/authentication/data/datasources/authentication_datasource.dart';
 import 'package:sgas/src/authentication/data/datasources/local_authentication_datasource.dart';
@@ -10,7 +11,7 @@ import 'package:sgas/src/authentication/data/models/otp_model.dart';
 import 'package:sgas/src/authentication/domain/failure/failure.dart';
 
 abstract class AuthenticationUseCaseInterface {
-  Future<Either<LoginFailure, void>> login(LoginParams params);
+  Future<Either<Failure, void>> login(LoginParams params);
   Future<void> forgetPassword(ForgetParams params);
   Future<Either<Failure, void>> compareOTP(CompareOTPParams params);
   Future<bool> authenticate();
@@ -38,12 +39,24 @@ class AuthenticationUseCase extends AuthenticationUseCaseInterface {
   }
 
   @override
-  Future<Either<LoginFailure, void>> login(LoginParams params) async {
-    Either<LoginFailure, void> loginResult = await _dataSource.login(params);
-    if (loginResult.isLeft) {
-      return Left(loginResult.left);
+  Future<Either<Failure, void>> login(LoginParams params) async {
+    try {
+      await _dataSource.login(params);
+      return const Right(null);
+    } catch (e) {
+      if (e is BadRequestException) {
+        if (e.statusCode != null) {
+          if (e.statusCode == 40001) {
+            return Left(InCorrectUserNamePasswordFailure());
+          } else if (e.statusCode == 40002) {
+            return Left(AccountHaveBeenBlockedFailure());
+          } else if (e.statusCode == 40003) {
+            return Left(CompanyAccountFailure());
+          }
+        }
+      }
+      return Left(convertExceptionToFailure(e));
     }
-    return const Right(null);
   }
 
   @override
@@ -52,6 +65,13 @@ class AuthenticationUseCase extends AuthenticationUseCaseInterface {
       await _dataSource.forgetPassword(params);
       return const Right(null);
     } catch (e) {
+      if (e is BadRequestException) {
+        if (e.statusCode == 400) {
+          return Left(OverRequestForgetPasswordFailure(data: e.data));
+        } else if (e.statusCode == 40015) {
+          return Left(NotExistPhoneFailure());
+        }
+      }
       return Left(convertExceptionToFailure(e));
     }
   }
@@ -64,9 +84,16 @@ class AuthenticationUseCase extends AuthenticationUseCaseInterface {
   @override
   Future<Either<Failure, OTPModel>> compareOTP(CompareOTPParams params) async {
     try {
-      var result = await _dataSource.compareOTP(params);
-      return Right(result);
+      var value = await _dataSource.compareOTP(params);
+      return Right(value);
     } catch (e) {
+      if (e is BadRequestException) {
+        if (e.statusCode == 40017) {
+          return Left(TimeOutOTPFailure());
+        } else {
+          return Left(IncorrectOTPFailure());
+        }
+      }
       return Left(convertExceptionToFailure(e));
     }
   }

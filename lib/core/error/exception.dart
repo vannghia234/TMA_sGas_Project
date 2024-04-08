@@ -15,7 +15,7 @@ class ForbiddenException implements APIServiceException {}
 // 400
 class BadRequestException implements APIServiceException {
   String? data;
-  String? statusCode;
+  int? statusCode;
   BadRequestException({this.statusCode, this.data});
 }
 

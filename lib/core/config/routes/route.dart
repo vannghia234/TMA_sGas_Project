@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
+import 'package:sgas/src/authentication/presentation/page/home_page.dart';
 import 'package:sgas/src/authentication/presentation/page/login_page.dart';
 import 'package:sgas/src/authentication/presentation/page/change_password_page.dart';
 import 'package:sgas/src/authentication/presentation/page/forgot_password_page.dart';
@@ -29,6 +30,10 @@ Route appRoute(RouteSettings settings) {
         builder: (context) => OTPPage(
           userInfo: model,
         ),
+      );
+    case RoutePath.home:
+      return MaterialPageRoute(
+        builder: (context) => const HomePage(),
       );
 
     default:

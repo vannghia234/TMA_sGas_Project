@@ -3,8 +3,6 @@ abstract class OtpState {}
 
 class InitialOtp extends OtpState {}
 
-class IncorrectOtp extends OtpState {}
-
 class TimeOutOtp extends OtpState {}
 
 class WaitingOtp extends OtpState {}
@@ -14,5 +12,6 @@ class OverRequestOtp extends OtpState {
   OverRequestOtp({this.mess});
 }
 
-class CorrectOtp extends OtpState {
-}
+class IncorrectOtp extends OtpState {}
+
+class CorrectOtp extends OtpState {}

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sgas/core/di/dependency_config.dart';
+import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/src/authentication/presentation/widgets/alert_message.dart';
 import 'package:sgas/src/authentication/presentation/widgets/notification_header.dart';
 import 'package:timer_count_down/timer_count_down.dart';

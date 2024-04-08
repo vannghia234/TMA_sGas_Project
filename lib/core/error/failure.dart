@@ -10,7 +10,7 @@ class ForbiddenFailure extends Failure {}
 
 class BadRequestFailure extends Failure {
   String? data;
-  String? statusCode;
+  int? statusCode;
   BadRequestFailure({this.statusCode, this.data});
 }
 

@@ -1,4 +1,4 @@
-import 'package:sgas/core/service/client/model/api_path_model.dart';
+import 'package:sgas/core/service/model/api_path_model.dart';
 
 class APIServicePath {
   static const baseUrl = "https://sgas.innovation.com.vn";

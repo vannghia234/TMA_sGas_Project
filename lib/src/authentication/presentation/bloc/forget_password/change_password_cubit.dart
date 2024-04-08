@@ -30,7 +30,7 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
           token: token, username: username, newPassword: password));
       if (result.isLeft) {
         if (result.left is BadRequestFailure) {
-          // todo :
+          // todo : kiểu có thể thay đổi mật khẩu 2 lần giống nhau, kiểu không biết cái token có expired không, tạm chưa xử lý chổ này
           return;
         }
       }
