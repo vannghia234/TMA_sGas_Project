@@ -1,13 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
-import 'package:sgas/src/authentication/presentation/page/home_page.dart';
-import 'package:sgas/src/authentication/presentation/page/login_page.dart';
-import 'package:sgas/src/authentication/presentation/page/change_password_page.dart';
-import 'package:sgas/src/authentication/presentation/page/forgot_password_page.dart';
-import 'package:sgas/src/authentication/presentation/page/otp_page.dart';
+import 'package:sgas/src/feature/authentication/presentation/page/home_page.dart';
+import 'package:sgas/src/feature/authentication/presentation/page/login_page.dart';
+import 'package:sgas/src/feature/authentication/presentation/page/change_password_page.dart';
+import 'package:sgas/src/feature/authentication/presentation/page/forgot_password_page.dart';
+import 'package:sgas/src/feature/authentication/presentation/page/otp_page.dart';
+import 'package:sgas/src/base/initial_layer/presentation/layer/initial_layer.dart';
 
 Route appRoute(RouteSettings settings) {
   switch (settings.name) {
+    case RoutePath.root:
+      return MaterialPageRoute(
+        builder: (context) => const InitialLayer(),
+      );
+    case RoutePath.home:
+      return MaterialPageRoute(
+        builder: (context) => const HomePage(),
+      );
     case RoutePath.login:
       return MaterialPageRoute(
         builder: (context) => const LoginPage(),

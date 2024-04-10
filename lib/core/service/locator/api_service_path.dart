@@ -2,7 +2,8 @@ import 'package:sgas/core/service/model/api_path_model.dart';
 
 class APIServicePath {
   static const baseUrl = "https://sgas.innovation.com.vn";
-
+ static const String ipmAppInfo =
+      "https://erp.innovation.com.vn/api/noauth/info";
   // authentication
   static String login() =>
       APIPathModel(serviceHost: baseUrl, endpoint: "/api/user/auth/login")

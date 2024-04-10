@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sgas/core/ui/style/base_color.dart';
 
 class LoadingController {
   bool isActive = false;
@@ -30,10 +29,7 @@ class LoadingController {
         insetPadding: EdgeInsets.zero,
         backgroundColor: Colors.transparent,
         child: Center(
-          child: CircularProgressIndicator(
-            color: BaseColor.blue500,
-            strokeWidth: 5,
-          ),
+          child: CircularProgressIndicator.adaptive(),
         ),
       ),
     );

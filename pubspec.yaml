@@ -3,7 +3,7 @@ description: "Gas Station Management App"
 
 publish_to: "none"
 
-version: 1.0.0+1
+version: 2.0.0+1
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -12,19 +12,21 @@ dependencies:
   flutter:
     sdk: flutter
 
+  url_launcher: ^6.2.5
   cupertino_icons: ^1.0.6
-  flutter_bloc: ^8.1.4
-  equatable: ^2.0.5
-  get_it: ^7.6.7
-  google_fonts: ^6.2.1
   flutter_svg: ^2.0.10+1
-  device_preview: ^1.1.0
   http: ^1.2.1
   shared_preferences: ^2.2.2
   logger: ^2.1.0
   timer_count_down: ^2.2.2
   jwt_decoder: ^2.0.1
   either_dart: ^1.0.0
+  lottie: ^3.1.0
+  flutter_localization: ^0.2.0
+  intl: 0.18.1
+  flutter_bloc: ^8.1.4
+  get_it: ^7.6.7
+  package_info_plus: ^6.0.0
 
 dev_dependencies:
   flutter_test:
@@ -34,20 +36,37 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
-
+  # To add assets to your application, add an assets section, like this:
   assets:
     - assets/images/
+    - assets/images/common/
+    - assets/images/logo/
+    - assets/anim/
+    - assets/fonts/
     - assets/icons/
 
-  # For example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+
+  # An image asset can refer to one or more resolution-specific "variants", see
+  # https://flutter.dev/assets-and-images/#resolution-aware
+  # For details regarding adding assets from package dependencies, see
+  # https://flutter.dev/assets-and-images/#from-packages
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  fonts:
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-Regular.ttf
+        - asset: assets/fonts/Inter-Bold.ttf
+          weight: 700
+        - asset: assets/fonts/Inter-SemiBold.ttf
+          weight: 600
+
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages
+flutter_intl:
+  enabled: true
+  generate: true
