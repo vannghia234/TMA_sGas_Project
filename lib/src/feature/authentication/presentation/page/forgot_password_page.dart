@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
-import 'package:sgas/core/ui/style/base_style.dart';
+import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/notification_header.dart';
@@ -80,7 +80,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     PrimaryButton(
                       buttonTitle: "Gửi mã OTP",
                       onPress: () async {
-                        getIt
+                      await  getIt
                             .get<ForgetPasswordCubit>()
                             .forgetPassword(_username.text, _phoneNumber.text);
                       },

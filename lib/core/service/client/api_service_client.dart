@@ -5,6 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:io' as Io;
 import 'package:sgas/core/error/exception.dart';
 import 'package:sgas/core/utils/helper/logger_helper.dart';
+import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
 
 const _defaultApiWaitingDuration = Duration(seconds: 30);
 const _defaultApiGetFileWaitingDuration = Duration(minutes: 5);
@@ -33,8 +34,7 @@ class ApiServiceClient {
   static Future<Map<String, String>> _headers({
     bool withToken = true,
   }) async {
-    String token = "";
-    // String? token = await AuthenticationUseCase().getAccessToken();
+    String? token = await AuthenticationUseCase().getAccessToken();
     return {
       HttpHeaders.acceptHeader: "application/json",
       if (withToken == true) HttpHeaders.authorizationHeader: "Bearer $token",
@@ -135,8 +135,7 @@ class ApiServiceClient {
       String? data;
 
       if (response.statusCode == 400) {
-        codeBadReq =
-            json.decode(utf8.decode(response.bodyBytes))["code"];
+        codeBadReq = json.decode(utf8.decode(response.bodyBytes))["code"];
         data = json.decode(utf8.decode(response.bodyBytes))["data"].toString();
       }
       logger.f(

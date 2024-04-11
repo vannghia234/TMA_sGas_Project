@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
-import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/src/feature/authentication/data/models/change_password_params.dart';
 import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/change_password_state.dart';
@@ -29,10 +28,9 @@ class ChangePasswordCubit extends Cubit<ChangePasswordState> {
       var result = await useCase.changePassword(ChangePasswordParams(
           token: token, username: username, newPassword: password));
       if (result.isLeft) {
-        if (result.left is BadRequestFailure) {
-          // todo : kiểu có thể thay đổi mật khẩu 2 lần giống nhau, kiểu không biết cái token có expired không, tạm chưa xử lý chổ này
-          return;
-        }
+        emit(InitialChangePassWord());
+        navigatorKey.currentState?.pushNamed(RoutePath.disconnect);
+        return;
       }
       if (result.isRight) {
         emit(SuccessValidPassword());

@@ -7,7 +7,7 @@ import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/ui/resource/image_path.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
-import 'package:sgas/core/ui/style/base_style.dart';
+import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/label_textfield.dart';
@@ -26,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   final _username = TextEditingController();
   final _password = TextEditingController();
   bool isHidden = true;
+  bool isLoading = false;
 
   @override
   void dispose() {
@@ -95,6 +96,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const _ForgetPasswordText(),
                   PrimaryButton(
+                    isLoading: isLoading,
                     buttonTitle: "Đăng nhập",
                     onPress: () => handleButtonLogin(),
                   ),
@@ -111,9 +113,15 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> handleButtonLogin() async {
+    setState(() {
+      isLoading = true;
+    });
     await getIt
         .get<AuthenticationCubit>()
-        .login(context, _username.text, _password.text);
+        .login(_username.text, _password.text);
+    setState(() {
+      isLoading = false;
+    });
   }
 }
 

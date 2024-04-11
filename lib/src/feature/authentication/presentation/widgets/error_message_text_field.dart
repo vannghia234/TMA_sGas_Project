@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
-import 'package:sgas/core/ui/style/base_style.dart';
+import 'package:sgas/core/ui/style/base_text_style.dart';
 
 class ErrorMessageTextField extends StatelessWidget {
   const ErrorMessageTextField({

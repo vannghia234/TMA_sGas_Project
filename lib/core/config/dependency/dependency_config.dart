@@ -21,7 +21,7 @@ Future<void> _configureDependenciesBloc() async {
   getIt.registerLazySingleton<OtpCubit>(() => OtpCubit());
   getIt.registerLazySingleton<AuthenticationCubit>(() => AuthenticationCubit());
   getIt.registerLazySingleton<LanguageCubit>(() => LanguageCubit());
-  getIt.registerLazySingleton<ValidationCubit>(() => ValidationCubit());
+  getIt.registerSingleton<ValidationCubit>(ValidationCubit());
 }
 
 Future<void> _configureController() async {

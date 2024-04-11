@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
+import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/src/feature/authentication/data/models/compare_otp_params.dart';
 import 'package:sgas/src/feature/authentication/data/models/forget_params.dart';
 import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
@@ -21,6 +22,11 @@ class OtpCubit extends Cubit<OtpState> {
     if (otpResult.isLeft) {
       if (otpResult.left is TimeOutOTPFailure) {
         emit(TimeOutOtp());
+        return;
+      }
+      if (otpResult.left is ServerFailure) {
+        emit(InitialOtp());
+        navigatorKey.currentState?.pushNamed(RoutePath.disconnect);
         return;
       } else {
         emit(IncorrectOtp());

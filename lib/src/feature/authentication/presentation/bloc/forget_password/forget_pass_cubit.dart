@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
 import 'package:sgas/core/error/failure.dart';
+import 'package:sgas/core/utils/helper/logger_helper.dart';
 import 'package:sgas/core/utils/helper/pattern_regex_helper.dart';
+import 'package:sgas/src/base/validation_layer/presentation/page/disconnect_page.dart';
 import 'package:sgas/src/feature/authentication/data/models/forget_params.dart';
 import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
 import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
@@ -25,11 +28,16 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
       emit(InvalidForgetPhoneNumberState(
           message: "Số điện thoại phải có 10 kí tự"));
     } else {
+      logger.d("forget");
+
       emit(InitialForgetState());
       ForgetParams params =
           ForgetParams(username: username, phone: phoneNumber);
       var result = await _useCase.forgetPassword(params);
+
       if (result.isLeft) {
+        logger.d("forget 2 ${result.left} ");
+
         if (result.left is NotFoundFailure) {
           emit(InvalidForgetUsernameState(
               message: "Không tìm thấy tài khoản này"));
@@ -40,6 +48,14 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
         } else if (result.left is NotExistPhoneFailure) {
           emit(InvalidForgetPhoneNumberState(
               message: "Số điện thoại không chính xác"));
+        } else {
+          logger.d("disconnect forget");
+          emit(InitialForgetState());
+          navigatorKey.currentState?.push(MaterialPageRoute(
+            builder: (context) => DisconnectPage(),
+          ));
+
+          return;
         }
       }
       if (result.isRight) {

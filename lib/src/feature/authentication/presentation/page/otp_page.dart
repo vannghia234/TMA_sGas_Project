@@ -6,7 +6,7 @@ import 'package:sgas/src/feature/authentication/presentation/widgets/alert_messa
 import 'package:sgas/src/feature/authentication/presentation/widgets/notification_header.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
-import 'package:sgas/core/ui/style/base_style.dart';
+import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/utils/hide_sdt.dart';

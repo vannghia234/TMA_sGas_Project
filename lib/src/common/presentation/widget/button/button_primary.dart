@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:sgas/core/utils/helper/screen_helper.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
-import 'package:sgas/core/ui/style/base_style.dart';
+import 'package:sgas/core/ui/style/base_text_style.dart';
 
 class PrimaryButton extends StatelessWidget {
-  const PrimaryButton({super.key, required this.buttonTitle, this.onPress});
+  const PrimaryButton(
+      {super.key,
+      required this.buttonTitle,
+      this.onPress,
+      this.isLoading = false});
   final String buttonTitle;
   final VoidCallback? onPress;
+  final bool? isLoading;
 
   @override
   Widget build(BuildContext context) {
@@ -20,11 +25,16 @@ class PrimaryButton extends StatelessWidget {
                 ? BaseColor.buttonPrimaryColor
                 : BaseColor.backgroundDisableColor)),
         onPressed: onPress ?? () {},
-        child: Text(
-          buttonTitle,
-          style: BaseTextStyle.button1(
-              color:
-                  (onPress != null) ? Colors.white : BaseColor.greyNeutral400),
-        ));
+        child: (isLoading == false)
+            ? Text(
+                buttonTitle,
+                style: BaseTextStyle.button1(
+                    color: (onPress != null)
+                        ? Colors.white
+                        : BaseColor.greyNeutral400),
+              )
+            : const CircularProgressIndicator.adaptive(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              ));
   }
 }

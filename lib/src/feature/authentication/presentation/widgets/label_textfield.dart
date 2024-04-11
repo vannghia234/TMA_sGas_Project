@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
-import 'package:sgas/core/ui/style/base_style.dart';
+import 'package:sgas/core/ui/style/base_text_style.dart';
 
 class LabelTextField extends StatelessWidget {
   const LabelTextField({

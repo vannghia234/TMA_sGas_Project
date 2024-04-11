@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:sgas/core/config/routes/route_path.dart';
+import 'package:sgas/src/base/validation_layer/presentation/page/data_parsing_page.dart';
+import 'package:sgas/src/base/validation_layer/presentation/page/disconnect_page.dart';
+import 'package:sgas/src/common/presentation/page/not_found_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/home_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/login_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/change_password_page.dart';
@@ -40,15 +43,17 @@ Route appRoute(RouteSettings settings) {
           userInfo: model,
         ),
       );
-    case RoutePath.home:
+    case RoutePath.disconnect:
       return MaterialPageRoute(
-        builder: (context) => const HomePage(),
+        builder: (context) => const DisconnectPage(),
       );
-
-    default:
-// TODO: return NotFoundPage
+    case RoutePath.errorVersion:
       return MaterialPageRoute(
-        builder: (context) => const LoginPage(),
+        builder: (context) => const DataParsingPage(),
+      );
+    default:
+      return MaterialPageRoute(
+        builder: (context) => const NotFoundPage(),
       );
   }
 }
