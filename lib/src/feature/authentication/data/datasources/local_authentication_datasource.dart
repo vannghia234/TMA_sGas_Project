@@ -1,6 +1,6 @@
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:sgas/core/service/client/local_service_client.dart';
-import 'package:sgas/core/service/locator/share_reference_key.dart';
+import 'package:sgas/core/service/locator/shared_references_key.dart';
 import 'package:sgas/src/feature/authentication/data/datasources/authentication_datasource.dart';
 import 'package:sgas/src/feature/authentication/data/models/token_model.dart';
 

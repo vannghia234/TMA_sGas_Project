@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sgas/core/config/routes/route_path.dart';
+import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/error/failure.dart';
-import 'package:sgas/core/utils/helper/logger_helper.dart';
-import 'package:sgas/core/utils/helper/pattern_regex_helper.dart';
-import 'package:sgas/src/base/validation_layer/presentation/page/disconnect_page.dart';
+import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/utils/controller/snack_bar_controller.dart';
+import 'package:sgas/src/common/utils/helper/string_regex_helper.dart';
 import 'package:sgas/src/feature/authentication/data/models/forget_params.dart';
 import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
 import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
@@ -17,44 +16,42 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
 
   Future<void> forgetPassword(String username, String phoneNumber) async {
     if (username.isEmpty) {
-      emit(InvalidForgetUsernameState(message: "bạn chưa nhập tên đăng nhập"));
+      emit(InvalidForgetUsernameState(
+          message: S.current.txt_please_enter_username));
     } else if (username.length < 6) {
       emit(InvalidForgetUsernameState(
-          message: "Tên đăng nhập không nhỏ hơn 6 kí tự"));
+          message: S.current.txt_at_least_6_characters_username));
     } else if (phoneNumber.isEmpty) {
       emit(InvalidForgetPhoneNumberState(
-          message: "bạn chưa nhập số điện thoại"));
-    } else if (phoneNumberRegex.hasMatch(phoneNumber) == false) {
+          message: S.current.txt_please_enter_phone_number));
+    } else if (!RegExp(phoneNumberRegex).hasMatch(phoneNumber)) {
       emit(InvalidForgetPhoneNumberState(
-          message: "Số điện thoại phải có 10 kí tự"));
+          message: S.current.txt_at_least_10_character_phone));
     } else {
-      logger.d("forget");
-
       emit(InitialForgetState());
       ForgetParams params =
           ForgetParams(username: username, phone: phoneNumber);
       var result = await _useCase.forgetPassword(params);
 
       if (result.isLeft) {
-        logger.d("forget 2 ${result.left} ");
-
         if (result.left is NotFoundFailure) {
           emit(InvalidForgetUsernameState(
-              message: "Không tìm thấy tài khoản này"));
+              message: S.current.txt_not_found_this_account));
         } else if (result.left is OverRequestForgetPasswordFailure) {
-          var overReqMessage = result.left as OverRequestForgetPasswordFailure;
-          emit(
-              InvalidForgetPhoneNumberState(message: "${overReqMessage.data}"));
+          // var overReqMessage = result.left as OverRequestForgetPasswordFailure;
+          // emit(
+          //     InvalidForgetPhoneNumberState(message: "${overReqMessage.data}"));
+          showSnackBar(
+              content: S.current.txt_please_wait_a_minute_to_send_otp,
+              state: SnackBarState.error);
+          return;
         } else if (result.left is NotExistPhoneFailure) {
           emit(InvalidForgetPhoneNumberState(
-              message: "Số điện thoại không chính xác"));
+              message: S.current.txt_not_existing_phone));
         } else {
-          logger.d("disconnect forget");
-          emit(InitialForgetState());
-          navigatorKey.currentState?.push(MaterialPageRoute(
-            builder: (context) => DisconnectPage(),
-          ));
-
+          showSnackBar(
+              content: S.current.txt_no_network_connection,
+              state: SnackBarState.error);
           return;
         }
       }

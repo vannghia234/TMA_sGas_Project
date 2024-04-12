@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
+import 'package:sgas/src/common/utils/controller/debounce_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/change_password_cubit.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/set_password_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cubit.dart';
@@ -16,7 +17,7 @@ Future<void> configureDependencies() async {
 
 Future<void> _configureDependenciesBloc() async {
   getIt.registerLazySingleton<LoginCubit>(() => LoginCubit());
-  getIt.registerLazySingleton<ChangePasswordCubit>(() => ChangePasswordCubit());
+  getIt.registerLazySingleton<SetPasswordCubit>(() => SetPasswordCubit());
   getIt.registerLazySingleton<ForgetPasswordCubit>(() => ForgetPasswordCubit());
   getIt.registerLazySingleton<OtpCubit>(() => OtpCubit());
   getIt.registerLazySingleton<AuthenticationCubit>(() => AuthenticationCubit());
@@ -26,4 +27,5 @@ Future<void> _configureDependenciesBloc() async {
 
 Future<void> _configureController() async {
   getIt.registerLazySingleton<LoadingController>(() => LoadingController());
+  getIt.registerLazySingleton<DebounceController>(() => DebounceController());
 }

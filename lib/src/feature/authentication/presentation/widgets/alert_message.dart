@@ -15,8 +15,8 @@ class AlertMessage extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: Text(
-        title ?? '',
-        style: BaseTextStyle.body2(color: color ?? Colors.red),
+        title ?? "",
+        style: BaseTextStyle.body2(),
       ),
     );
   }

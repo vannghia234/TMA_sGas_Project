@@ -23,8 +23,7 @@ Failure convertExceptionToFailure(Object exception) {
   if (exception is AuthorizationException) return AuthorizationFailure();
   if (exception is ForbiddenException) return ForbiddenFailure();
   if (exception is BadRequestException) {
-    return BadRequestFailure(
-        statusCode: exception.statusCode, data: exception.data);
+    return BadRequestFailure();
   }
   if (exception is NotFoundException) return NotFoundFailure();
   return DataParsingFailure();

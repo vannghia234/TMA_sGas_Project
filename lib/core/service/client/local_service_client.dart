@@ -5,20 +5,20 @@ class LocalServiceClient {
     SharedPreferences instance = await SharedPreferences.getInstance();
     switch (value.runtimeType) {
       case int:
-        instance.setInt(key, value);
+        await instance.setInt(key, value);
         break;
       case double:
-        instance.setDouble(key, value);
+        await instance.setDouble(key, value);
         break;
       case const (List<String>):
-        instance.setStringList(key, value);
+        await instance.setStringList(key, value);
         break;
       case bool:
-        instance.setBool(key, value);
+        await instance.setBool(key, value);
         break;
 
       default:
-        instance.setString(key, value.toString());
+        await instance.setString(key, value.toString());
     }
   }
 

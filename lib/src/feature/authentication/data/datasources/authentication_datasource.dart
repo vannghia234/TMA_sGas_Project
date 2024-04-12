@@ -1,5 +1,5 @@
 import 'package:sgas/core/error/exception.dart';
-import 'package:sgas/core/utils/helper/logger_helper.dart';
+import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 import 'package:sgas/core/service/client/api_service_client.dart';
 import 'package:sgas/core/service/locator/api_service_path.dart';
 import 'package:sgas/src/feature/authentication/data/datasources/local_authentication_datasource.dart';

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
-import 'package:sgas/core/utils/helper/screen_helper.dart';
+import 'package:sgas/src/common/utils/helper/screen_helper.dart';
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
 
 class ExceptionWidget extends StatelessWidget {
@@ -28,7 +28,7 @@ class ExceptionWidget extends StatelessWidget {
       children: [
         SizedBox(
           height: 250,
-          width: getWidthScreen(context),
+          width: getScreenWidth(context),
           child: FractionallySizedBox(
               heightFactor: 1,
               child: Image.asset(
@@ -46,7 +46,7 @@ class ExceptionWidget extends StatelessWidget {
               style: BaseTextStyle.body2(color: BaseColor.textSecondaryColor)),
         if (buttonTitle != null)
           Padding(
-            padding: EdgeInsets.only(top: getHeightScreen(context) * 0.02),
+            padding: EdgeInsets.only(top: getScreenHeight(context) * 0.02),
             child: PrimaryButton(
               buttonTitle: buttonTitle!,
               onPress: onPress,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
+import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/alert_message.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/notification_header.dart';
 import 'package:timer_count_down/timer_count_down.dart';
@@ -78,7 +79,7 @@ class _OTPPageState extends State<OTPPage> {
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
-        title: const Text('Nhập mã OTP'),
+        title:  Text(S.current.txt_enter_otp),
         titleTextStyle: BaseTextStyle.label2(color: BaseColor.textPrimaryColor),
       ),
       body: SizedBox.expand(
@@ -86,7 +87,7 @@ class _OTPPageState extends State<OTPPage> {
           children: [
             NotificationHeader(
               title:
-                  "Mã OTP đã được gửi về số điện thoại ${hideSDT(widget.userInfo["phone"]!)}",
+                  "${S.current.txt_otp_sent_to_phone} ${hideSDT(widget.userInfo["phone"]!)}",
             ),
             const SizedBox(height: 24),
             _otpFormField(context),
@@ -160,13 +161,12 @@ class _OTPPageState extends State<OTPPage> {
             bloc: getIt.get<OtpCubit>(),
             builder: (context, state) {
               if (state is TimeOutOtp) {
-                return const AlertMessage(
-                  title: "Mã OTP của bạn đã hết hạn",
-                  color: BaseColor.textPrimaryColor,
+                return  AlertMessage(
+                  title: S.current.txt_otp_expired,
                 );
               } else if (state is IncorrectOtp) {
-                return const AlertMessage(
-                  title: "Mã OTP không chính xác",
+                return  AlertMessage(
+                  title: S.current.txt_invalid_otp,
                 );
               }
               if (state is OverRequestOtp) {
@@ -187,13 +187,13 @@ class _OTPPageState extends State<OTPPage> {
             builder: (context, state) {
               return (state is WaitingOtp)
                   ? PrimaryButton(
-                      buttonTitle: "Xác nhận",
+                      buttonTitle: S.current.btn_confirm,
                       onPress: () {
                         _sendOTP(context);
                       },
                     )
                   : PrimaryButton(
-                      buttonTitle: "Gửi lại mã OTP",
+                      buttonTitle: S.current.btn_re_send_otp,
                       onPress: () {
                         getIt.get<OtpCubit>().reSendOtp(
                             username: widget.userInfo["username"]!,
@@ -221,7 +221,7 @@ class _OTPPageState extends State<OTPPage> {
         build: (BuildContext context, double time) => RichText(
           text: TextSpan(
               style: BaseTextStyle.body2(),
-              text: "Mã OTP của bạn sẽ hết hạn sau ",
+              text: "${S.current.txt_otp_expiry} ",
               children: [
                 TextSpan(
                     text: "${time.toInt()}s",

@@ -3,7 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
-import 'package:sgas/src/feature/authentication/presentation/page/change_password_page.dart';
+import 'package:sgas/src/feature/authentication/presentation/page/set_password_page.dart';
 
 class PasswordValidationLists extends StatefulWidget {
   const PasswordValidationLists({

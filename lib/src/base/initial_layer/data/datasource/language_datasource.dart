@@ -1,5 +1,5 @@
 import 'package:sgas/core/service/client/local_service_client.dart';
-import 'package:sgas/core/service/locator/share_reference_key.dart';
+import 'package:sgas/core/service/locator/shared_references_key.dart';
 
 abstract class LocalDatasourceInterface {
   saveLanguageCode(String? languageCode);

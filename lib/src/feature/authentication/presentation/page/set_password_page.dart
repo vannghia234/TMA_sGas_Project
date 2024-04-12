@@ -4,13 +4,13 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
-import 'package:sgas/core/utils/helper/logger_helper.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/change_password_cubit.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/change_password_state.dart';
+import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/set_password_cubit.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/set_password_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/utils/regex_check_valid.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/label_textfield.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/password_validation_lists.dart';
-import 'package:sgas/src/feature/authentication/presentation/widgets/error_message_text_field.dart';
+import 'package:sgas/src/feature/authentication/presentation/widgets/error_message_textfield.dart';
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/text_field_common.dart';
 
@@ -19,28 +19,35 @@ class ValidationStatus {
   static const String inValid = "notOk";
 }
 
-class ChangePasswordPage extends StatefulWidget {
-  const ChangePasswordPage({super.key, required this.data});
+class SetPasswordPage extends StatefulWidget {
+  const SetPasswordPage({super.key, required this.data});
   final Map<String, String> data;
 
   @override
-  State<ChangePasswordPage> createState() => _ChangePasswordPageState();
+  State<SetPasswordPage> createState() => _SetPasswordPageState();
 }
 
-class _ChangePasswordPageState extends State<ChangePasswordPage> {
+class _SetPasswordPageState extends State<SetPasswordPage> {
   final _passwordController = TextEditingController();
   final _rePasswordController = TextEditingController();
   List<Map<String, String>> validationLists = [
-    {"title": "Tối thiểu 8 ký tự", "status": ValidationStatus.inValid},
-    {"title": "Chứa ít nhất 1 ký tự chữ", "status": ValidationStatus.inValid},
-    {"title": "Chứa ít nhất một ký tự số", "status": ValidationStatus.inValid},
+    {
+      "title": S.current.txt_password_min_length,
+      "status": ValidationStatus.inValid
+    },
+    {
+      "title": S.current.txt_password_contains_letter,
+      "status": ValidationStatus.inValid
+    },
+    {
+      "title": S.current.txt_password_contains_digit,
+      "status": ValidationStatus.inValid
+    },
   ];
   bool isHiddenPassword = true;
   bool isHiddenRePassword = true;
   @override
   void initState() {
-    logger.f(
-        "debug changePass ${widget.data["username"]} ${widget.data["data"]}}");
     super.initState();
   }
 
@@ -72,10 +79,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
           },
         ),
         centerTitle: false,
-        title: const Text('Đổi mật khẩu'),
+        title: Text(S.current.txt_change_password),
       ),
-      body: BlocBuilder<ChangePasswordCubit, ChangePasswordState>(
-        bloc: getIt.get<ChangePasswordCubit>(),
+      body: BlocBuilder<SetPasswordCubit, SetPasswordState>(
+        bloc: getIt.get<SetPasswordCubit>(),
         builder: (context, state) {
           return SafeArea(
             child: Padding(
@@ -87,10 +94,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     const SizedBox(
                       height: 24,
                     ),
-                    const LabelTextField(title: "Mật khẩu"),
+                    LabelTextField(title: S.current.txt_password),
                     TextFieldCommon(
                       controller: _passwordController,
-                      hintText: "Nhập mật khẩu",
+                      hintText: S.current.txt_enter_password,
                       isHidden: isHiddenPassword,
                       onChange: (value) {
                         _handleOnChange(value);
@@ -113,15 +120,16 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     const SizedBox(
                       height: 16,
                     ),
-                    const LabelTextField(title: "Xác nhận mật khẩu"),
+                    
+                    LabelTextField(title: S.current.txt_confirm_password),
                     TextFieldCommon(
                       onChange: (value) {
                         getIt
-                            .get<ChangePasswordCubit>()
+                            .get<SetPasswordCubit>()
                             .changeState(InitialChangePassWord());
                       },
                       controller: _rePasswordController,
-                      hintText: "Nhập lại mật khẩu",
+                      hintText: S.current.txt_re_enter_password,
                       error: (state is InValidRePassword)
                           ? ErrorMessageTextField(
                               mess: state.message,
@@ -154,9 +162,9 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                     ),
                     if (_isAllValidList(validationLists))
                       PrimaryButton(
-                        buttonTitle: "Xác nhận",
+                        buttonTitle: S.current.btn_confirm,
                         onPress: () async {
-                          getIt.get<ChangePasswordCubit>().updatePass(
+                          getIt.get<SetPasswordCubit>().updatePass(
                               token: widget.data["data"]!,
                               password: _passwordController.text,
                               rePassword: _rePasswordController.text,
@@ -164,8 +172,8 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         },
                       )
                     else
-                      const PrimaryButton(
-                        buttonTitle: "Xác nhận",
+                      PrimaryButton(
+                        buttonTitle: S.current.btn_confirm,
                       )
                   ],
                 ),

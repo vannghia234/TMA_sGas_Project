@@ -1,17 +1,14 @@
 import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:sgas/core/config/routes/route_path.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/src/base/validation_layer/data/model/app_version_model.dart';
 import 'package:sgas/src/base/validation_layer/domain/usecase/app_info_usecase.dart';
 import 'package:sgas/src/base/validation_layer/domain/usecase/app_version_usecase.dart';
 import 'package:sgas/src/base/validation_layer/presentation/bloc/validation_state.dart';
-import 'package:sgas/src/common/utils/constant/global_key.dart';
 
 class ValidationCubit extends Cubit<ValidationState> {
   ValidationCubit() : super(ValidationInitialState());
-
 
   Future<void> init() async {
     PackageInfo packageInfo = await PackageInfo.fromPlatform();
@@ -49,9 +46,6 @@ class ValidationCubit extends Cubit<ValidationState> {
   }
 
   Future<void> retry() async {
-    navigatorKey.currentState?.popUntil(
-      (route) => route.settings.name == RoutePath.root,
-    );
     emit(ValidationInitialState());
     await Future.delayed(const Duration(seconds: 1));
     init();

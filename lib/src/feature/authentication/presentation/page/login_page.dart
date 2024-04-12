@@ -5,13 +5,15 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/ui/resource/image_path.dart';
-import 'package:sgas/core/config/routes/route_path.dart';
+import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
+import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/utils/controller/debounce_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/label_textfield.dart';
-import 'package:sgas/src/feature/authentication/presentation/widgets/error_message_text_field.dart';
+import 'package:sgas/src/feature/authentication/presentation/widgets/error_message_textfield.dart';
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/text_field_common.dart';
 
@@ -56,11 +58,11 @@ class _LoginPageState extends State<LoginPage> {
                   const Spacer(
                     flex: 1,
                   ),
-                  const LabelTextField(
-                    title: 'Tên đăng nhập',
+                  LabelTextField(
+                    title: S.current.txt_username,
                   ),
                   TextFieldCommon(
-                    hintText: "Nhập tên đăng nhập",
+                    hintText: S.current.txt_enter_username,
                     controller: _username,
                     error: (state is InValidUserName)
                         ? ErrorMessageTextField(
@@ -69,9 +71,9 @@ class _LoginPageState extends State<LoginPage> {
                         : null,
                   ),
                   const SizedBox(height: 16),
-                  const LabelTextField(title: "Mật khẩu"),
+                  LabelTextField(title: S.current.txt_password),
                   TextFieldCommon(
-                    hintText: "Nhập mật khẩu",
+                    hintText: S.current.txt_enter_password,
                     suffixIcon: IconButton(
                       highlightColor: const Color.fromRGBO(0, 0, 0, 0),
                       onPressed: () {
@@ -97,8 +99,12 @@ class _LoginPageState extends State<LoginPage> {
                   const _ForgetPasswordText(),
                   PrimaryButton(
                     isLoading: isLoading,
-                    buttonTitle: "Đăng nhập",
-                    onPress: () => handleButtonLogin(),
+                    buttonTitle: S.current.btn_login,
+                    onPress: () => getIt.get<DebounceController>().start(
+                      function: () {
+                        handleButtonLogin();
+                      },
+                    ),
                   ),
                   const Spacer(
                     flex: 3,
@@ -135,7 +141,7 @@ class _TitleLogin extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
       child: Text(
-        'Đăng nhập',
+        S.current.txt_login,
         style: BaseTextStyle.body1(color: BaseColor.textPrimaryColor),
       ),
     );
@@ -158,7 +164,7 @@ class _ForgetPasswordText extends StatelessWidget {
             Navigator.pushNamed(context, RoutePath.forgotPassword);
           },
           child: Text(
-            'Quên mật khẩu?',
+            S.current.lbl_forget_pass,
             style: BaseTextStyle.button1(color: BaseColor.primaryColor),
           ),
         ),

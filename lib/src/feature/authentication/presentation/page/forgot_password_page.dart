@@ -3,10 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
+import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/notification_header.dart';
-import 'package:sgas/src/feature/authentication/presentation/widgets/error_message_text_field.dart';
+import 'package:sgas/src/feature/authentication/presentation/widgets/error_message_textfield.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/label_textfield.dart';
 import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/text_field_common.dart';
@@ -40,15 +41,15 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
-        title: const Text(
-          'Cấp lại mật khẩu',
+        title: Text(
+          S.current.txt_confirm_password,
         ),
         titleTextStyle: BaseTextStyle.label2(color: BaseColor.textPrimaryColor),
       ),
       body: Column(
         children: [
-          const NotificationHeader(
-            title: "Nhập email và số điện thoại, sau đó nhấn gửi mã OTP",
+          NotificationHeader(
+            title: S.current.txt_instructions,
           ),
           const SizedBox(height: 24),
           BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
@@ -59,18 +60,18 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const LabelTextField(title: "Tên đăng nhập"),
+                    LabelTextField(title: S.current.txt_username),
                     TextFieldCommon(
-                      hintText: "Nhập tên đăng nhập",
+                      hintText: S.current.txt_enter_username,
                       controller: _username,
                       error: (state is InvalidForgetUsernameState)
                           ? ErrorMessageTextField(mess: state.message)
                           : null,
                     ),
                     const SizedBox(height: 16),
-                    const LabelTextField(title: "Số điện thoại"),
+                    LabelTextField(title: S.current.txt_phone_number),
                     TextFieldCommon(
-                      hintText: "Nhập số điện thoại",
+                      hintText: S.current.txt_enter_phone_number,
                       controller: _phoneNumber,
                       error: (state is InvalidForgetPhoneNumberState)
                           ? ErrorMessageTextField(mess: state.message)
@@ -78,9 +79,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     ),
                     const SizedBox(height: 24),
                     PrimaryButton(
-                      buttonTitle: "Gửi mã OTP",
+                      buttonTitle: S.current.btn_send_otp,
                       onPress: () async {
-                      await  getIt
+                        await getIt
                             .get<ForgetPasswordCubit>()
                             .forgetPassword(_username.text, _phoneNumber.text);
                       },

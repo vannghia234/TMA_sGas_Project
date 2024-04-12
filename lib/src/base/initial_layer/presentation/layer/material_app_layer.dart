@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sgas/core/config/routes/route.dart';
-import 'package:sgas/core/config/routes/route_path.dart';
+import 'package:sgas/core/config/route/route.dart';
+import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/ui/style/base_theme.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
@@ -13,22 +13,31 @@ class MaterialAppLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      onGenerateRoute: appRoute,
-      initialRoute: RoutePath.root,
-      navigatorKey: navigatorKey,
-      scaffoldMessengerKey: scaffoldMessengerKey,
-      theme: baseTheme(),
-      debugShowCheckedModeBanner: false,
-      localizationsDelegates: const [
-        S.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: S.delegate.supportedLocales,
-      locale: locale,
-      home: const ValidationLayer(),
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus &&
+            currentFocus.focusedChild != null) {
+          FocusManager.instance.primaryFocus!.unfocus();
+        }
+      },
+      child: MaterialApp(
+        onGenerateRoute: appRoute,
+        initialRoute: RoutePath.root,
+        navigatorKey: navigatorKey,
+        scaffoldMessengerKey: scaffoldMessengerKey,
+        theme: baseTheme(),
+        debugShowCheckedModeBanner: false,
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
+        locale: locale,
+        home: const ValidationLayer(),
+      ),
     );
   }
 }

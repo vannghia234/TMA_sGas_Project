@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
-import 'package:sgas/core/utils/helper/logger_helper.dart';
 import 'package:sgas/src/base/validation_layer/presentation/bloc/validation_cubit.dart';
 import 'package:sgas/src/base/validation_layer/presentation/bloc/validation_state.dart';
 import 'package:sgas/src/common/presentation/page/app_loading_page.dart';
@@ -15,19 +14,14 @@ class ValidationLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    logger.e("Validation Rebuild");
     return BlocBuilder<ValidationCubit, ValidationState>(
       bloc: getIt.get<ValidationCubit>()..init(),
       builder: (context, state) {
-        logger.e("Validation Rebuild $state");
-
         if (state is ValidatedValidationState) {
           return const AuthenticationLayer();
         }
         if (state is DisconnectedValidationState) {
-          return const DisconnectPage(
-            isLayer: true,
-          );
+          return const DisconnectPage();
         }
         if (state is UnsupportedVersionValidationState) {
           return UnSupportVersionPage(

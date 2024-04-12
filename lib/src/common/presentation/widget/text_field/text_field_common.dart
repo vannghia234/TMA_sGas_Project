@@ -40,7 +40,6 @@ class TextFieldCommon extends StatelessWidget {
       style: BaseTextStyle.body1(color: BaseColor.textPrimaryColor),
       cursorColor: BaseColor.textPrimaryColor,
       obscureText: isHidden ?? false,
-      obscuringCharacter: '●',
     );
   }
 }
