@@ -11,10 +11,7 @@ class CompanyAccountFailure extends LoginFailure {}
 
 abstract class ForgetPasswordFailure extends Failure {}
 
-class OverRequestForgetPasswordFailure extends ForgetPasswordFailure {
-  String? data;
-  OverRequestForgetPasswordFailure({this.data});
-}
+class OverRequestForgetPasswordFailure extends ForgetPasswordFailure {}
 
 class NotExistPhoneFailure extends ForgetPasswordFailure {}
 

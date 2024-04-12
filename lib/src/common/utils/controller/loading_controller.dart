@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
+import 'package:sgas/core/ui/resource/image_path.dart';
 
 class LoadingController {
   bool isActive = false;
@@ -21,16 +23,15 @@ class LoadingController {
   void start(BuildContext context) {
     if (isActive) close(context);
     _active();
-
     showDialog(
       context: context,
-      builder: (context) => const Dialog(
+      builder: (context) => Dialog(
         elevation: 0,
         insetPadding: EdgeInsets.zero,
         backgroundColor: Colors.transparent,
         child: Center(
-          child: CircularProgressIndicator.adaptive(),
-        ),
+            child: Lottie.asset(ImagePath.fourDotLoading,
+                fit: BoxFit.cover, width: 84, height: 94)),
       ),
     );
   }

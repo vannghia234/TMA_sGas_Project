@@ -33,10 +33,7 @@ class OtpCubit extends Cubit<OtpState> {
             state: SnackBarState.error);
         return;
       } else {
-        // emit(IncorrectOtp());
-        showSnackBar(
-            content: S.current.txt_please_wait_a_minute_to_send_otp,
-            state: SnackBarState.error);
+        emit(IncorrectOtp());
         return;
       }
     }

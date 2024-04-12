@@ -2,10 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
-import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/presentation/page/app_loading_page.dart';
+import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/home_page.dart';
@@ -27,7 +27,7 @@ class AuthenticationLayer extends StatelessWidget {
         }
 
         if (state is AuthenticatedState) {
-          // TODO: temp dashboard page
+          logger.f("Authenticated");
           return const HomePage();
         }
         return const AppLoadingPage();
@@ -45,10 +45,11 @@ class AuthenticationLayer extends StatelessWidget {
             CupertinoDialogAction(
               isDefaultAction: true,
               onPressed: () {
-                Navigator.popUntil(
-                  context,
-                  (route) => route.settings.name == RoutePath.root,
-                );
+                Navigator.pop(context);
+                // Navigator.popUntil(
+                //   context,
+                //   (route) => route.settings.name == RoutePath.root,
+                // );
               },
               child: Text(S.current.txt_confirm,
                   style: const TextStyle(color: BaseColor.blue500)),

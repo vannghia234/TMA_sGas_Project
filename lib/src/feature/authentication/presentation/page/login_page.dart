@@ -10,6 +10,7 @@ import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/utils/controller/debounce_controller.dart';
+import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/label_textfield.dart';
@@ -119,15 +120,11 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> handleButtonLogin() async {
-    setState(() {
-      isLoading = true;
-    });
+    getIt.get<LoadingController>().start(context);
     await getIt
         .get<AuthenticationCubit>()
         .login(_username.text, _password.text);
-    setState(() {
-      isLoading = false;
-    });
+    getIt.get<LoadingController>().close(context);
   }
 }
 

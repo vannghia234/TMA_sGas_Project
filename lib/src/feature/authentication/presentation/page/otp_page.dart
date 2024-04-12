@@ -169,9 +169,6 @@ class _OTPPageState extends State<OTPPage> {
                   title: S.current.txt_invalid_otp,
                 );
               }
-              if (state is OverRequestOtp) {
-                return AlertMessage(title: state.mess);
-              }
               if (state is WaitingOtp) {
                 return _timerCountDown(context);
               }

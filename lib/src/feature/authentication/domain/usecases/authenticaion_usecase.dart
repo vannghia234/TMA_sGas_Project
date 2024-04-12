@@ -67,7 +67,7 @@ class AuthenticationUseCase extends AuthenticationUseCaseInterface {
     } catch (e) {
       if (e is BadRequestException) {
         if (e.statusCode == 400) {
-          return Left(OverRequestForgetPasswordFailure(data: e.data));
+          return Left(OverRequestForgetPasswordFailure());
         } else if (e.statusCode == 40015) {
           return Left(NotExistPhoneFailure());
         }
