@@ -3,8 +3,8 @@ import 'package:sgas/src/common/utils/helper/screen_helper.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 
-class PrimaryButton extends StatelessWidget {
-  const PrimaryButton(
+class CommonButton extends StatelessWidget {
+  const CommonButton(
       {super.key,
       required this.buttonTitle,
       this.onPress,
@@ -17,6 +17,7 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ButtonStyle(
+            splashFactory: InkRipple.splashFactory,
             shape: MaterialStatePropertyAll(
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
             fixedSize:

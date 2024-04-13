@@ -6,8 +6,8 @@ import 'package:sgas/core/config/presentation/orientation_config.dart';
 import 'package:sgas/src/base/initial_layer/presentation/layer/initial_layer.dart';
 
 void main() {
-  configureDependencies();
   setOrientations();
+  configureDependencies();
   HttpOverrides.global = CustomHttpOverrides();
   runApp(
     const MyApp(),

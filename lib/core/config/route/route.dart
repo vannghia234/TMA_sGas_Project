@@ -6,7 +6,7 @@ import 'package:sgas/src/common/presentation/page/not_found_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/layer/authentication_layer.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/home_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/login_page.dart';
-import 'package:sgas/src/feature/authentication/presentation/page/set_password_page.dart';
+import 'package:sgas/src/feature/authentication/presentation/page/reset_password_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/forgot_password_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/otp_page.dart';
 import 'package:sgas/src/base/initial_layer/presentation/layer/initial_layer.dart';
@@ -25,15 +25,15 @@ Route appRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const LoginPage(),
       );
-    case RoutePath.changePassword:
+    case RoutePath.resetPassword:
       Map<String, String> data = settings.arguments as Map<String, String>;
 
       return MaterialPageRoute(
-        builder: (context) => SetPasswordPage(
+        builder: (context) => ResetPasswordPage(
           data: data,
         ),
       );
-    case RoutePath.forgotPassword:
+    case RoutePath.forgetPassword:
       return MaterialPageRoute(
         builder: (context) => const ForgotPasswordPage(),
       );
@@ -52,7 +52,7 @@ Route appRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const DataParsingPage(),
       );
-       case RoutePath.authentication:
+    case RoutePath.authentication:
       return MaterialPageRoute(
         builder: (context) => const AuthenticationLayer(),
       );

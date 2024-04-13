@@ -20,7 +20,7 @@ class LoginCubit extends Cubit<LoginState> {
     if (username.isEmpty) {
       emit(InValidUserName(message: S.current.txt_please_enter_username));
       return false;
-    } else if (!checkUserNameOnlyContainCharacter(username)) {
+    } else if (!checkUserNameNotContainSpecialCharacter(username)) {
       emit(InValidUserName(
           message: S.current.txt_username_contain_valid_character));
       return false;

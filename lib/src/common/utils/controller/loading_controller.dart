@@ -30,7 +30,7 @@ class LoadingController {
         insetPadding: EdgeInsets.zero,
         backgroundColor: Colors.transparent,
         child: Center(
-            child: Lottie.asset(ImagePath.fourDotLoading,
+            child: Lottie.asset(ImagePath.dot_loading,
                 fit: BoxFit.cover, width: 84, height: 94)),
       ),
     );

@@ -3,7 +3,7 @@ import 'package:sgas/core/error/exception.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/src/feature/authentication/data/datasources/authentication_datasource.dart';
 import 'package:sgas/src/feature/authentication/data/datasources/local_authentication_datasource.dart';
-import 'package:sgas/src/feature/authentication/data/models/change_password_params.dart';
+import 'package:sgas/src/feature/authentication/data/models/reset_password_params.dart';
 import 'package:sgas/src/feature/authentication/data/models/compare_otp_params.dart';
 import 'package:sgas/src/feature/authentication/data/models/forget_params.dart';
 import 'package:sgas/src/feature/authentication/data/models/login_params.dart';
@@ -17,7 +17,7 @@ abstract class AuthenticationUseCaseInterface {
   Future<bool> authenticate();
   Future<String?> getAccessToken();
   Future<void> removeAllToken();
-  Future<Either<Failure, void>> changePassword(ChangePasswordParams params);
+  Future<Either<Failure, void>> resetPassword(ResetPasswordParams params);
 }
 
 class AuthenticationUseCase extends AuthenticationUseCaseInterface {
@@ -99,10 +99,10 @@ class AuthenticationUseCase extends AuthenticationUseCaseInterface {
   }
 
   @override
-  Future<Either<Failure, void>> changePassword(
-      ChangePasswordParams params) async {
+  Future<Either<Failure, void>> resetPassword(
+      ResetPasswordParams params) async {
     try {
-      await _dataSource.changePassword(params);
+      await _dataSource.resetPassword(params);
       return const Right(null);
     } catch (e) {
       return Left(convertExceptionToFailure(e));

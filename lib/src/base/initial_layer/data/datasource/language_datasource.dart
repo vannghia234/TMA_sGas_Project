@@ -1,5 +1,5 @@
 import 'package:sgas/core/service/client/local_service_client.dart';
-import 'package:sgas/core/service/locator/shared_references_key.dart';
+import 'package:sgas/core/service/locator/shared_preferences_key.dart';
 
 abstract class LocalDatasourceInterface {
   saveLanguageCode(String? languageCode);
@@ -16,19 +16,19 @@ class LanguageDataSource implements LocalDatasourceInterface {
       await removeLanguageCode();
     } else {
       await LocalServiceClient.save(
-          key: ShareReferenceKey.currentLanguageKey, value: languageCode);
+          key: SharedPreferencesKey.currentLanguageKey, value: languageCode);
     }
   }
 
   @override
   Future<String?> getLanguageCode() async {
     String? code =
-        await LocalServiceClient.get(ShareReferenceKey.currentLanguageKey);
+        await LocalServiceClient.get(SharedPreferencesKey.currentLanguageKey);
     return code;
   }
 
   @override
   removeLanguageCode() async {
-    await LocalServiceClient.remove(ShareReferenceKey.currentLanguageKey);
+    await LocalServiceClient.remove(SharedPreferencesKey.currentLanguageKey);
   }
 }

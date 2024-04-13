@@ -13,10 +13,8 @@ import 'package:sgas/src/common/utils/controller/debounce_controller.dart';
 import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cubit.dart';
-import 'package:sgas/src/feature/authentication/presentation/widgets/label_textfield.dart';
-import 'package:sgas/src/feature/authentication/presentation/widgets/error_message_textfield.dart';
-import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
-import 'package:sgas/src/common/presentation/widget/text_field/text_field_common.dart';
+import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
+import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -59,21 +57,16 @@ class _LoginPageState extends State<LoginPage> {
                   const Spacer(
                     flex: 1,
                   ),
-                  LabelTextField(
-                    title: S.current.txt_username,
-                  ),
                   TextFieldCommon(
+                    label: S.current.txt_username,
                     hintText: S.current.txt_enter_username,
                     controller: _username,
-                    error: (state is InValidUserName)
-                        ? ErrorMessageTextField(
-                            mess: state.message,
-                          )
-                        : null,
+                    messageError:
+                        (state is InValidUserName) ? state.message : null,
                   ),
                   const SizedBox(height: 16),
-                  LabelTextField(title: S.current.txt_password),
                   TextFieldCommon(
+                    label: S.current.txt_password,
                     hintText: S.current.txt_enter_password,
                     suffixIcon: IconButton(
                       highlightColor: const Color.fromRGBO(0, 0, 0, 0),
@@ -91,14 +84,11 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     isHidden: isHidden,
                     controller: _password,
-                    error: (state is InValidPassWord)
-                        ? ErrorMessageTextField(
-                            mess: state.message,
-                          )
-                        : null,
+                    messageError:
+                        (state is InValidPassWord) ? state.message : null,
                   ),
                   const _ForgetPasswordText(),
-                  PrimaryButton(
+                  CommonButton(
                     isLoading: isLoading,
                     buttonTitle: S.current.btn_login,
                     onPress: () => getIt.get<DebounceController>().start(
@@ -158,7 +148,7 @@ class _ForgetPasswordText extends StatelessWidget {
         alignment: Alignment.centerRight,
         child: TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, RoutePath.forgotPassword);
+            Navigator.pushNamed(context, RoutePath.forgetPassword);
           },
           child: Text(
             S.current.lbl_forget_pass,

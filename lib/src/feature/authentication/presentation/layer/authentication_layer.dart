@@ -5,7 +5,6 @@ import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/presentation/page/app_loading_page.dart';
-import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/home_page.dart';
@@ -21,13 +20,15 @@ class AuthenticationLayer extends StatelessWidget {
       builder: (context, state) {
         if (state is UnAuthenticateState) {
           if (state.expiredToken) {
-            Future.microtask(() => _showExpiredSessionDialog(context));
+            if (!state.isAppeared) {
+              state.isAppeared = true;
+              Future.microtask(() => _showExpiredSessionDialog(context));
+            }
           }
           return const LoginPage();
         }
 
         if (state is AuthenticatedState) {
-          logger.f("Authenticated");
           return const HomePage();
         }
         return const AppLoadingPage();
@@ -46,10 +47,6 @@ class AuthenticationLayer extends StatelessWidget {
               isDefaultAction: true,
               onPressed: () {
                 Navigator.pop(context);
-                // Navigator.popUntil(
-                //   context,
-                //   (route) => route.settings.name == RoutePath.root,
-                // );
               },
               child: Text(S.current.txt_confirm,
                   style: const TextStyle(color: BaseColor.blue500)),

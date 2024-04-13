@@ -16,6 +16,7 @@ Future<void> handleAPIExceptionByStatusCode(
   if (statusCode == 200) return;
   logger.e(
       "[API failure] $statusCode $method $uri badRequestCode $codeBadRequest");
+  // TODO:
   // bool isValid = await AuthenticationUseCase().authenticate();
   // if (!isValid) {
   //   getIt.get<AuthenticationCubit>().forceLogout();
@@ -58,8 +59,8 @@ class ApiServiceClient {
       http.Response response =
           await client.get(Uri.parse(uri), headers: headers);
 
-      logger.f(
-          "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
+      // logger.f(
+      //     "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
 
       await handleAPIExceptionByStatusCode(uri, response.statusCode, "GET");
       Map<String, dynamic> result =
@@ -93,8 +94,8 @@ class ApiServiceClient {
           .whenComplete(() => client.close());
       var response = await client.put(Uri.parse(uri),
           headers: headers, body: (params != null) ? jsonEncode(params) : null);
-      logger.f(
-          "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
+      // logger.f(
+      //     "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
       await handleAPIExceptionByStatusCode(uri, response.statusCode, "PUT");
       Map<String, dynamic> result =
           json.decode(utf8.decode(response.bodyBytes));
@@ -138,8 +139,8 @@ class ApiServiceClient {
         codeBadReq = json.decode(utf8.decode(response.bodyBytes))["code"];
         data = json.decode(utf8.decode(response.bodyBytes))["data"].toString();
       }
-      logger.f(
-          "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
+      // logger.f(
+      //     "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
 
       await handleAPIExceptionByStatusCode(uri, response.statusCode, "POST",
           codeBadRequest: codeBadReq, data: data);

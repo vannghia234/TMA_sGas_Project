@@ -3,7 +3,7 @@ import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 import 'package:sgas/core/service/client/api_service_client.dart';
 import 'package:sgas/core/service/locator/api_service_path.dart';
 import 'package:sgas/src/feature/authentication/data/datasources/local_authentication_datasource.dart';
-import 'package:sgas/src/feature/authentication/data/models/change_password_params.dart';
+import 'package:sgas/src/feature/authentication/data/models/reset_password_params.dart';
 import 'package:sgas/src/feature/authentication/data/models/compare_otp_params.dart';
 import 'package:sgas/src/feature/authentication/data/models/forget_params.dart';
 import 'package:sgas/src/feature/authentication/data/models/login_params.dart';
@@ -14,7 +14,7 @@ abstract class AuthenticationDataSourceInterface {
   Future<void> login(LoginParams params);
   Future<void> forgetPassword(ForgetParams params);
   Future<OTPModel> compareOTP(CompareOTPParams params);
-  Future<void> changePassword(ChangePasswordParams params);
+  Future<void> resetPassword(ResetPasswordParams params);
   Future<void> refresh({required String refreshToken});
 }
 
@@ -54,7 +54,7 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
   }
 
   @override
-  Future<void> changePassword(ChangePasswordParams params) async {
+  Future<void> resetPassword(ResetPasswordParams params) async {
     try {
       await ApiServiceClient.put(
           params: params.toMap(),

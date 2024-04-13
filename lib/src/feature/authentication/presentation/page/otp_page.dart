@@ -10,8 +10,8 @@ import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_state.dart';
-import 'package:sgas/src/feature/authentication/presentation/utils/hide_sdt.dart';
-import 'package:sgas/src/common/presentation/widget/button/button_primary.dart';
+import 'package:sgas/src/feature/authentication/presentation/utils/hide_phone_number.dart';
+import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 
 class OTPPage extends StatefulWidget {
   const OTPPage({
@@ -61,6 +61,7 @@ class _OTPPageState extends State<OTPPage> {
     }
   }
 
+// TODO:
   Future<void> _sendOTP(BuildContext context) async {
     await getIt
         .get<OtpCubit>()
@@ -79,7 +80,8 @@ class _OTPPageState extends State<OTPPage> {
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
-        title:  Text(S.current.txt_enter_otp),
+        title: Text(S.current.txt_enter_otp),
+        centerTitle: false,
         titleTextStyle: BaseTextStyle.label2(color: BaseColor.textPrimaryColor),
       ),
       body: SizedBox.expand(
@@ -87,7 +89,7 @@ class _OTPPageState extends State<OTPPage> {
           children: [
             NotificationHeader(
               title:
-                  "${S.current.txt_otp_sent_to_phone} ${hideSDT(widget.userInfo["phone"]!)}",
+                  "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(widget.userInfo["phone"]!)}",
             ),
             const SizedBox(height: 24),
             _otpFormField(context),
@@ -161,11 +163,11 @@ class _OTPPageState extends State<OTPPage> {
             bloc: getIt.get<OtpCubit>(),
             builder: (context, state) {
               if (state is TimeOutOtp) {
-                return  AlertMessage(
+                return AlertMessage(
                   title: S.current.txt_otp_expired,
                 );
               } else if (state is IncorrectOtp) {
-                return  AlertMessage(
+                return AlertMessage(
                   title: S.current.txt_invalid_otp,
                 );
               }
@@ -183,13 +185,13 @@ class _OTPPageState extends State<OTPPage> {
             bloc: getIt.get<OtpCubit>(),
             builder: (context, state) {
               return (state is WaitingOtp)
-                  ? PrimaryButton(
+                  ? CommonButton(
                       buttonTitle: S.current.btn_confirm,
                       onPress: () {
                         _sendOTP(context);
                       },
                     )
-                  : PrimaryButton(
+                  : CommonButton(
                       buttonTitle: S.current.btn_re_send_otp,
                       onPress: () {
                         getIt.get<OtpCubit>().reSendOtp(

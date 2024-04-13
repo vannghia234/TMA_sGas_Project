@@ -8,23 +8,19 @@ import 'package:sgas/src/common/utils/constant/global_key.dart';
 enum SnackBarState { success, error }
 
 showSnackBar({required String content, SnackBarState? state}) {
-  String svgPath = (state != null)
-      ? "assets/icons/fill_error.svg"
-      : "assets/icons/fill_check_circle.svg";
-  Color textColor = (state != null) ? BaseColor.red500 : BaseColor.green700;
-
   scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
     shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(8)),
     behavior: SnackBarBehavior.floating,
     elevation: 0,
     padding: const EdgeInsets.only(left: 16, right: 16, top: 12, bottom: 12),
     margin: const EdgeInsets.only(top: 8, bottom: 16, right: 20, left: 20),
-    backgroundColor: _mapStateToColor(state),
+    backgroundColor: _mapStateToBackgroundColor(state),
     content: Row(
       children: [
         SvgPicture.asset(
-          svgPath,
-          colorFilter: ColorFilter.mode(textColor, BlendMode.srcIn),
+          _mapStateToStringPath(state),
+          colorFilter:
+              ColorFilter.mode(_mapStateToIconColor(state), BlendMode.srcIn),
         ),
         const SizedBox(
           width: 12,
@@ -32,7 +28,7 @@ showSnackBar({required String content, SnackBarState? state}) {
         Flexible(
           child: Text(content,
               style: BaseTextStyle.body2(
-                color: textColor,
+                color: _mapStateToIconColor(state),
               )),
         ),
       ],
@@ -40,7 +36,29 @@ showSnackBar({required String content, SnackBarState? state}) {
   ));
 }
 
-_mapStateToColor(SnackBarState? state) {
+_mapStateToStringPath(SnackBarState? state) {
+  switch (state) {
+    case SnackBarState.success:
+      return "assets/icons/fill_check_circle.svg";
+    case SnackBarState.error:
+      return "assets/icons/fill_error.svg";
+    default:
+      return "assets/icons/fill_check_circle.svg";
+  }
+}
+
+_mapStateToIconColor(SnackBarState? state) {
+  switch (state) {
+    case SnackBarState.success:
+      return BaseColor.green700;
+    case SnackBarState.error:
+      return BaseColor.red500;
+    default:
+      return BaseColor.green700;
+  }
+}
+
+_mapStateToBackgroundColor(SnackBarState? state) {
   switch (state) {
     case SnackBarState.success:
       return BaseColor.green60;

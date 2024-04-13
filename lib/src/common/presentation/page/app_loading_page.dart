@@ -9,9 +9,8 @@ class AppLoadingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: Center(
-          child: Lottie.asset(ImagePath.fourDotLoading,
-              fit: BoxFit.cover, width: 84, height: 94)),
+      body:
+          Center(child: Lottie.asset(ImagePath.dot_loading, fit: BoxFit.cover)),
     );
   }
 }

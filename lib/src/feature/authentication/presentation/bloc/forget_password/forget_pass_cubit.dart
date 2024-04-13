@@ -1,7 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/common/utils/controller/snack_bar_controller.dart';
 import 'package:sgas/src/common/utils/helper/string_regex_helper.dart';
 import 'package:sgas/src/feature/authentication/data/models/forget_params.dart';
@@ -14,7 +17,8 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
   ForgetPasswordCubit() : super(InitialForgetState());
   final _useCase = AuthenticationUseCase();
 
-  Future<void> forgetPassword(String username, String phoneNumber) async {
+  Future<void> forgetPassword(
+      String username, String phoneNumber, BuildContext context) async {
     if (username.isEmpty) {
       emit(InvalidForgetUsernameState(
           message: S.current.txt_please_enter_username));
@@ -24,23 +28,24 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
     } else if (phoneNumber.isEmpty) {
       emit(InvalidForgetPhoneNumberState(
           message: S.current.txt_please_enter_phone_number));
-    } else if (!RegExp(phoneNumberRegex).hasMatch(phoneNumber)) {
+    } else if (!RegExp(validPhoneNumber).hasMatch(phoneNumber)) {
       emit(InvalidForgetPhoneNumberState(
           message: S.current.txt_at_least_10_character_phone));
     } else {
       emit(InitialForgetState());
+      getIt.get<LoadingController>().start(context);
+
       ForgetParams params =
           ForgetParams(username: username, phone: phoneNumber);
       var result = await _useCase.forgetPassword(params);
+      getIt.get<LoadingController>().close(context);
+
 
       if (result.isLeft) {
         if (result.left is NotFoundFailure) {
           emit(InvalidForgetUsernameState(
               message: S.current.txt_not_found_this_account));
         } else if (result.left is OverRequestForgetPasswordFailure) {
-          // var overReqMessage = result.left as OverRequestForgetPasswordFailure;
-          // emit(
-          //     InvalidForgetPhoneNumberState(message: "${overReqMessage.data}"));
           showSnackBar(
               content: S.current.txt_please_wait_a_minute_to_send_otp,
               state: SnackBarState.error);
@@ -48,6 +53,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
         } else if (result.left is NotExistPhoneFailure) {
           emit(InvalidForgetPhoneNumberState(
               message: S.current.txt_not_existing_phone));
+          return;
         } else {
           showSnackBar(
               content: S.current.txt_no_network_connection,

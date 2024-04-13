@@ -1,12 +1,12 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-class ChangePasswordParams {
+class ResetPasswordParams {
   final String token;
   final String username;
   final String newPassword;
 
-  ChangePasswordParams(
+  ResetPasswordParams(
       {required this.token, required this.username, required this.newPassword});
 
   Map<String, String> toMap() {
@@ -17,8 +17,8 @@ class ChangePasswordParams {
     };
   }
 
-  factory ChangePasswordParams.fromMap(Map<String, String> map) {
-    return ChangePasswordParams(
+  factory ResetPasswordParams.fromMap(Map<String, String> map) {
+    return ResetPasswordParams(
       token: map['token'] as String,
       username: map['username'] as String,
       newPassword: map['newPassword'] as String,
@@ -27,6 +27,6 @@ class ChangePasswordParams {
 
   String toJson() => json.encode(toMap());
 
-  factory ChangePasswordParams.fromJson(String source) =>
-      ChangePasswordParams.fromMap(json.decode(source) as Map<String, String>);
+  factory ResetPasswordParams.fromJson(String source) =>
+      ResetPasswordParams.fromMap(json.decode(source) as Map<String, String>);
 }
