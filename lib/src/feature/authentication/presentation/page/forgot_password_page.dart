@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
-import 'package:sgas/core/ui/style/base_color.dart';
-import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/utils/controller/debounce_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_cubit.dart';
@@ -33,7 +31,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0.0,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -43,8 +40,6 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
         title: Text(
           S.current.txt_confirm_password,
         ),
-        centerTitle: false,
-        titleTextStyle: BaseTextStyle.label2(color: BaseColor.textPrimaryColor),
       ),
       body: Column(
         children: [
@@ -72,6 +67,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                     TextFieldCommon(
                       label: S.current.txt_phone_number,
                       hintText: S.current.txt_enter_phone_number,
+                      keyBoardType: TextInputType.number,
                       controller: _phoneNumber,
                       messageError: (state is InvalidForgetPhoneNumberState)
                           ? state.message

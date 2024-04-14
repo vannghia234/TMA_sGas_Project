@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/utils/controller/debounce_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/alert_message.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/notification_header.dart';
 import 'package:timer_count_down/timer_count_down.dart';
@@ -61,7 +62,6 @@ class _OTPPageState extends State<OTPPage> {
     }
   }
 
-// TODO:
   Future<void> _sendOTP(BuildContext context) async {
     await getIt
         .get<OtpCubit>()
@@ -73,7 +73,6 @@ class _OTPPageState extends State<OTPPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0.0,
         leading: IconButton(
           onPressed: () {
             Navigator.pop(context);
@@ -81,8 +80,6 @@ class _OTPPageState extends State<OTPPage> {
           icon: const Icon(Icons.arrow_back_ios),
         ),
         title: Text(S.current.txt_enter_otp),
-        centerTitle: false,
-        titleTextStyle: BaseTextStyle.label2(color: BaseColor.textPrimaryColor),
       ),
       body: SizedBox.expand(
         child: Column(
@@ -132,8 +129,6 @@ class _OTPPageState extends State<OTPPage> {
                             if (index < controllers.length - 1) {
                               FocusScope.of(context)
                                   .requestFocus(focusNodes[index + 1]);
-                            } else {
-                              _sendOTP(context);
                             }
                           } else if (value.isEmpty) {
                             controllers[index].clear();
@@ -184,19 +179,25 @@ class _OTPPageState extends State<OTPPage> {
           BlocBuilder<OtpCubit, OtpState>(
             bloc: getIt.get<OtpCubit>(),
             builder: (context, state) {
-              return (state is WaitingOtp)
+              return (state is TimeOutOtp)
                   ? CommonButton(
-                      buttonTitle: S.current.btn_confirm,
+                      buttonTitle: S.current.btn_re_send_otp,
                       onPress: () {
-                        _sendOTP(context);
+                        getIt<DebounceController>().start(
+                          function: () {
+                            getIt.get<OtpCubit>().reSendOtp(
+                                username: widget.userInfo["username"]!,
+                                phone: widget.userInfo["phone"]!);
+                          },
+                        );
                       },
                     )
                   : CommonButton(
-                      buttonTitle: S.current.btn_re_send_otp,
+                      buttonTitle: S.current.btn_confirm,
                       onPress: () {
-                        getIt.get<OtpCubit>().reSendOtp(
-                            username: widget.userInfo["username"]!,
-                            phone: widget.userInfo["phone"]!);
+                        getIt<DebounceController>().start(
+                          function: () => _sendOTP(context),
+                        );
                       },
                     );
             },

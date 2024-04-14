@@ -5,8 +5,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
-import 'package:sgas/core/ui/style/base_color.dart';
-import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 import 'package:sgas/src/common/presentation/widget/validation/validate_password_textfield.dart';
@@ -44,7 +42,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        titleSpacing: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
@@ -54,8 +51,6 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             );
           },
         ),
-        centerTitle: false,
-        titleTextStyle: BaseTextStyle.label2(color: BaseColor.textPrimaryColor),
         title: Text(S.current.txt_change_password),
       ),
       body: BlocBuilder<SetPasswordCubit, ResetPasswordState>(

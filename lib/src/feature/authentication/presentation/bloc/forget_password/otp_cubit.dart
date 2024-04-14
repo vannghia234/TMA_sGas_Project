@@ -51,12 +51,9 @@ class OtpCubit extends Cubit<OtpState> {
         .forgetPassword(ForgetParams(username: username, phone: phone));
     if (res.isLeft) {
       if (res.left is OverRequestForgetPasswordFailure) {
-        // final instance = res.left as OverRequestForgetPasswordFailure;
-        // emit(OverRequestOtp(mess: instance.data));
         showSnackBar(
             content: S.current.txt_please_wait_a_minute_to_send_otp,
             state: SnackBarState.error);
-        return;
       }
       if (res.left is ServerFailure) {
         showSnackBar(

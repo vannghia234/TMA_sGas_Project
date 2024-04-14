@@ -34,13 +34,10 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
     } else {
       emit(InitialForgetState());
       getIt.get<LoadingController>().start(context);
-
       ForgetParams params =
           ForgetParams(username: username, phone: phoneNumber);
       var result = await _useCase.forgetPassword(params);
       getIt.get<LoadingController>().close(context);
-
-
       if (result.isLeft) {
         if (result.left is NotFoundFailure) {
           emit(InvalidForgetUsernameState(

@@ -7,10 +7,7 @@ class TimeOutOtp extends OtpState {}
 
 class WaitingOtp extends OtpState {}
 
-class OverRequestOtp extends OtpState {
-  String? mess;
-  OverRequestOtp({this.mess});
-}
+class OverRequestOtp extends OtpState {}
 
 class IncorrectOtp extends OtpState {}
 

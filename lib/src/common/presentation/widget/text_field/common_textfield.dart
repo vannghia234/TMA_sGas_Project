@@ -13,7 +13,8 @@ class TextFieldCommon extends StatelessWidget {
       this.isHidden,
       this.hintText,
       this.messageError,
-      required this.label});
+      required this.label,
+      this.keyBoardType});
   final TextEditingController? controller;
   final Widget? suffixIcon;
   final ValueChanged<String>? onChange;
@@ -21,6 +22,7 @@ class TextFieldCommon extends StatelessWidget {
   final String? hintText;
   final String? messageError;
   final String label;
+  final TextInputType? keyBoardType;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,7 @@ class TextFieldCommon extends StatelessWidget {
               suffixIcon: suffixIcon),
           onChanged: onChange,
           textInputAction: TextInputAction.done,
+          keyboardType: keyBoardType ?? TextInputType.text,
           style: BaseTextStyle.body1(color: BaseColor.textPrimaryColor),
           cursorColor: BaseColor.textPrimaryColor,
           obscureText: isHidden ?? false,
