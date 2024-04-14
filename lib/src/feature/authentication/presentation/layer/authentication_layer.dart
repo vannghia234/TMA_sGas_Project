@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/style/base_color.dart';

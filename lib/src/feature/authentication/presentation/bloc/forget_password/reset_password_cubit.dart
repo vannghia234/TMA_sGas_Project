@@ -1,6 +1,9 @@
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/data/models/reset_password_params.dart';
 import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
 import 'package:sgas/src/common/utils/constant/global_key.dart';
@@ -19,6 +22,7 @@ class SetPasswordCubit extends Cubit<ResetPasswordState> {
   Future updatePass(
       {required String token,
       required String password,
+      required BuildContext context,
       required String rePassword,
       required String username}) async {
     if (rePassword.isEmpty) {
@@ -30,8 +34,11 @@ class SetPasswordCubit extends Cubit<ResetPasswordState> {
       return;
     } else {
       emit(InitialResetPassWord());
+      getIt<LoadingController>().start(context);
       var result = await useCase.resetPassword(ResetPasswordParams(
           token: token, username: username, newPassword: password));
+      getIt<LoadingController>().close(context);
+
       if (result.isLeft) {
         showSnackBar(
             content: S.current.txt_no_network_connection,

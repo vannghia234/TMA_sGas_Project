@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
@@ -8,6 +7,7 @@ import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 import 'package:sgas/src/common/presentation/widget/validation/validate_password_textfield.dart';
+import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/reset_password_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/reset_password_state.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
@@ -131,11 +131,15 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       buttonTitle: S.current.btn_confirm,
                       onPress: (isValidPassword)
                           ? () async {
+                              getIt<LoadingController>().start(context);
+
                               getIt.get<SetPasswordCubit>().updatePass(
+                                  context: context,
                                   token: widget.data["data"]!,
                                   password: _passwordController.text,
                                   rePassword: _rePasswordController.text,
                                   username: widget.data["username"]!);
+                              getIt<LoadingController>().close(context);
                             }
                           : null,
                     )

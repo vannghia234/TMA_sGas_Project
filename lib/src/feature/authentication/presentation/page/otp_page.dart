@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/utils/controller/debounce_controller.dart';
+import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/alert_message.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/notification_header.dart';
 import 'package:timer_count_down/timer_count_down.dart';
@@ -182,22 +182,22 @@ class _OTPPageState extends State<OTPPage> {
               return (state is TimeOutOtp)
                   ? CommonButton(
                       buttonTitle: S.current.btn_re_send_otp,
-                      onPress: () {
-                        getIt<DebounceController>().start(
-                          function: () {
-                            getIt.get<OtpCubit>().reSendOtp(
-                                username: widget.userInfo["username"]!,
-                                phone: widget.userInfo["phone"]!);
-                          },
-                        );
+                      onPress: () async {
+                        getIt<LoadingController>().start(context);
+                        await getIt.get<OtpCubit>().reSendOtp(
+                            username: widget.userInfo["username"]!,
+                            phone: widget.userInfo["phone"]!);
+                        // ignore: use_build_context_synchronously
+                        getIt<LoadingController>().close(context);
                       },
                     )
                   : CommonButton(
                       buttonTitle: S.current.btn_confirm,
-                      onPress: () {
-                        getIt<DebounceController>().start(
-                          function: () => _sendOTP(context),
-                        );
+                      onPress: () async {
+                        getIt<LoadingController>().start(context);
+                        await _sendOTP(context);
+                        // ignore: use_build_context_synchronously
+                        getIt<LoadingController>().close(context);
                       },
                     );
             },

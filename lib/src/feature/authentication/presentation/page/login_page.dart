@@ -1,3 +1,4 @@
+// ignore_for_file: use_build_context_synchronously
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -62,7 +63,7 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: S.current.txt_enter_username,
                     controller: _username,
                     messageError:
-                        (state is InValidUserName) ? state.message : null,
+                        (state is InValidUserNameLogin) ? state.message : null,
                   ),
                   const SizedBox(height: 16),
                   TextFieldCommon(
@@ -85,7 +86,7 @@ class _LoginPageState extends State<LoginPage> {
                     isHidden: isHidden,
                     controller: _password,
                     messageError:
-                        (state is InValidPassWord) ? state.message : null,
+                        (state is InValidPassWordLogin) ? state.message : null,
                   ),
                   const _ForgetPasswordText(),
                   CommonButton(
@@ -115,23 +116,6 @@ class _LoginPageState extends State<LoginPage> {
         .get<AuthenticationCubit>()
         .login(_username.text, _password.text);
     getIt.get<LoadingController>().close(context);
-  }
-}
-
-class _TitleLogin extends StatelessWidget {
-  const _TitleLogin({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 40, 0, 40),
-      child: Text(
-        S.current.txt_login,
-        style: BaseTextStyle.body1(color: BaseColor.textPrimaryColor),
-      ),
-    );
   }
 }
 

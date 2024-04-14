@@ -5,16 +5,16 @@ abstract class LoginState {
   LoginState({this.message = ""});
 }
 
-class initial extends LoginState {
-  initial({super.message});
+class InitialLogin extends LoginState {
+  InitialLogin({super.message});
 }
 
-class InValidUserName extends LoginState {
-  InValidUserName({super.message});
+class InValidUserNameLogin extends LoginState {
+  InValidUserNameLogin({super.message});
 }
 
-class InValidPassWord extends LoginState {
-  InValidPassWord({super.message});
+class InValidPassWordLogin extends LoginState {
+  InValidPassWordLogin({super.message});
 }
 
 class SuccessfulLogin extends LoginState {

@@ -10,7 +10,7 @@ import 'package:sgas/src/feature/authentication/presentation/utils/regex_check_v
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
-  LoginCubit() : super(initial());
+  LoginCubit() : super(InitialLogin());
   final AuthenticationUseCase _useCase = AuthenticationUseCase();
 
   Future<bool> login({
@@ -18,37 +18,38 @@ class LoginCubit extends Cubit<LoginState> {
     required String password,
   }) async {
     if (username.isEmpty) {
-      emit(InValidUserName(message: S.current.txt_please_enter_username));
+      emit(InValidUserNameLogin(message: S.current.txt_please_enter_username));
       return false;
     } else if (!checkUserNameNotContainSpecialCharacter(username)) {
-      emit(InValidUserName(
+      emit(InValidUserNameLogin(
           message: S.current.txt_username_contain_valid_character));
       return false;
     } else if (!isValidUserNameLength(username)) {
-      emit(InValidUserName(message: S.current.txt_username_valid_length));
+      emit(InValidUserNameLogin(message: S.current.txt_username_valid_length));
       return false;
     } else if (password.isEmpty) {
-      emit(InValidPassWord(message: S.current.txt_please_enter_password));
+      emit(InValidPassWordLogin(message: S.current.txt_please_enter_password));
       return false;
     } else if (!isValidPasswordLength(password)) {
-      emit(InValidPassWord(message: S.current.txt_password_valid_length));
+      emit(InValidPassWordLogin(message: S.current.txt_password_valid_length));
       return false;
     }
-    emit(initial());
+    emit(InitialLogin());
     LoginParams loginParams =
         LoginParams(username: username, password: password);
     Either<Failure, void> result = await _useCase.login(loginParams);
 
     if (result.isLeft) {
       if (result.left is InCorrectUserNamePasswordFailure) {
-        emit(InValidPassWord(
+        emit(InValidPassWordLogin(
             message: S.current.txt_incorrect_username_or_password));
         return false;
       } else if (result.left is AccountHaveBeenBlockedFailure) {
-        emit(InValidPassWord(message: S.current.txt_account_have_been_blocked));
+        emit(InValidPassWordLogin(
+            message: S.current.txt_account_have_been_blocked));
         return false;
       } else if (result.left is AccountHaveBeenBlockedFailure) {
-        emit(InValidPassWord(
+        emit(InValidPassWordLogin(
             message: S.current.txt_company_account_have_been_blocked));
         return false;
       } else if (result.left is ServerFailure) {
