@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/generated/l10n.dart';
@@ -30,7 +32,7 @@ class _OTPPageState extends State<OTPPage> {
       List.generate(6, (index) => TextEditingController());
   List<FocusNode> focusNodes = List.generate(6, (index) => FocusNode());
   String otp = '';
-  int countDownTime = 60;
+  int countDownTime = 120;
 
   @override
   void initState() {
@@ -63,9 +65,8 @@ class _OTPPageState extends State<OTPPage> {
   }
 
   Future<void> _sendOTP(BuildContext context) async {
-    await getIt
-        .get<OtpCubit>()
-        .sentOTP(username: widget.userInfo["username"]!, otp: otp);
+    await getIt.get<OtpCubit>().sentOTP(
+        username: widget.userInfo["username"]!, otp: otp, context: context);
     clearOtp();
   }
 
@@ -89,120 +90,115 @@ class _OTPPageState extends State<OTPPage> {
                   "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(widget.userInfo["phone"]!)}",
             ),
             const SizedBox(height: 24),
-            _otpFormField(context),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
+                children: [
+                  _otpFormField(context),
+                  const SizedBox(height: 16),
+                  BlocBuilder<OtpCubit, OtpState>(
+                    bloc: getIt.get<OtpCubit>(),
+                    builder: (context, state) {
+                      if (state is TimeOutOtp) {
+                        return AlertMessage(
+                          color: BaseColor.red500,
+                          title: S.current.txt_otp_expired,
+                        );
+                      }
+                      if (state is WaitingOtp) {
+                        return _timerCountDown(context);
+                      }
+                      if (state is InitialOtp) {
+                        return _timerCountDown(context);
+                      }
+                      return const SizedBox.shrink();
+                    },
+                  ),
+                  const SizedBox(height: 24),
+                  BlocBuilder<OtpCubit, OtpState>(
+                    bloc: getIt.get<OtpCubit>(),
+                    builder: (context, state) {
+                      return (state is TimeOutOtp)
+                          ? CommonButton(
+                              buttonTitle: S.current.btn_re_send_otp,
+                              onPress: () async {
+                                getIt<LoadingController>().start(context);
+                                await getIt.get<OtpCubit>().reSendOtp(
+                                    username: widget.userInfo["username"]!,
+                                    phone: widget.userInfo["phone"]!);
+                                // ignore: use_build_context_synchronously
+                                getIt<LoadingController>().close(context);
+                              },
+                            )
+                          : CommonButton(
+                              buttonTitle: S.current.btn_confirm,
+                              onPress: () async {
+                                await _sendOTP(context);
+                              },
+                            );
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
     );
   }
 
-  Padding _otpFormField(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 56,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: 6,
-              itemBuilder: (context, index) {
-                return Row(
-                  children: [
-                    SizedBox(
-                      height: 56,
-                      width: 48,
-                      child: TextField(
-                        inputFormatters: [
-                          FilteringTextInputFormatter.digitsOnly,
-                        ],
-                        controller: controllers[index],
-                        focusNode: focusNodes[index],
-                        keyboardType: TextInputType.number,
-                        textAlign: TextAlign.center,
-                        maxLength: 1,
-                        onChanged: (value) {
-                          updateOtp();
-                          if (value.isNotEmpty) {
-                            if (index < controllers.length - 1) {
-                              FocusScope.of(context)
-                                  .requestFocus(focusNodes[index + 1]);
-                            }
-                          } else if (value.isEmpty) {
-                            controllers[index].clear();
-                            if (index > 0) {
-                              FocusScope.of(context)
-                                  .requestFocus(focusNodes[index - 1]);
-                            }
-                          }
-                        },
-                        decoration: InputDecoration(
-                            counterText: '',
-                            border: _outLineBorderCustom(),
-                            focusedBorder: _outLineBorderCustom(),
-                            enabledBorder: _outLineBorderCustom()),
-                        cursorColor: BaseColor.textPrimaryColor,
-                        cursorRadius: const Radius.circular(4),
-                      ),
-                    ),
-                    const SizedBox(width: 12.4)
-                  ],
-                );
-              },
-            ),
-          ),
-          const SizedBox(height: 16),
-          BlocBuilder<OtpCubit, OtpState>(
-            bloc: getIt.get<OtpCubit>(),
-            builder: (context, state) {
-              if (state is TimeOutOtp) {
-                return AlertMessage(
-                  title: S.current.txt_otp_expired,
-                );
-              } else if (state is IncorrectOtp) {
-                return AlertMessage(
-                  title: S.current.txt_invalid_otp,
-                );
-              }
-              if (state is WaitingOtp) {
-                return _timerCountDown(context);
-              }
-              if (state is InitialOtp) {
-                return _timerCountDown(context);
-              }
-              return const SizedBox.shrink();
-            },
-          ),
-          const SizedBox(height: 24),
-          BlocBuilder<OtpCubit, OtpState>(
-            bloc: getIt.get<OtpCubit>(),
-            builder: (context, state) {
-              return (state is TimeOutOtp)
-                  ? CommonButton(
-                      buttonTitle: S.current.btn_re_send_otp,
-                      onPress: () async {
-                        getIt<LoadingController>().start(context);
-                        await getIt.get<OtpCubit>().reSendOtp(
-                            username: widget.userInfo["username"]!,
-                            phone: widget.userInfo["phone"]!);
-                        // ignore: use_build_context_synchronously
-                        getIt<LoadingController>().close(context);
-                      },
-                    )
-                  : CommonButton(
-                      buttonTitle: S.current.btn_confirm,
-                      onPress: () async {
-                        getIt<LoadingController>().start(context);
-                        await _sendOTP(context);
-                        // ignore: use_build_context_synchronously
-                        getIt<LoadingController>().close(context);
-                      },
-                    );
-            },
-          ),
-        ],
+  Widget _otpFormField(BuildContext context) {
+    return FittedBox(
+      child: SizedBox(
+        height: 56,
+        child: ListView.builder(
+          shrinkWrap: true,
+          scrollDirection: Axis.horizontal,
+          itemCount: 6,
+          itemBuilder: (context, index) {
+            return Row(
+              children: [
+                SizedBox(
+                  height: 56,
+                  width: 48,
+                  child: TextField(
+                    inputFormatters: [
+                      FilteringTextInputFormatter.digitsOnly,
+                    ],
+                    controller: controllers[index],
+                    focusNode: focusNodes[index],
+                    keyboardType: TextInputType.number,
+                    textAlign: TextAlign.center,
+                    maxLength: 1,
+                    onChanged: (value) {
+                      updateOtp();
+                      if (value.isNotEmpty) {
+                        if (index < controllers.length - 1) {
+                          FocusScope.of(context)
+                              .requestFocus(focusNodes[index + 1]);
+                        }
+                      } else if (value.isEmpty) {
+                        controllers[index].clear();
+                        if (index > 0) {
+                          FocusScope.of(context)
+                              .requestFocus(focusNodes[index - 1]);
+                        }
+                      }
+                    },
+                    decoration: InputDecoration(
+                        counterText: '',
+                        border: _outLineBorderCustom(),
+                        focusedBorder: _outLineBorderCustom(),
+                        enabledBorder: _outLineBorderCustom()),
+                    cursorColor: BaseColor.textPrimaryColor,
+                    cursorRadius: const Radius.circular(4),
+                  ),
+                ),
+                const SizedBox(width: 12.4)
+              ],
+            );
+          },
+        ),
       ),
     );
   }

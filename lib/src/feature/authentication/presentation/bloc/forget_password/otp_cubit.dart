@@ -1,7 +1,11 @@
+// ignore_for_file: use_build_context_synchronously
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/common/utils/controller/snack_bar_controller.dart';
 import 'package:sgas/src/feature/authentication/data/models/compare_otp_params.dart';
 import 'package:sgas/src/feature/authentication/data/models/forget_params.dart';
@@ -18,22 +22,29 @@ class OtpCubit extends Cubit<OtpState> {
     emit(state);
   }
 
-  sentOTP({required String username, required String otp}) async {
+  sentOTP(
+      {required String username,
+      required String otp,
+      required BuildContext context}) async {
+    getIt<LoadingController>().start(context);
+
     var otpResult = await _useCase
         .compareOTP(CompareOTPParams(username: username, oneTimeOtp: otp));
+    getIt<LoadingController>().close(context);
+
     if (otpResult.isLeft) {
       if (otpResult.left is TimeOutOTPFailure) {
         emit(TimeOutOtp());
         return;
       }
       if (otpResult.left is ServerFailure) {
-        emit(InitialOtp());
         showSnackBar(
             content: S.current.txt_no_network_connection,
             state: SnackBarState.error);
         return;
       } else {
-        emit(IncorrectOtp());
+        showSnackBar(
+            content: S.current.txt_invalid_otp, state: SnackBarState.error);
         return;
       }
     }

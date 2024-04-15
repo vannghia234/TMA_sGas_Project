@@ -7,7 +7,7 @@ class InCorrectUserNamePasswordFailure extends LoginFailure {}
 
 class AccountHaveBeenBlockedFailure extends LoginFailure {}
 
-class CompanyAccountFailure extends LoginFailure {}
+class CompanyAccountHaveBeenBlockedFailure extends LoginFailure {}
 
 abstract class ForgetPasswordFailure extends Failure {}
 

@@ -51,7 +51,7 @@ class AuthenticationUseCase extends AuthenticationUseCaseInterface {
           } else if (e.statusCode == 40002) {
             return Left(AccountHaveBeenBlockedFailure());
           } else if (e.statusCode == 40003) {
-            return Left(CompanyAccountFailure());
+            return Left(CompanyAccountHaveBeenBlockedFailure());
           }
         }
       }

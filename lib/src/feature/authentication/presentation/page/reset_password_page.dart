@@ -11,6 +11,7 @@ import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/reset_password_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/reset_password_state.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
+import 'package:sgas/src/feature/authentication/presentation/page/login_page.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({super.key, required this.data});
@@ -45,9 +46,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios),
           onPressed: () {
-            Navigator.popUntil(
+            Navigator.pushAndRemoveUntil(
               context,
-              (route) => route.settings.name == RoutePath.forgetPassword,
+              MaterialPageRoute(
+                builder: (context) => const LoginPage(),
+              ),
+              ModalRoute.withName(RoutePath.login),
             );
           },
         ),
