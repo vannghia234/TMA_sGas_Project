@@ -6,11 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/utils/controller/loading_controller.dart';
-import 'package:sgas/src/feature/authentication/presentation/widgets/alert_message.dart';
+import 'package:sgas/src/feature/authentication/presentation/widgets/message_otp.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/notification_header.dart';
-import 'package:timer_count_down/timer_count_down.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
-import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/utils/hide_phone_number.dart';
@@ -32,7 +30,6 @@ class _OTPPageState extends State<OTPPage> {
       List.generate(6, (index) => TextEditingController());
   List<FocusNode> focusNodes = List.generate(6, (index) => FocusNode());
   String otp = '';
-  int countDownTime = 120;
 
   @override
   void initState() {
@@ -96,46 +93,25 @@ class _OTPPageState extends State<OTPPage> {
                 children: [
                   _otpFormField(context),
                   const SizedBox(height: 16),
-                  BlocBuilder<OtpCubit, OtpState>(
-                    bloc: getIt.get<OtpCubit>(),
-                    builder: (context, state) {
-                      if (state is TimeOutOtp) {
-                        return AlertMessage(
-                          color: BaseColor.red500,
-                          title: S.current.txt_otp_expired,
-                        );
-                      }
-                      if (state is WaitingOtp) {
-                        return _timerCountDown(context);
-                      }
-                      if (state is InitialOtp) {
-                        return _timerCountDown(context);
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
+                  const MessageOTP(),
                   const SizedBox(height: 24),
                   BlocBuilder<OtpCubit, OtpState>(
                     bloc: getIt.get<OtpCubit>(),
                     builder: (context, state) {
-                      return (state is TimeOutOtp)
-                          ? CommonButton(
-                              buttonTitle: S.current.btn_re_send_otp,
-                              onPress: () async {
-                                getIt<LoadingController>().start(context);
-                                await getIt.get<OtpCubit>().reSendOtp(
-                                    username: widget.userInfo["username"]!,
-                                    phone: widget.userInfo["phone"]!);
-                                // ignore: use_build_context_synchronously
-                                getIt<LoadingController>().close(context);
-                              },
-                            )
-                          : CommonButton(
-                              buttonTitle: S.current.btn_confirm,
-                              onPress: () async {
-                                await _sendOTP(context);
-                              },
-                            );
+                      if (state is TimeOutOtp) {
+                        return CommonButton(
+                          buttonTitle: S.current.btn_re_send_otp,
+                          onPress: () async {
+                            getIt<LoadingController>().start(context);
+                            await getIt.get<OtpCubit>().reSendOtp(
+                                username: widget.userInfo["username"]!,
+                                phone: widget.userInfo["phone"]!);
+                            // ignore: use_build_context_synchronously
+                            getIt<LoadingController>().close(context);
+                          },
+                        );
+                      }
+                      return const SizedBox.shrink();
                     },
                   ),
                 ],
@@ -156,46 +132,46 @@ class _OTPPageState extends State<OTPPage> {
           scrollDirection: Axis.horizontal,
           itemCount: 6,
           itemBuilder: (context, index) {
-            return Row(
-              children: [
-                SizedBox(
-                  height: 56,
-                  width: 48,
-                  child: TextField(
-                    inputFormatters: [
-                      FilteringTextInputFormatter.digitsOnly,
-                    ],
-                    controller: controllers[index],
-                    focusNode: focusNodes[index],
-                    keyboardType: TextInputType.number,
-                    textAlign: TextAlign.center,
-                    maxLength: 1,
-                    onChanged: (value) {
-                      updateOtp();
-                      if (value.isNotEmpty) {
-                        if (index < controllers.length - 1) {
-                          FocusScope.of(context)
-                              .requestFocus(focusNodes[index + 1]);
-                        }
-                      } else if (value.isEmpty) {
-                        controllers[index].clear();
-                        if (index > 0) {
-                          FocusScope.of(context)
-                              .requestFocus(focusNodes[index - 1]);
-                        }
+            return Padding(
+              padding: const EdgeInsets.only(right: 12.4),
+              child: SizedBox(
+                height: 56,
+                width: 48,
+                child: TextField(
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                  ],
+                  controller: controllers[index],
+                  focusNode: focusNodes[index],
+                  keyboardType: TextInputType.number,
+                  textAlign: TextAlign.center,
+                  maxLength: 1,
+                  onChanged: (value) {
+                    updateOtp();
+                    if (value.isNotEmpty) {
+                      if (index < controllers.length - 1) {
+                        FocusScope.of(context)
+                            .requestFocus(focusNodes[index + 1]);
+                      } else {
+                        _sendOTP(context);
                       }
-                    },
-                    decoration: InputDecoration(
-                        counterText: '',
-                        border: _outLineBorderCustom(),
-                        focusedBorder: _outLineBorderCustom(),
-                        enabledBorder: _outLineBorderCustom()),
-                    cursorColor: BaseColor.textPrimaryColor,
-                    cursorRadius: const Radius.circular(4),
-                  ),
+                    } else if (value.isEmpty) {
+                      controllers[index].clear();
+                      if (index > 0) {
+                        FocusScope.of(context)
+                            .requestFocus(focusNodes[index - 1]);
+                      }
+                    }
+                  },
+                  decoration: InputDecoration(
+                      counterText: '',
+                      border: _outLineBorderCustom(),
+                      focusedBorder: _outLineBorderCustom(),
+                      enabledBorder: _outLineBorderCustom()),
+                  cursorColor: BaseColor.textPrimaryColor,
+                  cursorRadius: const Radius.circular(4),
                 ),
-                const SizedBox(width: 12.4)
-              ],
+              ),
             );
           },
         ),
@@ -207,29 +183,5 @@ class _OTPPageState extends State<OTPPage> {
     return const OutlineInputBorder(
         borderSide: BorderSide(color: BaseColor.borderColor, width: 1),
         borderRadius: BorderRadius.all(Radius.circular(8)));
-  }
-
-  Align _timerCountDown(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Countdown(
-        seconds: countDownTime,
-        build: (BuildContext context, double time) => RichText(
-          text: TextSpan(
-              style: BaseTextStyle.body2(),
-              text: "${S.current.txt_otp_expiry} ",
-              children: [
-                TextSpan(
-                    text: "${time.toInt()}s",
-                    style: BaseTextStyle.body2().copyWith(
-                        color: Colors.red, fontWeight: FontWeight.bold)),
-              ]),
-        ),
-        interval: const Duration(seconds: 1),
-        onFinished: () {
-          getIt.get<OtpCubit>().changeState(TimeOutOtp());
-        },
-      ),
-    );
   }
 }

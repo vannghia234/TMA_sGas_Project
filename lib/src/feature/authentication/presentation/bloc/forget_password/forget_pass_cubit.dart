@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
@@ -12,6 +14,7 @@ import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
 import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_state.dart';
 import 'package:sgas/src/common/utils/constant/global_key.dart';
+import 'package:sgas/src/feature/authentication/presentation/utils/transform_phone_number.dart';
 
 class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
   ForgetPasswordCubit() : super(InitialForgetState());
@@ -34,8 +37,8 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
     } else {
       emit(InitialForgetState());
       getIt.get<LoadingController>().start(context);
-      ForgetParams params =
-          ForgetParams(username: username, phone: phoneNumber);
+      ForgetParams params = ForgetParams(
+          username: username, phone: transformPhoneNumber(phoneNumber));
       var result = await _useCase.forgetPassword(params);
       getIt.get<LoadingController>().close(context);
       if (result.isLeft) {

@@ -6,16 +6,13 @@ import 'package:flutter_svg/svg.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/ui/resource/image_path.dart';
-import 'package:sgas/core/config/route/route_path.dart';
-import 'package:sgas/core/ui/style/base_color.dart';
-import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/utils/controller/debounce_controller.dart';
 import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cubit.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
+import 'package:sgas/src/feature/authentication/presentation/widgets/forget_text_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -88,16 +85,11 @@ class _LoginPageState extends State<LoginPage> {
                     messageError:
                         (state is InValidPassWordLogin) ? state.message : null,
                   ),
-                  const _ForgetPasswordText(),
+                  const ForgetTextButton(),
                   CommonButton(
-                    isLoading: isLoading,
-                    buttonTitle: S.current.btn_login,
-                    onPress: () => getIt.get<DebounceController>().start(
-                      function: () {
-                        handleButtonLogin();
-                      },
-                    ),
-                  ),
+                      isLoading: isLoading,
+                      buttonTitle: S.current.btn_login,
+                      onPress: () => handleButtonLogin()),
                   const Spacer(
                     flex: 3,
                   ),
@@ -116,30 +108,5 @@ class _LoginPageState extends State<LoginPage> {
         .get<AuthenticationCubit>()
         .login(_username.text, _password.text);
     getIt.get<LoadingController>().close(context);
-  }
-}
-
-class _ForgetPasswordText extends StatelessWidget {
-  const _ForgetPasswordText({
-    super.key,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: TextButton(
-          onPressed: () {
-            Navigator.pushNamed(context, RoutePath.forgetPassword);
-          },
-          child: Text(
-            S.current.lbl_forget_pass,
-            style: BaseTextStyle.button1(color: BaseColor.primaryColor),
-          ),
-        ),
-      ),
-    );
   }
 }

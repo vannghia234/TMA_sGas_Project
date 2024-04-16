@@ -7,7 +7,7 @@ import 'package:sgas/src/feature/authentication/presentation/layer/authenticatio
 import 'package:sgas/src/feature/authentication/presentation/page/home_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/login_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/reset_password_page.dart';
-import 'package:sgas/src/feature/authentication/presentation/page/forgot_password_page.dart';
+import 'package:sgas/src/feature/authentication/presentation/page/forget_password_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/otp_page.dart';
 import 'package:sgas/src/base/initial_layer/presentation/layer/initial_layer.dart';
 
@@ -35,7 +35,7 @@ Route appRoute(RouteSettings settings) {
       );
     case RoutePath.forgetPassword:
       return MaterialPageRoute(
-        builder: (context) => const ForgotPasswordPage(),
+        builder: (context) => const ForgetPasswordPage(),
       );
     case RoutePath.receiveOTP:
       Map<String, String> model = settings.arguments as Map<String, String>;

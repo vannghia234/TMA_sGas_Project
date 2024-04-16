@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/utils/controller/snack_bar_controller.dart';
+import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 import 'package:sgas/src/feature/authentication/data/models/login_params.dart';
 import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
 import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
@@ -17,6 +18,8 @@ class LoginCubit extends Cubit<LoginState> {
     required String username,
     required String password,
   }) async {
+    logger.f("$username $password");
+
     if (username.isEmpty) {
       emit(InValidUserNameLogin(message: S.current.txt_please_enter_username));
       return false;
@@ -38,7 +41,6 @@ class LoginCubit extends Cubit<LoginState> {
     LoginParams loginParams =
         LoginParams(username: username, password: password);
     Either<Failure, void> result = await _useCase.login(loginParams);
-
     if (result.isLeft) {
       if (result.left is InCorrectUserNamePasswordFailure) {
         emit(InValidPassWordLogin(

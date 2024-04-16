@@ -14,6 +14,7 @@ class NotificationHeader extends StatelessWidget {
     return Container(
       width: double.infinity,
       color: BaseColor.backgroundNeutralColor,
+      margin: const EdgeInsets.only(bottom: 24),
       padding: const EdgeInsets.symmetric(vertical: 18, horizontal: 20),
       child: Text(
         title,
