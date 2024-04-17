@@ -24,6 +24,7 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
     try {
       var res = await ApiServiceClient.post(
           withToken: false,
+          isAuthentication: true,
           uri: APIServicePath.login(),
           params: params.toJson());
       logger.d("LOGIN CODE ${res["code"]}");
@@ -43,10 +44,12 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
       await ApiServiceClient.post(
           uri: APIServicePath.forgetPassword(),
           withToken: false,
+          isAuthentication: true,
           params: params.toMap());
     } catch (e) {
       // 400: incorrect phoneNumber,  404: not found username
       if (e is Exception) {
+        logger.f("debug datasource $e");
         rethrow;
       }
       throw DataParsingException();
@@ -58,6 +61,7 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
     try {
       await ApiServiceClient.put(
           params: params.toMap(),
+          isAuthentication: true,
           uri: APIServicePath.updatePassword(),
           withToken: false);
     } catch (e) {
@@ -73,6 +77,7 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
     try {
       var res = await ApiServiceClient.post(
           withToken: false,
+          isAuthentication: true,
           uri: APIServicePath.refreshToken(
               params: {"refreshToken": refreshToken}));
       TokenModel token = TokenModel.fromJson(res["data"]["token"]);
@@ -92,6 +97,7 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
       var response = await ApiServiceClient.post(
           uri: APIServicePath.compareOTP(),
           withToken: false,
+          isAuthentication: true,
           params: params.toMap());
       return OTPModel.fromMap(response);
     } catch (e) {

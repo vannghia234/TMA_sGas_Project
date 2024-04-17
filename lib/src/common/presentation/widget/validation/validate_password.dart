@@ -5,8 +5,8 @@ import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
 
-class ValidatePasswordTextField extends StatelessWidget {
-  const ValidatePasswordTextField({
+class ValidatePassword extends StatelessWidget {
+  const ValidatePassword({
     super.key,
     required this.isValidPassword,
   });
@@ -18,9 +18,7 @@ class ValidatePasswordTextField extends StatelessWidget {
     return Row(
       children: [
         SvgPicture.asset(
-          (isValidPassword)
-              ? IconPath.fillCheckCircle
-              : IconPath.checkCircle,
+          (isValidPassword) ? IconPath.fillCheckCircle : IconPath.checkCircle,
           height: 24,
           width: 24,
         ),

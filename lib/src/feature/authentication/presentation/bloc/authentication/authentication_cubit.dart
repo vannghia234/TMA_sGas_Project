@@ -37,6 +37,6 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
 
   forceLogout() async {
     await logout();
-    emit(UnAuthenticateState(expiredToken: true, isAppeared: true));
+    emit(UnAuthenticateState(expiredToken: true, isAppeared: false));
   }
 }

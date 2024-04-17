@@ -26,12 +26,8 @@ Route appRoute(RouteSettings settings) {
         builder: (context) => const LoginPage(),
       );
     case RoutePath.resetPassword:
-      Map<String, String> data = settings.arguments as Map<String, String>;
-
       return MaterialPageRoute(
-        builder: (context) => ResetPasswordPage(
-          data: data,
-        ),
+        builder: (context) => const ResetPasswordPage(),
       );
     case RoutePath.forgetPassword:
       return MaterialPageRoute(

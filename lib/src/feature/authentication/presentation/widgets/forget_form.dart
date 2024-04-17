@@ -4,7 +4,6 @@ import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
-import 'package:sgas/src/common/utils/controller/debounce_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_state.dart';
 
@@ -51,12 +50,8 @@ class ForgetForm extends StatelessWidget {
               CommonButton(
                 buttonTitle: S.current.btn_send_otp,
                 onPress: () async {
-                  getIt<DebounceController>().start(
-                    function: () async {
-                      await getIt.get<ForgetPasswordCubit>().forgetPassword(
-                          _username.text, _phoneNumber.text, context);
-                    },
-                  );
+                  await getIt.get<ForgetPasswordCubit>().forgetPassword(
+                      _username.text, _phoneNumber.text, context);
                 },
               )
             ],

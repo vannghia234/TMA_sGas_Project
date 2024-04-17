@@ -2,26 +2,32 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
+import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'dart:io' as Io;
 import 'package:sgas/core/error/exception.dart';
 import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 
 const _defaultApiWaitingDuration = Duration(seconds: 30);
 const _defaultApiGetFileWaitingDuration = Duration(minutes: 5);
 
 Future<void> handleAPIExceptionByStatusCode(
     String uri, int statusCode, String method,
-    {int? codeBadRequest, String? data}) async {
+    {int? codeBadRequest, String? data, bool? isAuthentication}) async {
   if (statusCode == 200) return;
   logger.e(
       "[API failure] $statusCode $method $uri badRequestCode $codeBadRequest");
-  // TODO:
-  // bool isValid = await AuthenticationUseCase().authenticate();
-  // if (!isValid) {
-  //   getIt.get<AuthenticationCubit>().forceLogout();
-  //   return;
-  // }
+  logger.d("$isAuthentication ");
+
+  if (!isAuthentication!) {
+    logger.d("khong phai authen ");
+    bool isValid = await AuthenticationUseCase().authenticate();
+    if (!isValid) {
+      getIt.get<AuthenticationCubit>().forceLogout();
+      return;
+    }
+  }
   if (statusCode == 400) {
     throw BadRequestException(statusCode: codeBadRequest, data: data);
   }
@@ -86,6 +92,7 @@ class ApiServiceClient {
       bool withToken = true,
       Map<String, dynamic>? params,
       Duration? apiWaitingDuration,
+      bool isAuthentication = true,
       bool isSecondTime = false}) async {
     try {
       final client = http.Client();
@@ -96,7 +103,8 @@ class ApiServiceClient {
           headers: headers, body: (params != null) ? jsonEncode(params) : null);
       // logger.f(
       //     "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
-      await handleAPIExceptionByStatusCode(uri, response.statusCode, "PUT");
+      await handleAPIExceptionByStatusCode(uri, response.statusCode, "PUT",
+          isAuthentication: isAuthentication);
       Map<String, dynamic> result =
           json.decode(utf8.decode(response.bodyBytes));
       return result;
@@ -110,6 +118,7 @@ class ApiServiceClient {
             uri: uri,
             params: params,
             isSecondTime: true,
+            isAuthentication: isAuthentication,
             withToken: withToken,
             apiWaitingDuration: apiWaitingDuration);
       }
@@ -122,6 +131,7 @@ class ApiServiceClient {
     Map<String, dynamic>? params,
     Duration? apiWaitingDuration,
     bool isSecondTime = false,
+    bool isAuthentication = false,
   }) async {
     try {
       final client = http.Client();
@@ -143,7 +153,9 @@ class ApiServiceClient {
       //     "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
 
       await handleAPIExceptionByStatusCode(uri, response.statusCode, "POST",
-          codeBadRequest: codeBadReq, data: data);
+          isAuthentication: isAuthentication,
+          codeBadRequest: codeBadReq,
+          data: data);
       Map<String, dynamic> result =
           json.decode(utf8.decode(response.bodyBytes));
       return result;
@@ -156,6 +168,7 @@ class ApiServiceClient {
         return await post(
             params: params,
             uri: uri,
+            isAuthentication: isAuthentication,
             withToken: withToken,
             apiWaitingDuration: apiWaitingDuration,
             isSecondTime: true);

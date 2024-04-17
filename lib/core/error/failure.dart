@@ -8,11 +8,7 @@ class AuthorizationFailure extends Failure {}
 
 class ForbiddenFailure extends Failure {}
 
-class BadRequestFailure extends Failure {
-  String? data;
-  int? statusCode;
-  BadRequestFailure({this.statusCode, this.data});
-}
+class BadRequestFailure extends Failure {}
 
 class NotFoundFailure extends Failure {}
 

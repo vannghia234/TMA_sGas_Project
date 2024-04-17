@@ -48,12 +48,10 @@ class OtpCubit extends Cubit<OtpState> {
         return;
       }
     }
-    emit(CorrectOtp());
-    navigatorKey.currentState?.popAndPushNamed(RoutePath.resetPassword,
-        arguments: <String, String>{
-          "data": otpResult.right.data!,
-          "username": username
-        });
+    emit(CorrectOtp(data: otpResult.right.data!, username: username));
+    navigatorKey.currentState?.popAndPushNamed(
+      RoutePath.resetPassword,
+    );
   }
 
   Future<void> reSendOtp(

@@ -2,7 +2,7 @@ class ImagePath {
   static const String logo = "assets/images/logo/app_icon.png";
 
   //loading
-  static const String dot_loading = "assets/anim/dot_loading.json";
+  static const String dotLoading = "assets/anim/dotLoading.json";
 
   //common
   static const String notFound = "assets/images/common/not_found.png";

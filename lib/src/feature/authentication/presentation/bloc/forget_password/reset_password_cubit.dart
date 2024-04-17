@@ -48,8 +48,8 @@ class SetPasswordCubit extends Cubit<ResetPasswordState> {
       if (result.isRight) {
         emit(SuccessValidPassword());
         showSnackBar(content: S.current.txt_set_password_successfully);
-        await Future.delayed(const Duration(seconds: 1));
-        navigatorKey.currentState?.popAndPushNamed(RoutePath.login);
+        await Future.delayed(const Duration(milliseconds: 600));
+        navigatorKey.currentState?.popAndPushNamed(RoutePath.root);
       }
     }
   }

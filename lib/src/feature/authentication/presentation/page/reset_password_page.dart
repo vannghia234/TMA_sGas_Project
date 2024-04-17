@@ -6,16 +6,18 @@ import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
-import 'package:sgas/src/common/presentation/widget/validation/validate_password_textfield.dart';
+import 'package:sgas/src/common/presentation/widget/validation/validate_password.dart';
 import 'package:sgas/src/common/utils/controller/loading_controller.dart';
+import 'package:sgas/src/common/utils/helper/logger_helper.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/reset_password_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/reset_password_state.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/login_page.dart';
 
 class ResetPasswordPage extends StatefulWidget {
-  const ResetPasswordPage({super.key, required this.data});
-  final Map<String, String> data;
+  const ResetPasswordPage({super.key});
 
   @override
   State<ResetPasswordPage> createState() => _ResetPasswordPageState();
@@ -27,9 +29,13 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
   bool isValidPassword = false;
   bool isHiddenPassword = true;
   bool isHiddenRePassword = true;
+  late CorrectOtp data;
+
   @override
   void initState() {
     super.initState();
+    data = getIt<OtpCubit>().state as CorrectOtp;
+    logger.d("reset $data");
   }
 
   @override
@@ -127,7 +133,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                     const SizedBox(
                       height: 24,
                     ),
-                    ValidatePasswordTextField(isValidPassword: isValidPassword),
+                    ValidatePassword(isValidPassword: isValidPassword),
                     const SizedBox(
                       height: 24,
                     ),
@@ -136,13 +142,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                       onPress: (isValidPassword)
                           ? () async {
                               getIt<LoadingController>().start(context);
-
                               getIt.get<SetPasswordCubit>().updatePass(
                                   context: context,
-                                  token: widget.data["data"]!,
+                                  token: data.data,
                                   password: _passwordController.text,
                                   rePassword: _rePasswordController.text,
-                                  username: widget.data["username"]!);
+                                  username: data.username);
                               getIt<LoadingController>().close(context);
                             }
                           : null,
