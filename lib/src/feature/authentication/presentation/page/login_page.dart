@@ -7,6 +7,7 @@ import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/ui/resource/image_path.dart';
 import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/utils/controller/layout_controller.dart';
 import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cubit.dart';
@@ -41,7 +42,8 @@ class _LoginPageState extends State<LoginPage> {
         bloc: getIt.get<LoginCubit>(),
         builder: (context, state) {
           return Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 25),
+            padding:
+                EdgeInsets.symmetric(horizontal: isMobileLayout() ? 25 : 196),
             child: SizedBox.expand(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -51,7 +53,19 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   Align(
                       alignment: Alignment.center,
-                      child: Image.asset(ImagePath.logoTMA)),
+                      child: isMobileLayout()
+                          ? Image.asset(
+                              ImagePath.logoTMA,
+                              width: 109,
+                              height: 56,
+                              fit: BoxFit.cover,
+                            )
+                          : Image.asset(
+                              ImagePath.logoTMA,
+                              width: 156,
+                              height: 80,
+                              fit: BoxFit.cover,
+                            )),
                   const Spacer(
                     flex: 1,
                   ),

@@ -4,6 +4,7 @@ import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
+import 'package:sgas/src/common/utils/controller/layout_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_state.dart';
 
@@ -24,7 +25,8 @@ class ForgetForm extends StatelessWidget {
       bloc: getIt.get<ForgetPasswordCubit>(),
       builder: (context, state) {
         return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
+          padding:
+              EdgeInsets.symmetric(horizontal: isMobileLayout() ? 20 : 196),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [

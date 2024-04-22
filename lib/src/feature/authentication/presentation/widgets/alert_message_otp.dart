@@ -5,16 +5,17 @@ import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/utils/controller/layout_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_state.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
-class MessageOTP extends StatelessWidget {
-  const MessageOTP({super.key});
+class AlertMessageOTP extends StatelessWidget {
+  const AlertMessageOTP({super.key});
   final int countDownTime = 120;
   Align timerCountDown(BuildContext context) {
     return Align(
-      alignment: Alignment.centerLeft,
+      alignment: isMobileLayout() ? Alignment.centerLeft : Alignment.center,
       child: Countdown(
         seconds: countDownTime,
         build: (BuildContext context, double time) => RichText(

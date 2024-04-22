@@ -7,6 +7,7 @@ import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 import 'package:sgas/src/common/presentation/widget/validation/validate_password.dart';
+import 'package:sgas/src/common/utils/controller/layout_controller.dart';
 import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
@@ -68,14 +69,17 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         builder: (context, state) {
           return SafeArea(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
+              padding:
+                  EdgeInsets.symmetric(horizontal: isMobileLayout() ? 20 : 196),
               child: SizedBox.expand(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const SizedBox(
-                      height: 24,
-                    ),
+                    isMobileLayout()
+                        ? const SizedBox(
+                            height: 24,
+                          )
+                        : const Spacer(),
                     TextFieldCommon(
                       label: S.current.txt_password,
                       controller: _passwordController,
@@ -151,6 +155,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                               getIt<LoadingController>().close(context);
                             }
                           : null,
+                    ),
+                    const Spacer(
+                      flex: 3,
                     )
                   ],
                 ),

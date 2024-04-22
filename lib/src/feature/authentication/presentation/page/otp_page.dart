@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
+import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/utils/controller/layout_controller.dart';
 import 'package:sgas/src/common/utils/controller/loading_controller.dart';
-import 'package:sgas/src/feature/authentication/presentation/widgets/message_otp.dart';
+import 'package:sgas/src/feature/authentication/presentation/widgets/alert_message_otp.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/notification_header.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
@@ -82,18 +84,39 @@ class _OTPPageState extends State<OTPPage> {
       body: SizedBox.expand(
         child: Column(
           children: [
-            NotificationHeader(
-              title:
-                  "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(widget.userInfo["phone"]!)}",
-            ),
-            const SizedBox(height: 24),
+            isMobileLayout()
+                ? Column(
+                    children: [
+                      NotificationHeader(
+                        title:
+                            "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(widget.userInfo["phone"]!)}",
+                      ),
+                      const SizedBox(
+                        height: 24,
+                      ),
+                    ],
+                  )
+                : Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        Text(
+                          "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(widget.userInfo["phone"]!)}",
+                          style: BaseTextStyle.body1(),
+                        ),
+                        const SizedBox(
+                          height: 40,
+                        ),
+                      ],
+                    ),
+                  ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20),
               child: Column(
                 children: [
                   _otpFormField(context),
                   const SizedBox(height: 16),
-                  const MessageOTP(),
+                  const AlertMessageOTP(),
                   const SizedBox(height: 24),
                   BlocBuilder<OtpCubit, OtpState>(
                     bloc: getIt.get<OtpCubit>(),
@@ -117,6 +140,9 @@ class _OTPPageState extends State<OTPPage> {
                 ],
               ),
             ),
+            const Spacer(
+              flex: 4,
+            )
           ],
         ),
       ),

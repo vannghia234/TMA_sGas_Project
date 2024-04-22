@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/utils/controller/layout_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/forget_form.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/notification_header.dart';
 
@@ -37,10 +39,35 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       ),
       body: Column(
         children: [
-          NotificationHeader(
-            title: S.current.txt_instructions,
-          ),
+          isMobileLayout()
+              ? Column(
+                  children: [
+                    NotificationHeader(
+                      title: S.current.txt_instructions,
+                    ),
+                    const SizedBox(
+                      height: 24,
+                    ),
+                  ],
+                )
+              : Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      Text(
+                        S.current.txt_instructions,
+                        style: BaseTextStyle.body1(),
+                      ),
+                      const SizedBox(
+                        height: 40,
+                      ),
+                    ],
+                  ),
+                ),
           ForgetForm(username: _username, phoneNumber: _phoneNumber),
+          const Spacer(
+            flex: 2,
+          )
         ],
       ),
     );

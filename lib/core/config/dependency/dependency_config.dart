@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:sgas/src/common/utils/controller/debounce_controller.dart';
+import 'package:sgas/src/common/utils/controller/layout_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/reset_password_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_cubit.dart';
@@ -28,4 +29,5 @@ Future<void> _configureDependenciesBloc() async {
 Future<void> _configureController() async {
   getIt.registerLazySingleton<LoadingController>(() => LoadingController());
   getIt.registerLazySingleton<DebounceController>(() => DebounceController());
+  getIt.registerLazySingleton<LayoutController>(() => LayoutController());
 }
