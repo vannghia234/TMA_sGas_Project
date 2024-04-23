@@ -59,6 +59,7 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
   @override
   Future<void> resetPassword(ResetPasswordParams params) async {
     try {
+      logger.f("data source ${params.toMap()}");
       await ApiServiceClient.put(
           params: params.toMap(),
           isAuthentication: true,

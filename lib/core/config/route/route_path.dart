@@ -2,6 +2,8 @@ class RoutePath {
   static const root = "/";
 
   static const authentication = '/authentication';
+  static const forgetPasswordLayer = '/authentication/forgetPasswordLayer';
+
   static const login = '/authentication/login';
   static const home = '/home';
   static const forgetPassword = '/authentication/forget_password';

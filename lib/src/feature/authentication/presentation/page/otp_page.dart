@@ -1,12 +1,15 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/utils/controller/layout_controller.dart';
+import 'package:sgas/src/common/utils/constant/screen_size_constant.dart';
 import 'package:sgas/src/common/utils/controller/loading_controller.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/alert_message_otp.dart';
 import 'package:sgas/src/feature/authentication/presentation/widgets/notification_header.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
@@ -18,9 +21,7 @@ import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 class OTPPage extends StatefulWidget {
   const OTPPage({
     super.key,
-    required this.userInfo,
   });
-  final Map<String, String> userInfo;
 
   @override
   State<OTPPage> createState() => _OTPPageState();
@@ -63,8 +64,11 @@ class _OTPPageState extends State<OTPPage> {
   }
 
   Future<void> _sendOTP(BuildContext context) async {
-    await getIt.get<OtpCubit>().sentOTP(
-        username: widget.userInfo["username"]!, otp: otp, context: context);
+    getIt<LoadingController>().start(context);
+    await getIt
+        .get<ForgetControllerCubit>()
+        .sentOTP(otp)
+        .whenComplete(() => getIt<LoadingController>().close(context));
     clearOtp();
   }
 
@@ -74,76 +78,109 @@ class _OTPPageState extends State<OTPPage> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            getIt.get<ForgetControllerCubit>().changeState(ForgetScreenState());
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
         title: Text(S.current.txt_enter_otp),
       ),
       body: SizedBox.expand(
-        child: Column(
-          children: [
-            isMobileLayout()
-                ? Column(
+        child: LayoutBuilder(builder: (context, constraints) {
+          if (constraints.maxWidth > ScreenSizeConstant.maxTabletWidth) {
+            return Column(
+              children: [
+                const Spacer(flex: 2),
+                Text(
+                    "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(getIt.get<ForgetControllerCubit>().phone!)}",
+                    style: BaseTextStyle.body1()),
+                const SizedBox(height: 40),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: Column(
                     children: [
-                      NotificationHeader(
-                        title:
-                            "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(widget.userInfo["phone"]!)}",
-                      ),
-                      const SizedBox(
-                        height: 24,
+                      _otpFormField(context),
+                      const SizedBox(height: 16),
+                      const AlertMessageOTP(),
+                      const SizedBox(height: 24),
+                      BlocBuilder<OtpCubit, OtpState>(
+                        bloc: getIt.get<OtpCubit>(),
+                        builder: (context, state) {
+                          if (state is TimeOutOtp) {
+                            return CommonButton(
+                              buttonTitle: S.current.btn_re_send_otp,
+                              onPress: () async {
+                                getIt<LoadingController>().start(context);
+                                await getIt.get<OtpCubit>().reSendOtp(
+                                    username: getIt
+                                        .get<ForgetControllerCubit>()
+                                        .username!,
+                                    phone: getIt
+                                        .get<ForgetControllerCubit>()
+                                        .phone!);
+                                // ignore: use_build_context_synchronously
+                                getIt<LoadingController>().close(context);
+                              },
+                            );
+                          }
+                          return const SizedBox.shrink();
+                        },
                       ),
                     ],
-                  )
-                : Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        Text(
-                          "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(widget.userInfo["phone"]!)}",
-                          style: BaseTextStyle.body1(),
-                        ),
-                        const SizedBox(
-                          height: 40,
-                        ),
-                      ],
-                    ),
                   ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: Column(
-                children: [
-                  _otpFormField(context),
-                  const SizedBox(height: 16),
-                  const AlertMessageOTP(),
-                  const SizedBox(height: 24),
-                  BlocBuilder<OtpCubit, OtpState>(
-                    bloc: getIt.get<OtpCubit>(),
-                    builder: (context, state) {
-                      if (state is TimeOutOtp) {
-                        return CommonButton(
-                          buttonTitle: S.current.btn_re_send_otp,
-                          onPress: () async {
-                            getIt<LoadingController>().start(context);
-                            await getIt.get<OtpCubit>().reSendOtp(
-                                username: widget.userInfo["username"]!,
-                                phone: widget.userInfo["phone"]!);
-                            // ignore: use_build_context_synchronously
-                            getIt<LoadingController>().close(context);
-                          },
-                        );
-                      }
-                      return const SizedBox.shrink();
-                    },
-                  ),
-                ],
+                ),
+                const Spacer(
+                  flex: 7,
+                )
+              ],
+            );
+          }
+          return Column(
+            children: [
+              NotificationHeader(
+                title:
+                    // ignore: use_build_context_synchronously
+                    "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(getIt.get<ForgetControllerCubit>().phone!)}",
               ),
-            ),
-            const Spacer(
-              flex: 4,
-            )
-          ],
-        ),
+              const SizedBox(
+                height: 24,
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Column(
+                  children: [
+                    _otpFormField(context),
+                    const SizedBox(height: 16),
+                    const AlertMessageOTP(),
+                    const SizedBox(height: 24),
+                    BlocBuilder<OtpCubit, OtpState>(
+                      bloc: getIt.get<OtpCubit>(),
+                      builder: (context, state) {
+                        if (state is TimeOutOtp) {
+                          return CommonButton(
+                            buttonTitle: S.current.btn_re_send_otp,
+                            onPress: () async {
+                              getIt<LoadingController>().start(context);
+                              await getIt.get<OtpCubit>().reSendOtp(
+                                  username: getIt
+                                      .get<ForgetControllerCubit>()
+                                      .username!,
+                                  phone: getIt
+                                      .get<ForgetControllerCubit>()
+                                      .phone!);
+                              // ignore: use_build_context_synchronously
+                              getIt<LoadingController>().close(context);
+                            },
+                          );
+                        }
+                        return const SizedBox.shrink();
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        }),
       ),
     );
   }

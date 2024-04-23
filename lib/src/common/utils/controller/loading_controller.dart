@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sgas/core/ui/resource/image_path.dart';
+import 'package:sgas/src/common/utils/constant/screen_size_constant.dart';
 
 class LoadingController {
   bool isActive = false;
@@ -21,6 +22,8 @@ class LoadingController {
   }
 
   void start(BuildContext context) {
+    bool isTablet =
+        MediaQuery.of(context).size.width > ScreenSizeConstant.maxTabletWidth;
     if (isActive) close(context);
     _active();
     showDialog(
@@ -30,8 +33,11 @@ class LoadingController {
         insetPadding: EdgeInsets.zero,
         backgroundColor: Colors.transparent,
         child: Center(
-            child: Lottie.asset(ImagePath.dotLoading,
-                fit: BoxFit.cover, width: 84, height: 94)),
+            child: isTablet
+                ? Lottie.asset(ImagePath.dotLoading,
+                    fit: BoxFit.cover, width: 134, height: 150)
+                : Lottie.asset(ImagePath.dotLoading,
+                    fit: BoxFit.cover, width: 84, height: 94)),
       ),
     );
   }

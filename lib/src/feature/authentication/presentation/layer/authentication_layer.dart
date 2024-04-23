@@ -19,8 +19,7 @@ class AuthenticationLayer extends StatelessWidget {
       builder: (context, state) {
         if (state is UnAuthenticateState) {
           if (state.expiredToken) {
-            if (!state.isAppeared) {
-              state.isAppeared = true;
+            if (getIt.get<AuthenticationCubit>().isShown == null) {
               Future.microtask(() => _showExpiredSessionDialog(context));
             }
           }

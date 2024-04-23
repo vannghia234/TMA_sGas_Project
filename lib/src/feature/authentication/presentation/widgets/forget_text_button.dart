@@ -17,7 +17,7 @@ class ForgetTextButton extends StatelessWidget {
         alignment: Alignment.centerRight,
         child: TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, RoutePath.forgetPassword);
+            Navigator.pushNamed(context, RoutePath.forgetPasswordLayer);
           },
           child: Text(
             S.current.lbl_forget_pass,

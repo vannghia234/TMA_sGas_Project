@@ -1,18 +1,15 @@
 // ignore_for_file: use_build_context_synchronously
-import 'package:flutter/widgets.dart';
+import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sgas/core/config/dependency/dependency_config.dart';
-import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/utils/controller/loading_controller.dart';
 import 'package:sgas/src/common/utils/controller/snack_bar_controller.dart';
 import 'package:sgas/src/feature/authentication/data/models/compare_otp_params.dart';
 import 'package:sgas/src/feature/authentication/data/models/forget_params.dart';
+import 'package:sgas/src/feature/authentication/data/models/otp_model.dart';
 import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
 import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_state.dart';
-import 'package:sgas/src/common/utils/constant/global_key.dart';
 
 class OtpCubit extends Cubit<OtpState> {
   OtpCubit() : super(InitialOtp());
@@ -22,36 +19,32 @@ class OtpCubit extends Cubit<OtpState> {
     emit(state);
   }
 
-  sentOTP(
-      {required String username,
-      required String otp,
-      required BuildContext context}) async {
-    getIt<LoadingController>().start(context);
-
+  Future<Either<Failure, OTPModel>> sentOTP({
+    required String username,
+    required String otp,
+  }) async {
     var otpResult = await _useCase
         .compareOTP(CompareOTPParams(username: username, oneTimeOtp: otp));
-    getIt<LoadingController>().close(context);
 
     if (otpResult.isLeft) {
       if (otpResult.left is TimeOutOTPFailure) {
         emit(TimeOutOtp());
-        return;
+        return Left(otpResult.left);
       }
       if (otpResult.left is ServerFailure) {
         showSnackBar(
             content: S.current.txt_no_network_connection,
             state: SnackBarState.error);
-        return;
+        return Left(otpResult.left);
       } else {
         showSnackBar(
             content: S.current.txt_invalid_otp, state: SnackBarState.error);
-        return;
+        return Left(otpResult.left);
       }
     }
-    emit(CorrectOtp(data: otpResult.right.data!, username: username));
-    navigatorKey.currentState?.popAndPushNamed(
-      RoutePath.resetPassword,
-    );
+    // emit(CorrectOtp(data: otpResult.right.data!, username: username));
+    emit(CorrectOtp());
+    return Right(otpResult.right);
   }
 
   Future<void> reSendOtp(

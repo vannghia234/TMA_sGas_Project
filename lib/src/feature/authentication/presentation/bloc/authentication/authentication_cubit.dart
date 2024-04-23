@@ -8,12 +8,14 @@ import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cu
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {
   AuthenticationCubit() : super(InitialAuthenticationState());
+  bool? isShown;
 
   authenticate() async {
     bool isValidToken = await AuthenticationUseCase().authenticate();
     if (isValidToken) {
       emit(AuthenticatedState());
     } else {
+      isShown ??= true;
       emit(UnAuthenticateState(expiredToken: true));
     }
   }
@@ -31,12 +33,13 @@ class AuthenticationCubit extends Cubit<AuthenticationState> {
     navigatorKey.currentState
         ?.popUntil((route) => route.settings.name == RoutePath.root);
     emit(InitialAuthenticationState());
-    emit(UnAuthenticateState(expiredToken: false, isAppeared: true));
+    emit(UnAuthenticateState(expiredToken: false));
     await AuthenticationUseCase().removeAllToken();
   }
 
   forceLogout() async {
     await logout();
-    emit(UnAuthenticateState(expiredToken: true, isAppeared: false));
+    isShown = null;
+    emit(UnAuthenticateState(expiredToken: true));
   }
 }

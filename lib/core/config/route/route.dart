@@ -4,6 +4,7 @@ import 'package:sgas/src/base/validation_layer/presentation/page/data_parsing_pa
 import 'package:sgas/src/base/validation_layer/presentation/page/disconnect_page.dart';
 import 'package:sgas/src/common/presentation/page/not_found_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/layer/authentication_layer.dart';
+import 'package:sgas/src/feature/authentication/presentation/layer/forget_password_layer.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/home_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/login_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/reset_password_page.dart';
@@ -34,11 +35,8 @@ Route appRoute(RouteSettings settings) {
         builder: (context) => const ForgetPasswordPage(),
       );
     case RoutePath.receiveOTP:
-      Map<String, String> model = settings.arguments as Map<String, String>;
       return MaterialPageRoute(
-        builder: (context) => OTPPage(
-          userInfo: model,
-        ),
+        builder: (context) => const OTPPage(),
       );
     case RoutePath.disconnect:
       return MaterialPageRoute(
@@ -52,6 +50,11 @@ Route appRoute(RouteSettings settings) {
       return MaterialPageRoute(
         builder: (context) => const AuthenticationLayer(),
       );
+    case RoutePath.forgetPasswordLayer:
+      return MaterialPageRoute(
+        builder: (context) => const ForgetPasswordLayer(),
+      );
+
     default:
       return MaterialPageRoute(
         builder: (context) => const NotFoundPage(),

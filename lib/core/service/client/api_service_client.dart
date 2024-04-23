@@ -18,8 +18,6 @@ Future<void> handleAPIExceptionByStatusCode(
   if (statusCode == 200) return;
   logger.e(
       "[API failure] $statusCode $method $uri badRequestCode $codeBadRequest");
-  logger.d("$isAuthentication ");
-
   if (!isAuthentication!) {
     bool isValid = await AuthenticationUseCase().authenticate();
     if (!isValid) {
@@ -100,8 +98,8 @@ class ApiServiceClient {
           .whenComplete(() => client.close());
       var response = await client.put(Uri.parse(uri),
           headers: headers, body: (params != null) ? jsonEncode(params) : null);
-      // logger.f(
-      //     "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
+      logger.f(
+          "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
       await handleAPIExceptionByStatusCode(uri, response.statusCode, "PUT",
           isAuthentication: isAuthentication);
       Map<String, dynamic> result =

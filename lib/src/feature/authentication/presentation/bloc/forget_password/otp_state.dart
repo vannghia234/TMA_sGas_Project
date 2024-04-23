@@ -11,9 +11,4 @@ class OverRequestOtp extends OtpState {}
 
 class IncorrectOtp extends OtpState {}
 
-class CorrectOtp extends OtpState {
-  final String data;
-  final String username;
-
-  CorrectOtp({required this.data, required this.username});
-}
+class CorrectOtp extends OtpState {}
