@@ -21,7 +21,6 @@ Future<void> handleAPIExceptionByStatusCode(
   logger.d("$isAuthentication ");
 
   if (!isAuthentication!) {
-    logger.d("khong phai authen ");
     bool isValid = await AuthenticationUseCase().authenticate();
     if (!isValid) {
       getIt.get<AuthenticationCubit>().forceLogout();

@@ -7,7 +7,6 @@ import 'package:sgas/src/common/presentation/page/app_loading_page.dart';
 import 'package:sgas/src/base/validation_layer/presentation/page/disconnect_page.dart';
 import 'package:sgas/src/base/validation_layer/presentation/page/data_parsing_page.dart';
 import 'package:sgas/src/base/validation_layer/presentation/page/unsupported_version_page.dart';
-import 'package:sgas/src/common/utils/controller/layout_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/layer/authentication_layer.dart';
 
 class ValidationLayer extends StatelessWidget {
@@ -15,9 +14,7 @@ class ValidationLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    getIt
-        .get<LayoutController>()
-        .setScreenMode(MediaQuery.of(context).size.width);
+
     return BlocBuilder<ValidationCubit, ValidationState>(
       bloc: getIt.get<ValidationCubit>()..init(),
       builder: (context, state) {
