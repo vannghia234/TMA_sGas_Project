@@ -39,26 +39,26 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        child: SizedBox.expand(
-          child: LayoutBuilder(builder: (context, constraints) {
-            if (constraints.maxWidth > ScreenSizeConstant.maxTabletWidth) {
-              return Column(
-                children: [
-                  const Spacer(
-                    flex: 3,
-                  ),
-                  SizedBox(
-                      width: constraints.maxWidth * 2 / 3,
-                      child: _loginForm(constraints, const Size(156, 80))),
-                  const Spacer(
-                    flex: 4,
-                  ),
-                ],
-              );
-            }
+      body: SizedBox.expand(
+        child: LayoutBuilder(builder: (context, constraints) {
+          if (constraints.maxWidth > ScreenSizeConstant.maxTabletWidth) {
             return Column(
+              children: [
+                const Spacer(
+                  flex: 3,
+                ),
+                SizedBox(
+                    width: constraints.maxWidth * 2 / 3,
+                    child: _loginForm(constraints, const Size(156, 80))),
+                const Spacer(
+                  flex: 4,
+                ),
+              ],
+            );
+          }
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const Spacer(
@@ -69,9 +69,9 @@ class _LoginPageState extends State<LoginPage> {
                   flex: 3,
                 ),
               ],
-            );
-          }),
-        ),
+            ),
+          );
+        }),
       ),
     );
   }

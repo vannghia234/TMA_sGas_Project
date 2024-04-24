@@ -64,33 +64,33 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
         title: Text(S.current.txt_change_password),
       ),
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: SizedBox.expand(
-            child: LayoutBuilder(builder: (context, constraints) {
-              if (constraints.maxWidth > ScreenSizeConstant.maxTabletWidth) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    const Spacer(flex: 2),
-                    SizedBox(
-                        width: constraints.maxWidth * 2 / 3,
-                        child: _resetPasswordForm(constraints, context)),
-                    const Spacer(
-                      flex: 5,
-                    )
-                  ],
-                );
-              }
+        child: SizedBox.expand(
+          child: LayoutBuilder(builder: (context, constraints) {
+            if (constraints.maxWidth > ScreenSizeConstant.maxTabletWidth) {
               return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  const Spacer(flex: 2),
+                  SizedBox(
+                      width: constraints.maxWidth * 2 / 3,
+                      child: _resetPasswordForm(constraints, context)),
+                  const Spacer(
+                    flex: 5,
+                  )
+                ],
+              );
+            }
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 24),
                   _resetPasswordForm(constraints, context)
                 ],
-              );
-            }),
-          ),
+              ),
+            );
+          }),
         ),
       ),
     );
