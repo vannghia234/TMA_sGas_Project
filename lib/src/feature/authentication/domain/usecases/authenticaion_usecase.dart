@@ -1,7 +1,6 @@
 import 'package:either_dart/either.dart';
 import 'package:sgas/core/error/exception.dart';
 import 'package:sgas/core/error/failure.dart';
-import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 import 'package:sgas/src/feature/authentication/data/datasources/authentication_datasource.dart';
 import 'package:sgas/src/feature/authentication/data/datasources/local_authentication_datasource.dart';
 import 'package:sgas/src/feature/authentication/data/models/reset_password_params.dart';
@@ -64,7 +63,6 @@ class AuthenticationUseCase extends AuthenticationUseCaseInterface {
   Future<Either<Failure, void>> forgetPassword(ForgetParams params) async {
     try {
       await _dataSource.forgetPassword(params);
-      logger.f("logger usecase true");
       return const Right(null);
     } catch (e) {
       if (e is BadRequestException) {

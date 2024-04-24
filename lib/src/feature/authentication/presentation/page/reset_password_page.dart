@@ -73,7 +73,9 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     const Spacer(flex: 2),
-                    _resetPasswordFormTablet(constraints, context),
+                    SizedBox(
+                        width: constraints.maxWidth * 2 / 3,
+                        child: _resetPasswordForm(constraints, context)),
                     const Spacer(
                       flex: 5,
                     )
@@ -84,7 +86,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const SizedBox(height: 24),
-                  _resetPasswordFormMobile()
+                  _resetPasswordForm(constraints, context)
                 ],
               );
             }),
@@ -94,7 +96,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
     );
   }
 
-  Widget _resetPasswordFormMobile() {
+  Widget _resetPasswordForm(BoxConstraints constraints, BuildContext context) {
     return BlocBuilder<ResetPasswordCubit, ResetPasswordState>(
       bloc: getIt.get<ResetPasswordCubit>(),
       builder: (context, state) {
@@ -165,108 +167,21 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               onPress: (isValidPassword)
                   ? () async {
                       getIt<LoadingController>().start(context);
-                      await getIt.get<ResetPasswordCubit>().updatePass(
-                            password: _passwordController.text,
-                            rePassword: _rePasswordController.text,
-                          );
-                      getIt<LoadingController>().close(context);
+                      getIt
+                          .get<ForgetControllerCubit>()
+                          .resetPassword(_passwordController.text,
+                              _rePasswordController.text)
+                          .whenComplete(() {
+                        getIt<LoadingController>().close(context);
+                        getIt<ForgetControllerCubit>()
+                            .changeState(ForgetScreenState());
+                        Navigator.of(context)
+                            .pushNamed(RoutePath.authentication);
+                      });
                     }
                   : null,
             ),
           ],
-        );
-      },
-    );
-  }
-
-  Widget _resetPasswordFormTablet(
-      BoxConstraints constraints, BuildContext context) {
-    return BlocBuilder<ResetPasswordCubit, ResetPasswordState>(
-      bloc: getIt.get<ResetPasswordCubit>(),
-      builder: (context, state) {
-        return SizedBox(
-          width: constraints.maxWidth * 2 / 3,
-          child: Column(
-            children: [
-              TextFieldCommon(
-                label: S.current.txt_password,
-                controller: _passwordController,
-                hintText: S.current.txt_enter_password,
-                isHidden: isHiddenPassword,
-                onChange: (value) {
-                  _handleOnChange(value);
-                },
-                suffixIcon: IconButton(
-                  highlightColor: Colors.transparent,
-                  onPressed: () {
-                    setState(() {
-                      isHiddenPassword = !isHiddenPassword;
-                    });
-                  },
-                  icon: SvgPicture.asset(
-                    (isHiddenPassword)
-                        ? IconPath.showPassword
-                        : IconPath.hidePassword,
-                    fit: BoxFit.scaleDown,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 16,
-              ),
-              TextFieldCommon(
-                label: S.current.txt_confirm_password,
-                onChange: (value) {
-                  getIt
-                      .get<ResetPasswordCubit>()
-                      .changeState(InitialResetPassWord());
-                },
-                controller: _rePasswordController,
-                hintText: S.current.txt_re_enter_password,
-                messageError:
-                    (state is InValidReEnterPassword) ? state.message : null,
-                isHidden: isHiddenRePassword,
-                suffixIcon: IconButton(
-                  highlightColor: Colors.transparent,
-                  onPressed: () {
-                    setState(() {
-                      isHiddenRePassword = !isHiddenRePassword;
-                    });
-                  },
-                  icon: SvgPicture.asset(
-                    (isHiddenRePassword)
-                        ? IconPath.showPassword
-                        : IconPath.hidePassword,
-                    fit: BoxFit.scaleDown,
-                  ),
-                ),
-              ),
-              const SizedBox(
-                height: 24,
-              ),
-              ValidatePassword(isValidPassword: isValidPassword),
-              const SizedBox(
-                height: 24,
-              ),
-              CommonButton(
-                buttonTitle: S.current.btn_confirm,
-                onPress: (isValidPassword)
-                    ? () async {
-                        getIt<LoadingController>().start(context);
-                        getIt
-                            .get<ForgetControllerCubit>()
-                            .resetPassword(_passwordController.text,
-                                _rePasswordController.text)
-                            .whenComplete(() {
-                          getIt<LoadingController>().close(context);
-
-                          Navigator.of(context).pushNamed(RoutePath.root);
-                        });
-                      }
-                    : null,
-              ),
-            ],
-          ),
         );
       },
     );

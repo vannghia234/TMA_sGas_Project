@@ -49,7 +49,6 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
     } catch (e) {
       // 400: incorrect phoneNumber,  404: not found username
       if (e is Exception) {
-        logger.f("debug datasource $e");
         rethrow;
       }
       throw DataParsingException();
@@ -59,7 +58,6 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
   @override
   Future<void> resetPassword(ResetPasswordParams params) async {
     try {
-      logger.f("data source ${params.toMap()}");
       await ApiServiceClient.put(
           params: params.toMap(),
           isAuthentication: true,
@@ -83,7 +81,6 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
               params: {"refreshToken": refreshToken}));
       TokenModel token = TokenModel.fromJson(res["data"]["token"]);
       await LocalAuthenticationDataSource().saveToken(token);
-      logger.e("Log refreshTokenCode ${res["code"]}");
     } catch (e) {
       if (e is Exception) {
         rethrow;

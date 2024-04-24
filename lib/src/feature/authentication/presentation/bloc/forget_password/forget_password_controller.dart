@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
-import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
@@ -20,7 +19,6 @@ class ForgetControllerCubit extends Cubit<ForgetControllerState> {
     bool success = await getIt
         .get<ForgetPasswordCubit>()
         .forgetPassword(username, phoneNumber);
-    logger.d("forget status $success");
     if (success) {
       this.username = username;
       phone = phoneNumber;

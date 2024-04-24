@@ -16,7 +16,7 @@ Future<void> handleAPIExceptionByStatusCode(
     String uri, int statusCode, String method,
     {int? codeBadRequest, String? data, bool? isAuthentication}) async {
   if (statusCode == 200) return;
-  logger.e(
+  logger.f(
       "[API failure] $statusCode $method $uri badRequestCode $codeBadRequest");
   if (!isAuthentication!) {
     bool isValid = await AuthenticationUseCase().authenticate();
@@ -89,7 +89,7 @@ class ApiServiceClient {
       bool withToken = true,
       Map<String, dynamic>? params,
       Duration? apiWaitingDuration,
-      bool isAuthentication = true,
+      bool isAuthentication = false,
       bool isSecondTime = false}) async {
     try {
       final client = http.Client();

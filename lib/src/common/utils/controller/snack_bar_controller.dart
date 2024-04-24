@@ -5,7 +5,6 @@ import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/src/common/utils/constant/global_key.dart';
 import 'package:sgas/src/common/utils/constant/screen_size_constant.dart';
-import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 
 enum SnackBarState { success, error }
 
@@ -13,7 +12,6 @@ showSnackBar({required String content, SnackBarState? state}) {
   final screenSize =
       MediaQuery.of(scaffoldMessengerKey.currentContext!).size.width;
   final isTablet = (screenSize > ScreenSizeConstant.maxTabletWidth);
-  logger.f(" isTablet $isTablet");
 
   scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
     shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(8)),
