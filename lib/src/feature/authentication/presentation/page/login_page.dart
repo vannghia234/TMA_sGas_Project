@@ -105,7 +105,6 @@ class _LoginPageState extends State<LoginPage> {
               label: S.current.txt_password,
               hintText: S.current.txt_enter_password,
               suffixIcon: IconButton(
-                highlightColor: const Color.fromRGBO(0, 0, 0, 0),
                 onPressed: () {
                   setState(() {
                     isHidden = !isHidden;
