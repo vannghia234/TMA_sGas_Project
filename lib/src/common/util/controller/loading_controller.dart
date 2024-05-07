@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sgas/core/ui/resource/image_path.dart';
-import 'package:sgas/src/common/utils/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
 
 class LoadingController {
   bool isActive = false;

@@ -1,8 +1,8 @@
 import 'package:jwt_decoder/jwt_decoder.dart';
 import 'package:sgas/core/service/client/local_service_client.dart';
 import 'package:sgas/core/service/locator/shared_preferences_key.dart';
-import 'package:sgas/src/feature/authentication/data/datasources/authentication_datasource.dart';
-import 'package:sgas/src/feature/authentication/data/models/token_model.dart';
+import 'package:sgas/src/feature/authentication/data/datasource/authentication_datasource.dart';
+import 'package:sgas/src/feature/authentication/data/model/token_model.dart';
 
 abstract class LocalAuthenticationDataSourceInterface {
   Future<String?> getAccessToken();
@@ -10,7 +10,7 @@ abstract class LocalAuthenticationDataSourceInterface {
 
   Future<void> saveToken(TokenModel token);
   Future<void> removeAllToken();
-  Future<bool> checkToken();
+  Future<bool> validateToken();
 }
 
 class LocalAuthenticationDataSource
@@ -39,15 +39,16 @@ class LocalAuthenticationDataSource
   }
 
   @override
-  Future<bool> checkToken() async {
+  Future<bool> validateToken() async {
     String? accessToken = await getAccessToken();
     String? refreshToken = await getRefreshToken();
     if (accessToken != null && !isExpired(accessToken)) {
       return true;
     }
     if (refreshToken != null && !isExpired(refreshToken)) {
-      await AuthenticationDataSource().refresh(refreshToken: refreshToken);
-      return await checkToken();
+      await AuthenticationDataSource()
+          .refreshAccessToken(refreshToken: refreshToken);
+      return await validateToken();
     }
     return false;
   }

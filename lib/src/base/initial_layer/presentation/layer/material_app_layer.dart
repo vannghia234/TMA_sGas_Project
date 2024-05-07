@@ -4,7 +4,7 @@ import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/ui/style/base_theme.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/base/validation_layer/presentation/layer/validation_layer.dart';
-import 'package:sgas/src/common/utils/constant/global_key.dart';
+import 'package:sgas/src/common/util/constant/global_key.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MaterialAppLayer extends StatelessWidget {

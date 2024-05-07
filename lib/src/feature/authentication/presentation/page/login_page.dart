@@ -8,13 +8,13 @@ import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/ui/resource/image_path.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/utils/constant/screen_size_constant.dart';
-import 'package:sgas/src/common/utils/controller/loading_controller.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cubit.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
-import 'package:sgas/src/feature/authentication/presentation/widgets/forget_text_button.dart';
+import 'package:sgas/src/feature/authentication/presentation/widget/forget_text_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

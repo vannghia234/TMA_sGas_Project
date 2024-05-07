@@ -6,16 +6,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/utils/constant/screen_size_constant.dart';
-import 'package:sgas/src/common/utils/controller/loading_controller.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller_state.dart';
-import 'package:sgas/src/feature/authentication/presentation/widgets/alert_message_otp.dart';
-import 'package:sgas/src/feature/authentication/presentation/widgets/notification_header.dart';
+import 'package:sgas/src/feature/authentication/presentation/widget/alert_message_otp.dart';
+import 'package:sgas/src/feature/authentication/presentation/widget/notification_header.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_state.dart';
-import 'package:sgas/src/feature/authentication/presentation/utils/hide_phone_number.dart';
+import 'package:sgas/src/common/util/helper/hide_phone_number.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 
 class OTPPage extends StatefulWidget {

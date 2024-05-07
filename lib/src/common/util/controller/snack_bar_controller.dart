@@ -3,8 +3,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
-import 'package:sgas/src/common/utils/constant/global_key.dart';
-import 'package:sgas/src/common/utils/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/constant/global_key.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
 
 enum SnackBarState { success, error }
 

@@ -1,21 +1,20 @@
 import 'package:sgas/core/error/exception.dart';
-import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 import 'package:sgas/core/service/client/api_service_client.dart';
 import 'package:sgas/core/service/locator/api_service_path.dart';
-import 'package:sgas/src/feature/authentication/data/datasources/local_authentication_datasource.dart';
-import 'package:sgas/src/feature/authentication/data/models/reset_password_params.dart';
-import 'package:sgas/src/feature/authentication/data/models/compare_otp_params.dart';
-import 'package:sgas/src/feature/authentication/data/models/forget_params.dart';
-import 'package:sgas/src/feature/authentication/data/models/login_params.dart';
-import 'package:sgas/src/feature/authentication/data/models/otp_model.dart';
-import 'package:sgas/src/feature/authentication/data/models/token_model.dart';
+import 'package:sgas/src/feature/authentication/data/datasource/local_authentication_datasource.dart';
+import 'package:sgas/src/feature/authentication/data/model/reset_password_params.dart';
+import 'package:sgas/src/feature/authentication/data/model/compare_otp_params.dart';
+import 'package:sgas/src/feature/authentication/data/model/forget-password_params.dart';
+import 'package:sgas/src/feature/authentication/data/model/login_params.dart';
+import 'package:sgas/src/feature/authentication/data/model/otp_model.dart';
+import 'package:sgas/src/feature/authentication/data/model/token_model.dart';
 
 abstract class AuthenticationDataSourceInterface {
   Future<void> login(LoginParams params);
-  Future<void> forgetPassword(ForgetParams params);
+  Future<void> forgetPassword(ForgetPasswordParams params);
   Future<OTPModel> compareOTP(CompareOTPParams params);
   Future<void> resetPassword(ResetPasswordParams params);
-  Future<void> refresh({required String refreshToken});
+  Future<void> refreshAccessToken({required String refreshToken});
 }
 
 class AuthenticationDataSource extends AuthenticationDataSourceInterface {
@@ -27,7 +26,6 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
           isAuthentication: true,
           uri: APIServicePath.login(),
           params: params.toJson());
-      logger.d("LOGIN CODE ${res["code"]}");
       TokenModel token = TokenModel.fromJson(res["data"]["token"]);
       LocalAuthenticationDataSource().saveToken(token);
     } catch (e) {
@@ -39,7 +37,7 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
   }
 
   @override
-  Future<void> forgetPassword(ForgetParams params) async {
+  Future<void> forgetPassword(ForgetPasswordParams params) async {
     try {
       await ApiServiceClient.post(
           uri: APIServicePath.forgetPassword(),
@@ -72,7 +70,7 @@ class AuthenticationDataSource extends AuthenticationDataSourceInterface {
   }
 
   @override
-  Future<void> refresh({required String refreshToken}) async {
+  Future<void> refreshAccessToken({required String refreshToken}) async {
     try {
       var res = await ApiServiceClient.post(
           withToken: false,

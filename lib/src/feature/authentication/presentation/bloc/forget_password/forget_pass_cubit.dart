@@ -2,13 +2,13 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/utils/controller/snack_bar_controller.dart';
-import 'package:sgas/src/common/utils/helper/string_regex_helper.dart';
-import 'package:sgas/src/feature/authentication/data/models/forget_params.dart';
+import 'package:sgas/src/common/util/controller/snack_bar_controller.dart';
+import 'package:sgas/src/common/util/helper/string_regex_helper.dart';
+import 'package:sgas/src/feature/authentication/data/model/forget-password_params.dart';
 import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
-import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
+import 'package:sgas/src/feature/authentication/domain/usecase/authenticaion_usecase.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_state.dart';
-import 'package:sgas/src/feature/authentication/presentation/utils/transform_phone_number.dart';
+import 'package:sgas/src/common/util/helper/transform_phone_number.dart';
 
 class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
   ForgetPasswordCubit() : super(InitialForgetState());
@@ -33,7 +33,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
       return false;
     } else {
       emit(InitialForgetState());
-      ForgetParams params = ForgetParams(
+      ForgetPasswordParams params = ForgetPasswordParams(
           username: username, phone: transformPhoneNumber(phoneNumber));
       var result = await _useCase.forgetPassword(params);
       if (result.isLeft) {
@@ -42,9 +42,6 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
               message: S.current.txt_not_found_this_account));
           return false;
         } else if (result.left is OverRequestForgetPasswordFailure) {
-          // showSnackBar(
-          //     content: S.current.txt_please_wait_a_minute_to_send_otp,
-          //     state: SnackBarState.error);
           return true;
         } else if (result.left is NotExistPhoneFailure) {
           emit(InvalidForgetPhoneNumberState(

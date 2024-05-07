@@ -3,12 +3,12 @@ import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/utils/controller/snack_bar_controller.dart';
-import 'package:sgas/src/feature/authentication/data/models/compare_otp_params.dart';
-import 'package:sgas/src/feature/authentication/data/models/forget_params.dart';
-import 'package:sgas/src/feature/authentication/data/models/otp_model.dart';
+import 'package:sgas/src/common/util/controller/snack_bar_controller.dart';
+import 'package:sgas/src/feature/authentication/data/model/compare_otp_params.dart';
+import 'package:sgas/src/feature/authentication/data/model/forget-password_params.dart';
+import 'package:sgas/src/feature/authentication/data/model/otp_model.dart';
 import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
-import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
+import 'package:sgas/src/feature/authentication/domain/usecase/authenticaion_usecase.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_state.dart';
 
 class OtpCubit extends Cubit<OtpState> {
@@ -50,7 +50,7 @@ class OtpCubit extends Cubit<OtpState> {
   Future<void> reSendOtp(
       {required String username, required String phone}) async {
     var res = await _useCase
-        .forgetPassword(ForgetParams(username: username, phone: phone));
+        .forgetPassword(ForgetPasswordParams(username: username, phone: phone));
     if (res.isLeft) {
       if (res.left is OverRequestForgetPasswordFailure) {
         showSnackBar(

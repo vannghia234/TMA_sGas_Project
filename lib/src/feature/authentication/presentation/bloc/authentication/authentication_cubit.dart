@@ -1,9 +1,9 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/config/route/route_path.dart';
-import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
+import 'package:sgas/src/feature/authentication/domain/usecase/authenticaion_usecase.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_state.dart';
-import 'package:sgas/src/common/utils/constant/global_key.dart';
+import 'package:sgas/src/common/util/constant/global_key.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cubit.dart';
 
 class AuthenticationCubit extends Cubit<AuthenticationState> {

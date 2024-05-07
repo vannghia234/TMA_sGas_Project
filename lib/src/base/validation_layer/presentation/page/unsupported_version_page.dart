@@ -5,7 +5,7 @@ import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/base/validation_layer/domain/usecase/app_store_usecase.dart';
 import 'package:sgas/src/common/presentation/widget/exception/exception_widget.dart';
-import 'package:sgas/src/common/utils/controller/debounce_controller.dart';
+import 'package:sgas/src/common/util/controller/debounce_controller.dart';
 
 class UnSupportVersionPage extends StatelessWidget {
   const UnSupportVersionPage({super.key, required this.appVersion});

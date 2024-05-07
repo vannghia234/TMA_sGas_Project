@@ -2,11 +2,11 @@ import 'package:either_dart/either.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/utils/controller/snack_bar_controller.dart';
-import 'package:sgas/src/feature/authentication/data/models/login_params.dart';
+import 'package:sgas/src/common/util/controller/snack_bar_controller.dart';
+import 'package:sgas/src/feature/authentication/data/model/login_params.dart';
 import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
-import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
-import 'package:sgas/src/feature/authentication/presentation/utils/regex_check_valid.dart';
+import 'package:sgas/src/feature/authentication/domain/usecase/authenticaion_usecase.dart';
+import 'package:sgas/src/feature/authentication/presentation/util/regex_check_valid.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {

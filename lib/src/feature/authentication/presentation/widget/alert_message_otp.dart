@@ -5,7 +5,7 @@ import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/utils/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_state.dart';
 import 'package:timer_count_down/timer_count_down.dart';

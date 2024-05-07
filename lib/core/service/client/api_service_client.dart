@@ -2,37 +2,14 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart' as http;
-import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'dart:io' as Io;
 import 'package:sgas/core/error/exception.dart';
-import 'package:sgas/src/common/utils/helper/logger_helper.dart';
-import 'package:sgas/src/feature/authentication/domain/usecases/authenticaion_usecase.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
+import 'package:sgas/core/service/util/handle_api_exception_by_status_code.dart';
+import 'package:sgas/src/common/util/helper/logger_helper.dart';
+import 'package:sgas/src/feature/authentication/domain/usecase/authenticaion_usecase.dart';
 
 const _defaultApiWaitingDuration = Duration(seconds: 30);
 const _defaultApiGetFileWaitingDuration = Duration(minutes: 5);
-
-Future<void> handleAPIExceptionByStatusCode(
-    String uri, int statusCode, String method,
-    {int? codeBadRequest, String? data, bool? isAuthentication}) async {
-  if (statusCode == 200) return;
-  logger.f(
-      "[API failure] $statusCode $method $uri badRequestCode $codeBadRequest");
-  if (!isAuthentication!) {
-    bool isValid = await AuthenticationUseCase().authenticate();
-    if (!isValid) {
-      getIt.get<AuthenticationCubit>().forceLogout();
-      return;
-    }
-  }
-  if (statusCode == 400) {
-    throw BadRequestException(statusCode: codeBadRequest, data: data);
-  }
-  if (statusCode == 401) throw AuthorizationException();
-  if (statusCode == 403) throw ForbiddenException();
-  if (statusCode == 404) throw NotFoundException();
-  throw ServerException();
-}
 
 class ApiServiceClient {
   static Future<Map<String, String>> _headers({
@@ -61,10 +38,8 @@ class ApiServiceClient {
           .whenComplete(() => client.close());
       http.Response response =
           await client.get(Uri.parse(uri), headers: headers);
-
       // logger.f(
       //     "code response ${json.decode(utf8.decode(response.bodyBytes)).toString()}");
-
       await handleAPIExceptionByStatusCode(uri, response.statusCode, "GET");
       Map<String, dynamic> result =
           json.decode(utf8.decode(response.bodyBytes));

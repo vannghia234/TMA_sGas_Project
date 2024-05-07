@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
-import 'package:sgas/src/common/utils/helper/screen_helper.dart';
+import 'package:sgas/src/common/util/helper/screen_helper.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 
 class ExceptionWidget extends StatelessWidget {

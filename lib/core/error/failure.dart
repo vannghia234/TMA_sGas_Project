@@ -18,9 +18,7 @@ Failure convertExceptionToFailure(Object exception) {
   if (exception is ServerException) return ServerFailure();
   if (exception is AuthorizationException) return AuthorizationFailure();
   if (exception is ForbiddenException) return ForbiddenFailure();
-  if (exception is BadRequestException) {
-    return BadRequestFailure();
-  }
+  if (exception is BadRequestException) return BadRequestFailure();
   if (exception is NotFoundException) return NotFoundFailure();
   return DataParsingFailure();
 }
