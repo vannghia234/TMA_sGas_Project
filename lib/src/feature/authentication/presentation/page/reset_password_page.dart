@@ -11,8 +11,8 @@ import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 import 'package:sgas/src/common/presentation/widget/validation/validate_password.dart';
 import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
 import 'package:sgas/src/common/util/controller/loading_controller.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller_state.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_cubit.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/reset_password_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/reset_password_state.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
@@ -58,7 +58,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               ),
               ModalRoute.withName(RoutePath.login),
             );
-            getIt.get<ForgetControllerCubit>().changeState(ForgetScreenState());
+            getIt.get<ForgetPasswordCubit>().changeState(ForgetScreenState());
           },
         ),
         title: Text(S.current.txt_change_password),
@@ -168,12 +168,12 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
                   ? () async {
                       getIt<LoadingController>().start(context);
                       getIt
-                          .get<ForgetControllerCubit>()
+                          .get<ForgetPasswordCubit>()
                           .resetPassword(_passwordController.text,
                               _rePasswordController.text)
                           .whenComplete(() {
                         getIt<LoadingController>().close(context);
-                        getIt<ForgetControllerCubit>()
+                        getIt<ForgetPasswordCubit>()
                             .changeState(ForgetScreenState());
                         Navigator.of(context)
                             .pushNamed(RoutePath.authentication);

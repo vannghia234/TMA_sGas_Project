@@ -49,8 +49,8 @@ class OtpCubit extends Cubit<OtpState> {
 
   Future<void> reSendOtp(
       {required String username, required String phone}) async {
-    var res = await _useCase
-        .forgetPassword(ForgetPasswordParams(username: username, phone: phone));
+    var res = await _useCase.confirmForgetPasswordAccountInfo(
+        ForgetPasswordParams(username: username, phone: phone));
     if (res.isLeft) {
       if (res.left is OverRequestForgetPasswordFailure) {
         showSnackBar(

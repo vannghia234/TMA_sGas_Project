@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/src/common/presentation/page/app_loading_page.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller_state.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_cubit.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/forget_password_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/otp_page.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/reset_password_page.dart';
@@ -13,8 +13,8 @@ class ForgetPasswordLayer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ForgetControllerCubit, ForgetControllerState>(
-      bloc: getIt.get<ForgetControllerCubit>(),
+    return BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
+      bloc: getIt.get<ForgetPasswordCubit>(),
       builder: (context, state) {
         if (state is ForgetScreenState) {
           return const ForgetPasswordPage();

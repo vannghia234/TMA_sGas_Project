@@ -8,8 +8,8 @@ import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
 import 'package:sgas/src/common/util/controller/loading_controller.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller_state.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_cubit.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/widget/alert_message_otp.dart';
 import 'package:sgas/src/feature/authentication/presentation/widget/notification_header.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
@@ -66,7 +66,7 @@ class _OTPPageState extends State<OTPPage> {
   Future<void> _sendOTP(BuildContext context) async {
     getIt<LoadingController>().start(context);
     await getIt
-        .get<ForgetControllerCubit>()
+        .get<ForgetPasswordCubit>()
         .sentOTP(otp)
         .whenComplete(() => getIt<LoadingController>().close(context));
     clearOtp();
@@ -78,7 +78,7 @@ class _OTPPageState extends State<OTPPage> {
       appBar: AppBar(
         leading: IconButton(
           onPressed: () {
-            getIt.get<ForgetControllerCubit>().changeState(ForgetScreenState());
+            getIt.get<ForgetPasswordCubit>().changeState(ForgetScreenState());
           },
           icon: const Icon(Icons.arrow_back_ios),
         ),
@@ -91,7 +91,7 @@ class _OTPPageState extends State<OTPPage> {
               children: [
                 const Spacer(flex: 2),
                 Text(
-                    "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(getIt.get<ForgetControllerCubit>().phone!)}",
+                    "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(getIt.get<ForgetPasswordCubit>().phone!)}",
                     style: BaseTextStyle.body1()),
                 const SizedBox(height: 40),
                 Padding(
@@ -112,10 +112,10 @@ class _OTPPageState extends State<OTPPage> {
                                 getIt<LoadingController>().start(context);
                                 await getIt.get<OtpCubit>().reSendOtp(
                                     username: getIt
-                                        .get<ForgetControllerCubit>()
+                                        .get<ForgetPasswordCubit>()
                                         .username!,
                                     phone: getIt
-                                        .get<ForgetControllerCubit>()
+                                        .get<ForgetPasswordCubit>()
                                         .phone!);
                                 // ignore: use_build_context_synchronously
                                 getIt<LoadingController>().close(context);
@@ -139,7 +139,7 @@ class _OTPPageState extends State<OTPPage> {
               NotificationHeader(
                 title:
                     // ignore: use_build_context_synchronously
-                    "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(getIt.get<ForgetControllerCubit>().phone!)}",
+                    "${S.current.txt_otp_sent_to_phone} ${hidePhoneNumber(getIt.get<ForgetPasswordCubit>().phone!)}",
               ),
               const SizedBox(
                 height: 24,
@@ -162,11 +162,10 @@ class _OTPPageState extends State<OTPPage> {
                               getIt<LoadingController>().start(context);
                               await getIt.get<OtpCubit>().reSendOtp(
                                   username: getIt
-                                      .get<ForgetControllerCubit>()
+                                      .get<ForgetPasswordCubit>()
                                       .username!,
-                                  phone: getIt
-                                      .get<ForgetControllerCubit>()
-                                      .phone!);
+                                  phone:
+                                      getIt.get<ForgetPasswordCubit>().phone!);
                               // ignore: use_build_context_synchronously
                               getIt<LoadingController>().close(context);
                             },

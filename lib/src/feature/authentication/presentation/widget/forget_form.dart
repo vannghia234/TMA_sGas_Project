@@ -5,9 +5,9 @@ import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
 import 'package:sgas/src/common/util/controller/loading_controller.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_cubit.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_state.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_controller.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password__page_cubit.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_page_state.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_cubit.dart';
 
 class ForgetForm extends StatelessWidget {
   const ForgetForm({
@@ -22,8 +22,8 @@ class ForgetForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<ForgetPasswordCubit, ForgetPasswordState>(
-      bloc: getIt.get<ForgetPasswordCubit>(),
+    return BlocBuilder<ForgetPasswordPageCubit, ForgetPasswordState>(
+      bloc: getIt.get<ForgetPasswordPageCubit>(),
       builder: (context, state) {
         return Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -54,7 +54,7 @@ class ForgetForm extends StatelessWidget {
                 onPress: () async {
                   getIt.get<LoadingController>().start(context);
                   await getIt
-                      .get<ForgetControllerCubit>()
+                      .get<ForgetPasswordCubit>()
                       .forgetPassword(_username.text, _phoneNumber.text)
                       .whenComplete(
                           () => getIt.get<LoadingController>().close(context));

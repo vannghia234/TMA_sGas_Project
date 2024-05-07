@@ -12,7 +12,7 @@ import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
 
 abstract class AuthenticationUseCaseInterface {
   Future<Either<Failure, void>> login(LoginParams params);
-  Future<void> forgetPassword(ForgetPasswordParams params);
+  Future<void> confirmForgetPasswordAccountInfo(ForgetPasswordParams params);
   Future<Either<Failure, void>> compareOTP(CompareOTPParams params);
   Future<bool> authenticate();
   Future<String?> getAccessToken();
@@ -60,10 +60,10 @@ class AuthenticationUseCase extends AuthenticationUseCaseInterface {
   }
 
   @override
-  Future<Either<Failure, void>> forgetPassword(
+  Future<Either<Failure, void>> confirmForgetPasswordAccountInfo(
       ForgetPasswordParams params) async {
     try {
-      await _dataSource.forgetPassword(params);
+      await _dataSource.confirmForgetPasswordAccountInfo(params);
       return const Right(null);
     } catch (e) {
       if (e is BadRequestException) {

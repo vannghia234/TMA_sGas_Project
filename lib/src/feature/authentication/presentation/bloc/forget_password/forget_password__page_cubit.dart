@@ -7,11 +7,11 @@ import 'package:sgas/src/common/util/helper/string_regex_helper.dart';
 import 'package:sgas/src/feature/authentication/data/model/forget-password_params.dart';
 import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
 import 'package:sgas/src/feature/authentication/domain/usecase/authenticaion_usecase.dart';
-import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_pass_state.dart';
+import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_page_state.dart';
 import 'package:sgas/src/common/util/helper/transform_phone_number.dart';
 
-class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
-  ForgetPasswordCubit() : super(InitialForgetState());
+class ForgetPasswordPageCubit extends Cubit<ForgetPasswordState> {
+  ForgetPasswordPageCubit() : super(InitialForgetState());
   final _useCase = AuthenticationUseCase();
 
   Future<bool> forgetPassword(String username, String phoneNumber) async {
@@ -35,7 +35,7 @@ class ForgetPasswordCubit extends Cubit<ForgetPasswordState> {
       emit(InitialForgetState());
       ForgetPasswordParams params = ForgetPasswordParams(
           username: username, phone: transformPhoneNumber(phoneNumber));
-      var result = await _useCase.forgetPassword(params);
+      var result = await _useCase.confirmForgetPasswordAccountInfo(params);
       if (result.isLeft) {
         if (result.left is NotFoundFailure) {
           emit(InvalidForgetUsernameState(
