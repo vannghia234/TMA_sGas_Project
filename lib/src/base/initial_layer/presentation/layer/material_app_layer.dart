@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sgas/core/config/route/route.dart';
 import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/ui/style/base_theme.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sgas/src/base/validation_layer/presentation/layer/validation_layer.dart';
 import 'package:sgas/src/common/utils/constant/global_key.dart';
 
 class MaterialAppLayer extends StatelessWidget {
   const MaterialAppLayer({super.key, this.locale});
+
   final Locale? locale;
 
   @override

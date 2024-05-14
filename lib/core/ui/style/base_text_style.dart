@@ -95,4 +95,52 @@ class BaseTextStyle {
         fontSize: 10,
         color: color ?? BaseColor.textPrimaryColor);
   }
+
+  static TextStyle h1({Color? color}) {
+    return TextStyle(
+        fontFamily: BaseTextStyle.baseFont,
+        fontSize: 72,
+        fontWeight: FontWeight.w700,
+        color: color ?? BaseColor.textPrimaryColor);
+  }
+
+  static TextStyle h2({Color? color}) {
+    return TextStyle(
+        fontFamily: BaseTextStyle.baseFont,
+        fontSize: 48,
+        fontWeight: FontWeight.w700,
+        color: color ?? BaseColor.textPrimaryColor);
+  }
+
+  static TextStyle h3({Color? color}) {
+    return TextStyle(
+        fontFamily: BaseTextStyle.baseFont,
+        fontSize: 40,
+        fontWeight: FontWeight.w700,
+        color: color ?? BaseColor.textPrimaryColor);
+  }
+
+  static TextStyle h4({Color? color}) {
+    return TextStyle(
+        fontFamily: BaseTextStyle.baseFont,
+        fontSize: 32,
+        fontWeight: FontWeight.w600,
+        color: color ?? BaseColor.textPrimaryColor);
+  }
+
+  static TextStyle h5({Color? color}) {
+    return TextStyle(
+        fontFamily: BaseTextStyle.baseFont,
+        fontSize: 24,
+        fontWeight: FontWeight.w600,
+        color: color ?? BaseColor.textPrimaryColor);
+  }
+
+  static TextStyle h6({Color? color}) {
+    return TextStyle(
+        fontFamily: BaseTextStyle.baseFont,
+        fontSize: 20,
+        fontWeight: FontWeight.w600,
+        color: color ?? BaseColor.textPrimaryColor);
+  }
 }

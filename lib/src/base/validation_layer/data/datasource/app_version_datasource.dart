@@ -1,10 +1,12 @@
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:sgas/core/helper/logger_helper.dart';
 import 'package:sgas/src/base/validation_layer/data/model/app_version_model.dart';
+import 'package:sgas/src/common/utils/helper/logger_helper.dart';
 
 abstract class AppVersionDataSourceInterface {
   Future<bool?> isSupportedVersion(AppVersionModel minimumVersion);
+
   Future<String> getCurrentVersion();
+
   Future<bool?> checkSupportedVersion(AppVersionModel minimumVersion);
 }
 

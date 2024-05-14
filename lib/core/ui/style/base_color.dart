@@ -5,18 +5,18 @@ class BaseColor {
 
   static const Color textPrimaryColor = Color(0xFF313535);
   static const Color textSecondaryColor = Color(0xFF6D7474);
-  static const Color textTertiary = Color(0xFF6D7474);
+  static const Color textTertiary = Color(0xFF969C9C);
 
-  static const Color backgoundColor = Color(0xFFFFFFFF);
+  static const Color backgroundColor = Color(0xFFFFFFFF);
   static const Color backgroundNeutral = Color(0xFF6D7474);
-
+  static const Color backgroundDisableColor = Color(0xFFEAEBEB);
   static const Color dividerColor = Color(0xFFD5D7D7);
   static const Color borderColor = Color(0xFFC0C4C4);
 
   static const Color buttonPrimaryColor = Color(0xFF18A0A0);
 
   static const Color alertColor = Color(0xFFFF1B0A);
-  static const Color warning = Color(0xFFFFBE0A); 
+  static const Color warning = Color(0xFFFFBE0A);
   static const Color success = Color(0xFF41C8B1);
   static const Color info = Color(0xFF3385D7);
   static const Color orange = Color(0xFFFF6C0A);
