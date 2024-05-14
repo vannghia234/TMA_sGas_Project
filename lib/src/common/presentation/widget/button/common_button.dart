@@ -49,16 +49,9 @@ class CommonButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (iconWidget != null)
-              Padding(
-                padding: const EdgeInsets.only(right: 6.0),
-                child: iconWidget!,
-              )
-            else if (icon != null)
-              Padding(
-                padding: const EdgeInsets.only(right: 6.0),
-                child: icon!,
-              ),
+            if (iconWidget != null) iconWidget! else if (icon != null) icon!,
+            if ((iconWidget != null || iconWidget != null) && text != null)
+              const SizedBox(width: 6),
             if (text != null)
               Text(text!,
                   style: BaseTextStyle.button1(
