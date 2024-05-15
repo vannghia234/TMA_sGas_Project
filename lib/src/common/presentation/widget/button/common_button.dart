@@ -1,53 +1,63 @@
 import 'package:flutter/material.dart';
-import 'package:sgas/src/common/util/helper/screen_helper.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
+import 'package:sgas/src/common/presentation/widget/icon/icon_widget.dart';
 
 class CommonButton extends StatelessWidget {
   const CommonButton(
       {super.key,
-      required this.buttonTitle,
+      this.text,
       this.onPress,
-      this.isLoading = false});
-  final String buttonTitle;
+      this.fixedSize = const Size(double.infinity, 48),
+      this.backgroundColor,
+      this.icon,
+      this.textColor,
+      this.border,
+      this.borderRadius,
+      this.isDisable = false,
+      this.iconWidget});
+
+  final String? text;
+  final IconWidget? icon;
+  final Widget? iconWidget;
+  final Color? textColor;
+  final BorderSide? border;
+  final BorderRadius? borderRadius;
+  final bool isDisable;
   final VoidCallback? onPress;
-  final bool isLoading;
+  final Size? fixedSize;
+  final MaterialStatePropertyAll<Color>? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
         style: ButtonStyle(
+            minimumSize: const MaterialStatePropertyAll(Size(40, 40)),
+            padding: const MaterialStatePropertyAll(EdgeInsets.zero),
             splashFactory: InkRipple.splashFactory,
-            shape: MaterialStatePropertyAll(
-                RoundedRectangleBorder(borderRadius: BorderRadius.circular(8))),
-            fixedSize:
-                MaterialStatePropertyAll(Size(getScreenWidth(context), 48)),
-            backgroundColor: MaterialStatePropertyAll((onPress != null)
-                ? BaseColor.buttonPrimaryColor
-                : BaseColor.backgroundDisableColor)),
-        onPressed: onPress ?? () {},
+            shape: MaterialStatePropertyAll(RoundedRectangleBorder(
+                borderRadius: borderRadius ?? BorderRadius.circular(8),
+                side: border ?? BorderSide.none)),
+            fixedSize: MaterialStatePropertyAll(fixedSize),
+            backgroundColor: (isDisable)
+                ? const MaterialStatePropertyAll(
+                    BaseColor.backgroundDisableColor)
+                : backgroundColor ??
+                    const MaterialStatePropertyAll(
+                        BaseColor.buttonPrimaryColor)),
+        onPressed: isDisable ? () {} : onPress,
         child: Row(
-          mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            if (isLoading)
-              const Padding(
-                padding: EdgeInsets.only(right: 8),
-                child: SizedBox(
-                  height: 24,
-                  width: 24,
-                  child: CircularProgressIndicator.adaptive(
-                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
-                  ),
-                ),
-              ),
-            Text(
-              buttonTitle,
-              style: BaseTextStyle.button1(
-                  color: (onPress != null)
-                      ? Colors.white
-                      : BaseColor.greyNeutral400),
-            ),
+            if (iconWidget != null) iconWidget! else if (icon != null) icon!,
+            if ((iconWidget != null || iconWidget != null) && text != null)
+              const SizedBox(width: 6),
+            if (text != null)
+              Text(text!,
+                  style: BaseTextStyle.button1(
+                      color: isDisable
+                          ? BaseColor.greyNeutral400
+                          : (textColor ?? Colors.white)))
           ],
         ));
   }

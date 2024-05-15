@@ -3,7 +3,9 @@ import 'package:sgas/src/base/validation_layer/data/model/app_version_model.dart
 
 abstract class AppVersionDataSourceInterface {
   Future<bool?> isSupportedVersion(AppVersionModel minimumVersion);
+
   Future<String> getCurrentVersion();
+
   Future<bool?> checkSupportedVersion(AppVersionModel minimumVersion);
 }
 

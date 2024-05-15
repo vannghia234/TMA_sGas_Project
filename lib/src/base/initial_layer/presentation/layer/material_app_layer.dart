@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sgas/core/config/route/route.dart';
 import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/ui/style/base_theme.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 class MaterialAppLayer extends StatelessWidget {
   const MaterialAppLayer({super.key, this.locale});
+
   final Locale? locale;
 
   @override

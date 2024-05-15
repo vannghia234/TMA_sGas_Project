@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constaint.dart';
 import 'package:sgas/src/feature/authentication/presentation/widget/forget_form.dart';
 import 'package:sgas/src/feature/authentication/presentation/widget/notification_header.dart';
 
@@ -40,7 +40,7 @@ class _ForgetPasswordPageState extends State<ForgetPasswordPage> {
       body: SafeArea(
         child: SizedBox.expand(
           child: LayoutBuilder(builder: (context, constraints) {
-            if (constraints.maxWidth > ScreenSizeConstant.maxTabletWidth) {
+            if (constraints.maxWidth > ScreenSizeConstant.minTabletWidth) {
               return Column(
                 children: [
                   const Spacer(flex: 2),

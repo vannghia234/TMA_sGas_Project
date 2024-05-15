@@ -25,7 +25,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(
               width: 300,
               child: CommonButton(
-                buttonTitle: "Logout",
+                text: "Logout",
                 onPress: () {
                   getIt.get<AuthenticationCubit>().forceLogout();
                 },

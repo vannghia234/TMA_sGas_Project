@@ -6,8 +6,8 @@ import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 
-class TextFieldCommon extends StatelessWidget {
-  const TextFieldCommon(
+class CommonTextField extends StatelessWidget {
+  const CommonTextField(
       {super.key,
       this.controller,
       this.suffixIcon,
@@ -36,7 +36,6 @@ class TextFieldCommon extends StatelessWidget {
   final Widget? suffixIcon;
   final String? suffixPath;
   final Color suffixPathColor;
-
   final Widget? prefixIcon;
   final String? prefixPath;
   final Color prefixPathColor;
@@ -44,7 +43,6 @@ class TextFieldCommon extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final hasError = messageError != null;
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -65,8 +63,7 @@ class TextFieldCommon extends StatelessWidget {
               enabledBorder: hasError ? _errorBorder() : _greyBorder(),
               disabledBorder: _disableBorder(),
               hintText: hintText,
-              hintStyle:
-                  BaseTextStyle.body1(color: BaseColor.textTertiaryColor),
+              hintStyle: BaseTextStyle.body1(color: BaseColor.textTertiary),
               suffixIcon: _mapSuffixToWidget(),
               prefixIcon: _mapPrefixToWidget()),
           onChanged: onChange,

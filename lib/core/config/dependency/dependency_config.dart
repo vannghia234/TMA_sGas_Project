@@ -16,6 +16,7 @@ Future<void> configureDependencies() async {
   _configureController();
 }
 
+
 Future<void> _configureDependenciesBloc() async {
   getIt.registerLazySingleton<LoginCubit>(() => LoginCubit());
   getIt.registerLazySingleton<ResetPasswordCubit>(() => ResetPasswordCubit());

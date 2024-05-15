@@ -1,8 +1,6 @@
 name: sgas
 description: "Gas Station Management App"
-
 publish_to: "none"
-
 version: 2.0.0+1
 
 environment:
@@ -10,6 +8,8 @@ environment:
 
 dependencies:
   flutter:
+    sdk: flutter
+  flutter_localizations:
     sdk: flutter
 
   url_launcher: ^6.2.5
@@ -22,9 +22,8 @@ dependencies:
   jwt_decoder: ^2.0.1
   either_dart: ^1.0.0
   lottie: ^3.1.0
-  flutter_localization: ^0.2.0
   intl: ^0.18.1
-  flutter_bloc: ^8.1.5
+  flutter_bloc: ^8.1.4
   get_it: ^7.6.7
   package_info_plus: ^6.0.0
 
@@ -38,11 +37,11 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/icons/
     - assets/images/common/
     - assets/images/logo/
     - assets/anim/
     - assets/fonts/
-    - assets/icons/
 
   fonts:
     - family: Inter
@@ -53,9 +52,6 @@ flutter:
         - asset: assets/fonts/Inter-SemiBold.ttf
           weight: 600
 
-  #
-  # For details regarding fonts from package dependencies,
-  # see https://flutter.dev/custom-fonts/#from-packages
 flutter_intl:
   enabled: true
   generate: true

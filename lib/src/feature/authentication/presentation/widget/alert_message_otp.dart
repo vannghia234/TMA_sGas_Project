@@ -5,7 +5,7 @@ import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constaint.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_state.dart';
 import 'package:timer_count_down/timer_count_down.dart';
@@ -15,7 +15,7 @@ class AlertMessageOTP extends StatelessWidget {
   final int countDownTime = 120;
   Widget timerCountDown(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth > ScreenSizeConstant.maxTabletWidth) {
+      if (constraints.maxWidth > ScreenSizeConstant.minTabletWidth) {
         return Align(
           alignment: Alignment.center,
           child: Countdown(
@@ -94,7 +94,7 @@ class AlertMessage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
-      if (constraints.maxWidth > ScreenSizeConstant.maxTabletWidth) {
+      if (constraints.maxWidth > ScreenSizeConstant.minTabletWidth) {
         return Align(
           alignment: Alignment.center,
           child: Text(

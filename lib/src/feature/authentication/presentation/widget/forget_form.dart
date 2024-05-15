@@ -50,7 +50,7 @@ class ForgetForm extends StatelessWidget {
               ),
               const SizedBox(height: 24),
               CommonButton(
-                buttonTitle: S.current.btn_send_otp,
+                text: S.current.btn_send_otp,
                 onPress: () async {
                   getIt.get<LoadingController>().start(context);
                   await getIt

@@ -4,14 +4,14 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sgas/core/ui/style/base_color.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/src/common/util/constant/global_key.dart';
-import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constaint.dart';
 
 enum SnackBarState { success, error }
 
 showSnackBar({required String content, SnackBarState? state}) {
   final screenSize =
       MediaQuery.of(scaffoldMessengerKey.currentContext!).size.width;
-  final isTablet = (screenSize > ScreenSizeConstant.maxTabletWidth);
+  final isTablet = (screenSize > ScreenSizeConstant.minTabletWidth);
 
   scaffoldMessengerKey.currentState?.showSnackBar(SnackBar(
     shape: BeveledRectangleBorder(borderRadius: BorderRadius.circular(8)),

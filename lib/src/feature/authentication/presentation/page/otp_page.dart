@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constaint.dart';
 import 'package:sgas/src/common/util/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_state.dart';
@@ -86,7 +86,7 @@ class _OTPPageState extends State<OTPPage> {
       ),
       body: SizedBox.expand(
         child: LayoutBuilder(builder: (context, constraints) {
-          if (constraints.maxWidth > ScreenSizeConstant.maxTabletWidth) {
+          if (constraints.maxWidth > ScreenSizeConstant.minTabletWidth) {
             return Column(
               children: [
                 const Spacer(flex: 2),
@@ -107,7 +107,7 @@ class _OTPPageState extends State<OTPPage> {
                         builder: (context, state) {
                           if (state is TimeOutOtp) {
                             return CommonButton(
-                              buttonTitle: S.current.btn_re_send_otp,
+                              text: S.current.btn_re_send_otp,
                               onPress: () async {
                                 getIt<LoadingController>().start(context);
                                 await getIt.get<OtpCubit>().reSendOtp(
@@ -157,7 +157,7 @@ class _OTPPageState extends State<OTPPage> {
                       builder: (context, state) {
                         if (state is TimeOutOtp) {
                           return CommonButton(
-                            buttonTitle: S.current.btn_re_send_otp,
+                            text: S.current.btn_re_send_otp,
                             onPress: () async {
                               getIt<LoadingController>().start(context);
                               await getIt.get<OtpCubit>().reSendOtp(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:sgas/core/ui/resource/image_path.dart';
-import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constaint.dart';
 
 class LoadingController {
   bool isActive = false;
@@ -23,7 +23,7 @@ class LoadingController {
 
   void start(BuildContext context) {
     bool isTablet =
-        MediaQuery.of(context).size.width > ScreenSizeConstant.maxTabletWidth;
+        MediaQuery.of(context).size.width > ScreenSizeConstant.minTabletWidth;
     if (isActive) close(context);
     _active();
     showDialog(

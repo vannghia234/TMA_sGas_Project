@@ -9,7 +9,7 @@ import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
 import 'package:sgas/src/common/presentation/widget/validation/validate_password.dart';
-import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constaint.dart';
 import 'package:sgas/src/common/util/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_state.dart';
@@ -66,7 +66,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       body: SafeArea(
         child: SizedBox.expand(
           child: LayoutBuilder(builder: (context, constraints) {
-            if (constraints.maxWidth > ScreenSizeConstant.maxTabletWidth) {
+            if (constraints.maxWidth > ScreenSizeConstant.minTabletWidth) {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -163,7 +163,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
               height: 24,
             ),
             CommonButton(
-              buttonTitle: S.current.btn_confirm,
+              text: S.current.btn_confirm,
               onPress: (isValidPassword)
                   ? () async {
                       getIt<LoadingController>().start(context);

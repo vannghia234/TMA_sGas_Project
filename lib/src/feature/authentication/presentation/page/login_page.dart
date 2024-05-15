@@ -8,7 +8,7 @@ import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/ui/resource/image_path.dart';
 import 'package:sgas/generated/l10n.dart';
-import 'package:sgas/src/common/util/constant/screen_size_constant.dart';
+import 'package:sgas/src/common/util/constant/screen_size_constaint.dart';
 import 'package:sgas/src/common/util/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cubit.dart';
@@ -27,7 +27,6 @@ class _LoginPageState extends State<LoginPage> {
   final _username = TextEditingController();
   final _password = TextEditingController();
   bool isHidden = true;
-  bool isLoading = false;
 
   @override
   void dispose() {
@@ -41,7 +40,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       body: SizedBox.expand(
         child: LayoutBuilder(builder: (context, constraints) {
-          if (constraints.maxWidth > ScreenSizeConstant.maxTabletWidth) {
+          if (constraints.maxWidth > ScreenSizeConstant.minTabletWidth) {
             return Column(
               children: [
                 const Spacer(
@@ -122,9 +121,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             const ForgetTextButton(),
             CommonButton(
-                isLoading: isLoading,
-                buttonTitle: S.current.btn_login,
-                onPress: () => handleButtonLogin())
+                text: S.current.btn_login, onPress: () => handleButtonLogin())
           ],
         );
       },
