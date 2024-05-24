@@ -1,4 +1,5 @@
-import 'package:sgas/src/common/util/helper/string_regex_helper.dart';
+
+import 'package:sgas/src/common/util/constant/string_regex.dart';
 
 bool atLeast1NumberExist(String num) {
   RegExp regexNumber = RegExp(checkExistDigit);

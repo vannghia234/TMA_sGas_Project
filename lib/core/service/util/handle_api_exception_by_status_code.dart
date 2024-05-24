@@ -1,7 +1,7 @@
 
 import 'package:sgas/core/config/dependency/dependency_config.dart';
 import 'package:sgas/core/error/exception.dart';
-import 'package:sgas/src/common/util/helper/logger_helper.dart';
+import 'package:sgas/src/common/util/helper/logger.dart';
 import 'package:sgas/src/feature/authentication/domain/usecase/authenticaion_usecase.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 

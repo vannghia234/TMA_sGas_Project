@@ -10,9 +10,10 @@ import 'package:sgas/src/feature/authentication/presentation/bloc/forget_passwor
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/otp_state.dart';
 import 'package:timer_count_down/timer_count_down.dart';
 
+const countDownTime = 120;
+
 class AlertMessageOTP extends StatelessWidget {
   const AlertMessageOTP({super.key});
-  final int countDownTime = 120;
   Widget timerCountDown(BuildContext context) {
     return LayoutBuilder(builder: (context, constraints) {
       if (constraints.maxWidth > ScreenSizeConstant.minTabletWidth) {

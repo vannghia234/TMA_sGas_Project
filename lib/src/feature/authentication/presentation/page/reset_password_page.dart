@@ -8,15 +8,15 @@ import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/generated/l10n.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
-import 'package:sgas/src/common/presentation/widget/validation/validate_password.dart';
+import 'package:sgas/src/common/presentation/widget/text_field/common_text_field.dart';
 import 'package:sgas/src/common/util/constant/screen_size_constaint.dart';
 import 'package:sgas/src/common/util/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/forget_password_state.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/reset_password_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/forget_password/reset_password_state.dart';
-import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
 import 'package:sgas/src/feature/authentication/presentation/page/login_page.dart';
+import 'package:sgas/src/feature/authentication/presentation/widget/validate_password.dart';
 
 class ResetPasswordPage extends StatefulWidget {
   const ResetPasswordPage({super.key});
@@ -102,7 +102,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
       builder: (context, state) {
         return Column(
           children: [
-            TextFieldCommon(
+            CommonTextField(
               label: S.current.txt_password,
               controller: _passwordController,
               hintText: S.current.txt_enter_password,
@@ -128,7 +128,7 @@ class _ResetPasswordPageState extends State<ResetPasswordPage> {
             const SizedBox(
               height: 16,
             ),
-            TextFieldCommon(
+            CommonTextField(
               label: S.current.txt_confirm_password,
               onChange: (value) {
                 getIt

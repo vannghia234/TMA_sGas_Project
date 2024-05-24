@@ -42,7 +42,6 @@ class OtpCubit extends Cubit<OtpState> {
         return Left(otpResult.left);
       }
     }
-    // emit(CorrectOtp(data: otpResult.right.data!, username: username));
     emit(CorrectOtp());
     return Right(otpResult.right);
   }

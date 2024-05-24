@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'dart:io' as Io;
 import 'package:sgas/core/error/exception.dart';
 import 'package:sgas/core/service/util/handle_api_exception_by_status_code.dart';
-import 'package:sgas/src/common/util/helper/logger_helper.dart';
+import 'package:sgas/src/common/util/helper/logger.dart';
 import 'package:sgas/src/feature/authentication/domain/usecase/authenticaion_usecase.dart';
 
 const _defaultApiWaitingDuration = Duration(seconds: 30);

@@ -5,16 +5,18 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sgas/core/config/dependency/dependency_config.dart';
+import 'package:sgas/core/config/route/route_path.dart';
 import 'package:sgas/core/ui/resource/icon_path.dart';
 import 'package:sgas/core/ui/resource/image_path.dart';
+import 'package:sgas/core/ui/style/base_color.dart';
+import 'package:sgas/core/ui/style/base_text_style.dart';
 import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/presentation/widget/text_field/common_text_field.dart';
 import 'package:sgas/src/common/util/constant/screen_size_constaint.dart';
 import 'package:sgas/src/common/util/controller/loading_controller.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/authentication/authentication_cubit.dart';
 import 'package:sgas/src/feature/authentication/presentation/bloc/login/login_cubit.dart';
 import 'package:sgas/src/common/presentation/widget/button/common_button.dart';
-import 'package:sgas/src/common/presentation/widget/text_field/common_textfield.dart';
-import 'package:sgas/src/feature/authentication/presentation/widget/forget_text_button.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -92,7 +94,7 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(
               height: 80,
             ),
-            TextFieldCommon(
+            CommonTextField(
               label: S.current.txt_username,
               hintText: S.current.txt_enter_username,
               controller: _username,
@@ -100,7 +102,7 @@ class _LoginPageState extends State<LoginPage> {
                   (state is InValidUserNameLogin) ? state.message : null,
             ),
             const SizedBox(height: 16),
-            TextFieldCommon(
+            CommonTextField(
               label: S.current.txt_password,
               hintText: S.current.txt_enter_password,
               suffixIcon: IconButton(
@@ -119,12 +121,30 @@ class _LoginPageState extends State<LoginPage> {
               messageError:
                   (state is InValidPassWordLogin) ? state.message : null,
             ),
-            const ForgetTextButton(),
+            _textButton(context),
             CommonButton(
                 text: S.current.btn_login, onPress: () => handleButtonLogin())
           ],
         );
       },
+    );
+  }
+
+  Padding _textButton(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 8, 0, 24),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: TextButton(
+          onPressed: () {
+            Navigator.pushNamed(context, RoutePath.forgetPasswordLayer);
+          },
+          child: Text(
+            S.current.lbl_forget_pass,
+            style: BaseTextStyle.button1(color: BaseColor.primaryColor),
+          ),
+        ),
+      ),
     );
   }
 

@@ -2,8 +2,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sgas/core/error/failure.dart';
 import 'package:sgas/generated/l10n.dart';
+import 'package:sgas/src/common/util/constant/string_regex.dart';
 import 'package:sgas/src/common/util/controller/snack_bar_controller.dart';
-import 'package:sgas/src/common/util/helper/string_regex_helper.dart';
 import 'package:sgas/src/feature/authentication/data/model/forget-password_params.dart';
 import 'package:sgas/src/feature/authentication/domain/failure/failure.dart';
 import 'package:sgas/src/feature/authentication/domain/usecase/authenticaion_usecase.dart';
